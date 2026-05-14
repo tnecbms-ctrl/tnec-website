@@ -229,6 +229,7 @@ h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,2.2vw,2.25rem);fo
 .pin.active .pin-ring{background:rgba(232,98,42,.5);animation:pinRing 2s ease-out infinite}
 .pin.done .pin-ring{background:rgba(45,188,110,.5);animation:pinRing 2s ease-out infinite 0.5s}
 @keyframes pinRing{0%{transform:translate(-3px,3px) scale(1);opacity:.8}100%{transform:translate(-3px,3px) scale(4);opacity:0}}
+
 /* tooltip */
 .pin-tip{position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:10px;padding:.5rem .85rem;font-size:.68rem;font-weight:500;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s,transform .2s;transform:translateX(-50%) translateY(4px);z-index:10;box-shadow:0 6px 20px rgba(0,0,0,.2)}
 .pin-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink)}
@@ -236,6 +237,62 @@ h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,2.2vw,2.25rem);fo
 .pin-city{font-weight:700;color:#fff;margin-bottom:.1rem}
 .pin-desc{color:rgba(244,241,236,.55);font-size:.62rem}
 
+/* MAP OVERLAY SYSTEM */
+.map-wrap{position:relative}
+.map-dim{
+  position:absolute;inset:0;
+  background:rgba(20,16,10,0.55);
+  z-index:1;
+  pointer-events:none;
+}
+.map-states-overlay{
+  position:absolute;inset:0;
+  z-index:2;
+  pointer-events:none;
+}
+.map-pins{z-index:3}
+.pin-tip{z-index:10}
+
+/* State highlight blobs */
+.state-blob{
+  position:absolute;
+  border-radius:40%;
+  border:2px solid rgba(232,98,42,0.7);
+  background:rgba(232,98,42,0.15);
+  backdrop-filter:blur(0px);
+  animation:blobPulse 4s ease-in-out infinite;
+  pointer-events:none;
+}
+.state-blob.done{
+  border-color:rgba(45,188,110,0.6);
+  background:rgba(45,188,110,0.1);
+  animation:blobPulseDone 4s ease-in-out infinite;
+}
+@keyframes blobPulse{
+  0%,100%{background:rgba(232,98,42,0.12);border-color:rgba(232,98,42,0.6)}
+  50%{background:rgba(232,98,42,0.22);border-color:rgba(232,98,42,0.9)}
+}
+@keyframes blobPulseDone{
+  0%,100%{background:rgba(45,188,110,0.08);border-color:rgba(45,188,110,0.5)}
+  50%{background:rgba(45,188,110,0.18);border-color:rgba(45,188,110,0.8)}
+}
+
+/* State name labels on map */
+.state-label{
+  position:absolute;
+  z-index:4;
+  font-family:'Inter',sans-serif;
+  font-size:.55rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.9);
+  text-shadow:0 1px 4px rgba(0,0,0,.8);
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  white-space:nowrap;
+}
+  
 /* EQUIPMENT */
 #equipment{background:var(--white)}
 .eq-grid{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center}
@@ -337,6 +394,7 @@ footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-
   .numbers-band{grid-template-columns:1fr;gap:1.2rem}
   .nb-div{border-right:none;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:1.2rem}
 }
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
@@ -517,8 +575,62 @@ footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-
       </div>
     </div>
     <div class="map-wrap rvr">
-      <!-- The actual India map image you provided -->
-      <img class="map-bg" src="INdiamap.jpg" alt="India Map — True North Engineering Project Locations" id="mapImg"/>
+      <!-- Map image — dimmed -->
+      <img class="map-bg" src="INdiamap.jpg" alt="India Map" id="mapImg" style="filter:grayscale(30%) brightness(0.4)"/>
+    
+      <!-- Dim overlay -->
+      <div class="map-dim"></div>
+    
+      <!-- State highlight blobs -->
+      <div class="map-states-overlay">
+    
+        <!-- Madhya Pradesh — primary state, orange, center of map -->
+        <div class="state-blob" style="left:22%;top:38%;width:28%;height:18%;border-radius:45%;animation-delay:0s"></div>
+        <div class="state-label" style="left:34%;top:44%">Madhya Pradesh</div>
+    
+        <!-- Maharashtra -->
+        <div class="state-blob" style="left:16%;top:52%;width:22%;height:16%;border-radius:50%;animation-delay:.6s"></div>
+        <div class="state-label" style="left:26%;top:58%">Maharashtra</div>
+    
+        <!-- Gujarat -->
+        <div class="state-blob done" style="left:8%;top:40%;width:13%;height:14%;border-radius:45%;animation-delay:1.2s"></div>
+        <div class="state-label" style="left:13%;top:45%">Gujarat</div>
+    
+        <!-- Uttar Pradesh -->
+        <div class="state-blob done" style="left:30%;top:24%;width:22%;height:14%;border-radius:40%;animation-delay:.3s"></div>
+        <div class="state-label" style="left:40%;top:29%">Uttar Pradesh</div>
+    
+        <!-- Rajasthan -->
+        <div class="state-blob done" style="left:10%;top:26%;width:16%;height:18%;border-radius:45%;animation-delay:.9s"></div>
+        <div class="state-label" style="left:17%;top:33%">Rajasthan</div>
+    
+        <!-- Chhattisgarh -->
+        <div class="state-blob done" style="left:38%;top:44%;width:13%;height:14%;border-radius:50%;animation-delay:1.5s"></div>
+        <div class="state-label" style="left:44%;top:49%">Chhattisgarh</div>
+    
+        <!-- Bihar -->
+        <div class="state-blob done" style="left:51%;top:30%;width:11%;height:10%;border-radius:45%;animation-delay:.5s"></div>
+        <div class="state-label" style="left:56%;top:34%">Bihar</div>
+    
+        <!-- Jharkhand -->
+        <div class="state-blob done" style="left:52%;top:38%;width:12%;height:10%;border-radius:50%;animation-delay:1.8s"></div>
+        <div class="state-label" style="left:57%;top:42%">Jharkhand</div>
+    
+        <!-- Assam -->
+        <div class="state-blob done" style="left:72%;top:28%;width:16%;height:10%;border-radius:45%;animation-delay:2.1s"></div>
+        <div class="state-label" style="left:79%;top:32%">Assam</div>
+    
+        <!-- Uttarakhand -->
+        <div class="state-blob done" style="left:27%;top:17%;width:10%;height:8%;border-radius:45%;animation-delay:2.4s"></div>
+        <div class="state-label" style="left:31%;top:20%">Uttarakhand</div>
+    
+        <!-- Goa -->
+        <div class="state-blob done" style="left:16%;top:66%;width:5%;height:4%;border-radius:50%;animation-delay:2.7s"></div>
+        <div class="state-label" style="left:19%;top:68%">Goa</div>
+    
+      </div>
+    
+      <!-- Pins on top -->
       <div class="map-pins" id="mapPins">
         <!--
           Pin positions are % based on the map image dimensions.
@@ -807,8 +919,9 @@ footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-
           <div class="pin-dot"></div>
           <div class="pin-tip"><div class="pin-city">Jalgaon, Maharashtra</div><div class="pin-desc">3930 Ha — Irrigation Area Contour Survey</div></div>
         </div>
-      </div>
-    </div>
+      </div><!-- end map-pins -->
+      </div><!-- end map-states-overlay -->
+    </div><!-- end map-wrap -->
   </div>
 </section>
 

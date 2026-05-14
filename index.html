@@ -263,7 +263,10 @@ h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,2.2vw,2.25rem);fo
 .sub-btn{width:100%;background:var(--or);color:#fff;font-family:'Inter',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:none;border-radius:10px;padding:.8rem;cursor:pointer;transition:background .2s,transform .18s;box-shadow:0 5px 18px var(--or-glow);margin-top:.28rem}
 .sub-btn:hover{background:var(--or2);transform:translateY(-1px)}
 .sub-btn.sent{background:#2DBC6E;box-shadow:none}
-
+.fg .err{display:none;font-size:.6rem;color:#ff6b6b;margin-top:.28rem;font-weight:500}
+.fg.has-error input,.fg.has-error textarea,.fg.has-error select{border-color:#ff6b6b !important;background:rgba(255,107,107,0.06) !important}
+.fg.has-error .err{display:block}
+  
 footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.04)}
 .foot-left{display:flex;align-items:center;gap:.55rem}
 .foot-left img{width:26px;height:26px;object-fit:contain;filter:brightness(10);opacity:.55}
@@ -300,6 +303,7 @@ footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-
   .nb-div{border-right:none;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:1.2rem}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 <div class="cur" id="cur"></div>
@@ -815,12 +819,87 @@ function buildClientMarquee(){
 
 buildClientMarquee();
 
-/* ── Form ── */
+/* ── EmailJS ── */
+emailjs.init('SlkGhU9nFLKeBRVsa');
+
 function handleSubmit(e){
   e.preventDefault();
+
+  const nameEl  = document.querySelector('input[placeholder="Your full name"]');
+  const phoneEl = document.querySelector('input[placeholder="+91 XXXXX XXXXX"]');
+  const emailEl = document.querySelector('input[placeholder="your@email.com"]');
+  const svcEl   = document.getElementById('svc');
+  const msgEl   = document.querySelector('textarea');
+
+  // Clear old errors
+  [nameEl,phoneEl,emailEl,svcEl,msgEl].forEach(el=>{
+    el.closest('.fg').classList.remove('has-error');
+    const old=el.closest('.fg').querySelector('.err');
+    if(old) old.remove();
+  });
+
+  // Validate
+  let valid=true;
+  function showErr(el,msg){
+    const fg=el.closest('.fg');
+    fg.classList.add('has-error');
+    const span=document.createElement('span');
+    span.className='err';
+    span.textContent=msg;
+    fg.appendChild(span);
+    valid=false;
+  }
+
+  const name  = nameEl.value.trim();
+  const phone = phoneEl.value.trim();
+  const email = emailEl.value.trim();
+  const svc   = svcEl.value;
+  const msg   = msgEl.value.trim();
+
+  if(!name || name.length<2)
+    showErr(nameEl, !name ? 'Please enter your full name.' : 'Name must be at least 2 characters.');
+  if(!phone)
+    showErr(phoneEl,'Please enter your phone number.');
+  else if(!/^[+\d][\d\s\-]{8,14}$/.test(phone))
+    showErr(phoneEl,'Enter a valid phone number.');
+  if(!email)
+    showErr(emailEl,'Please enter your email address.');
+  else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    showErr(emailEl,'Enter a valid email address.');
+  if(!svc)
+    showErr(svcEl,'Please select a service.');
+  if(!msg || msg.length<10)
+    showErr(msgEl, !msg ? 'Please write a message.' : 'Message must be at least 10 characters.');
+
+  if(!valid) return;
+
   const btn=document.getElementById('submitBtn');
-  btn.textContent='✓ Message Sent!';btn.classList.add('sent');
-  setTimeout(()=>{btn.textContent='Send Message →';btn.classList.remove('sent')},3500);
+  btn.textContent='Sending…';
+  btn.disabled=true;
+
+  emailjs.send('service_xdywm9b','template_oqoj69b',{
+    from_name : name,
+    phone     : phone,
+    from_email: email,
+    service   : svc,
+    message   : msg,
+  })
+  .then(()=>{
+    btn.textContent='✓ Message Sent!';
+    btn.classList.add('sent');
+    btn.disabled=false;
+    nameEl.value=''; phoneEl.value=''; emailEl.value='';
+    svcEl.value=''; svcEl.classList.remove('chosen');
+    msgEl.value='';
+    setTimeout(()=>{btn.textContent='Send Message →';btn.classList.remove('sent')},4000);
+  })
+  .catch(err=>{
+    console.error('EmailJS error:',err);
+    btn.textContent='Failed — Try Again';
+    btn.style.background='#ff6b6b';
+    btn.disabled=false;
+    setTimeout(()=>{btn.textContent='Send Message →';btn.style.background='';},4000);
+  });
 }
 </script>
 </body>

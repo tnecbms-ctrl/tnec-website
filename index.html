@@ -399,9 +399,22 @@ footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-
 .pj-marquee-inner{display:flex;gap:1.1rem;width:max-content;animation:pjmq 40s linear infinite}
 .pj-marquee-inner:hover{animation-play-state:paused}
 @keyframes pjmq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Google Maps info window custom style */
+.gm-style .gm-style-iw-c{border-radius:12px !important;padding:0 !important;box-shadow:0 8px 32px rgba(24,20,15,.2) !important}
+.gm-style .gm-style-iw-d{overflow:hidden !important;padding:0 !important}
+.gm-style .gm-style-iw-t::after{display:none}
+.map-popup{padding:1rem 1.2rem;min-width:200px;max-width:260px;font-family:'Inter',sans-serif}
+.map-popup-tag{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--or);margin-bottom:.3rem}
+.map-popup-tag.done{color:#2DBC6E}
+.map-popup-title{font-weight:700;font-size:.85rem;color:#18140F;line-height:1.3;margin-bottom:.25rem}
+.map-popup-desc{font-size:.72rem;color:#4A4540;line-height:1.5}
+.map-popup-qty{font-weight:800;font-size:1rem;color:var(--or);margin-top:.5rem;font-family:'Playfair Display',serif}
+.map-popup-qty.done{color:#2DBC6E}
   
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnLBtOeixDJN9BZdCXJ_PaZTOUU469uV0&callback=initMap"></script>
 </head>
 <body>
 <div class="cur" id="cur"></div>
@@ -592,7 +605,7 @@ footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-
   </div>
 </section>
 
-<!-- INDIA MAP — interactive with real map image and pins -->
+<!-- INDIA MAP — Google Maps with auto markers -->
 <section id="map-section">
   <div class="map-layout">
     <div class="map-info rvl">
@@ -600,302 +613,20 @@ footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-
       <h2>Where We've Worked Across India</h2>
       <p class="sec-intro">From the Narmada basin to Mumbai's Mithi River — our projects span 12+ states with 50,000+ KM of survey coverage.</p>
       <div class="map-legend">
-        <div class="legend-item"><div class="legend-dot active"></div>Active / Ongoing Project Location</div>
-        <div class="legend-item"><div class="legend-dot done"></div>Completed Project Location</div>
+        <div class="legend-item"><div class="legend-dot active"></div>Active / Ongoing Project</div>
+        <div class="legend-item"><div class="legend-dot done"></div>Completed Project</div>
       </div>
       <div class="map-states">
         <strong>States Covered</strong>
         Madhya Pradesh · Maharashtra · Gujarat · Uttar Pradesh · Chhattisgarh · Bihar · Jharkhand · Rajasthan · Assam · Uttarakhand · Goa · West Bengal
       </div>
     </div>
-    <div class="map-wrap rvr">
-      <!-- Map image — dimmed -->
-      <img class="map-bg" src="INdiamap.jpg" alt="India Map" id="mapImg" style="filter:grayscale(30%) brightness(0.8)"/>
-    
-      <!-- Dim overlay -->
-      <div class="map-dim"></div>
-    
-      <!-- Pins on top -->
-      <div class="map-pins" id="mapPins">
-        <!--
-          Pin positions are % based on the map image dimensions.
-          The map image covers India from approx:
-          Left edge = Pakistan/Afghanistan border (~68°E)
-          Right edge = Myanmar border (~97°E)  
-          Top = Kashmir (~37°N)
-          Bottom = Sri Lanka (~6°N)
-          
-          Formula:
-          x% = (longitude - 68) / (97 - 68) * 100
-          y% = (37 - latitude) / (37 - 6) * 100
-        -->
-        
-        <!-- Shristi / Leadership team prior experience pins -->
-
-        <!-- Guna: 77.3°E, 24.7°N → x=31.8%, y=40.1% -->
-        <div class="pin done" style="left:31.8%;top:40.1%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Guna, MP</div><div class="pin-desc">3000 KM — Multi-Village WSS, 354 Villages + Hydraulic Design</div></div>
-        </div>
-        
-        <!-- Gorakhpur UP: 83.4°E, 26.7°N → x=53.0%, y=33.5% -->
-        <div class="pin done" style="left:53%;top:33.5%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Gorakhpur, UP</div><div class="pin-desc">3000 KM — Multi-Village WSS, 200 Villages</div></div>
-        </div>
-        
-        <!-- Hapur UP: 77.8°E, 28.7°N → x=33.7%, y=27.0% -->
-        <div class="pin done" style="left:33.7%;top:27%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Hapur, UP</div><div class="pin-desc">1400 KM — Multi-Village WSS, 200 Villages</div></div>
-        </div>
-        
-        <!-- Gautam Buddha Nagar UP: 77.5°E, 28.5°N → x=32.7%, y=27.6% -->
-        <div class="pin done" style="left:32.7%;top:27.6%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Gautam Buddha Nagar, UP</div><div class="pin-desc">500 KM — Multi-Village WSS, 117 Villages</div></div>
-        </div>
-        
-        <!-- Assam / Biswanath: 93.0°E, 26.7°N → x=86.5%, y=33.5% -->
-        <div class="pin done" style="left:86.5%;top:33.5%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Biswanath, Assam</div><div class="pin-desc">3000 KM — Multi-Village Rural WSS</div></div>
-        </div>
-        
-        <!-- Assam / Dhubri: 89.9°E, 26.0°N → x=75.5%, y=35.5% -->
-        <div class="pin done" style="left:75.5%;top:35.5%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Dhubri, Assam</div><div class="pin-desc">648 KM — Multi-Village Rural WSS</div></div>
-        </div>
-        
-        <!-- Rishikesh / Dehradun Uttarakhand: 78.1°E, 30.3°N → x=34.8%, y=22.3% -->
-        <div class="pin done" style="left:34.8%;top:22.3%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Rishikesh &amp; Dehradun, UK</div><div class="pin-desc">218 Sq.KM — Storm Water Drainage Master Plan</div></div>
-        </div>
-        
-        <!-- Goa / Porvorim: 73.8°E, 15.5°N → x=20.0%, y=70.0% -->
-        <div class="pin done" style="left:20%;top:70%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Porvorim &amp; Candolim, Goa</div><div class="pin-desc">50 KM — Topographical Survey of Sewage Main Trunk</div></div>
-        </div>
-        
-        <!-- Nasik MH: 73.8°E, 20.0°N → x=20.0%, y=54.8% -->
-        <div class="pin done" style="left:20%;top:54.8%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Nashik, Maharashtra</div><div class="pin-desc">64 Ha — Bathymetry of Godavari River, Smart City Project</div></div>
-        </div>
-        
-        <!-- Farakkha Jharkhand: 87.9°E, 24.8°N → x=68.5%, y=39.8% -->
-        <div class="pin done" style="left:68.5%;top:39.8%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Farakkha, Jharkhand</div><div class="pin-desc">100 Ha — Bathymetric Survey of Ganga River</div></div>
-        </div>
-        
-        <!-- Nalanda Bihar: 85.5°E, 25.1°N → x=60.2%, y=38.7% -->
-        <div class="pin done" style="left:60.2%;top:38.7%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Nalanda, Bihar</div><div class="pin-desc">31 KM — Topographical Survey, Highway Project</div></div>
-        </div>
-        
-        <!-- Khajuraho MP: 79.9°E, 24.8°N → x=40.8%, y=39.8% -->
-        <div class="pin done" style="left:40.8%;top:39.8%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Khajuraho, MP</div><div class="pin-desc">150 Ha — Khajuraho Airport Topographical Survey</div></div>
-        </div>
-        
-        <!-- Chasnalla Mines Jharkhand: 86.1°E, 23.7°N → x=62.4%, y=43.0% -->
-        <div class="pin done" style="left:62.4%;top:43%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Chasnalla, Jharkhand</div><div class="pin-desc">63 Ha — Coal Mine Contour Survey</div></div>
-        </div>
-        
-        <!-- Barwani MP: 74.9°E, 22.0°N → x=23.8%, y=48.4% -->
-        <div class="pin done" style="left:23.8%;top:48.4%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Barwani &amp; Sheopur, MP</div><div class="pin-desc">2000 KM — Multi-Village Rural WSS, 210 Villages</div></div>
-        </div>
-        
-        <!-- Annupur MP: 81.7°E, 23.1°N → x=47.1%, y=45.2% -->
-        <div class="pin done" style="left:47.1%;top:45.2%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Anuppur, MP</div><div class="pin-desc">1000 KM — Dameri MVWSS, 78 Villages + Bathymetry</div></div>
-        </div>
-        
-        <!-- Khargone / Burhanpur MP: 76.0°E, 21.8°N → x=27.5%, y=49.0% -->
-        <div class="pin done" style="left:27.5%;top:49%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Khargone &amp; Burhanpur, MP</div><div class="pin-desc">800 KM — Water Supply &amp; Sewerage under AMRUT 2.0</div></div>
-        </div>
-        
-        <!-- Chhuriya: 80.6°E, 21°N → x=43.4%, y=51.6% -->
-        <div class="pin done" style="left:43.4%;top:51.6%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Chhuriya, CH ★</div><div class="pin-desc">Water Supply · Consumer Survey</div></div>
-        </div>
-
-        <!-- Deoli: 78.4°E, 20.6°N → x=35.9%, y=52.9% -->
-        <div class="pin done" style="left:35.9%;top:52.9%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Deoli, MH ★</div><div class="pin-desc">Water Supply</div></div>
-        </div>
-
-        <!-- Katol: 78.6°E, 21.3°N → x=36.6%, y=50.6% -->
-        <div class="pin done" style="left:36.6%;top:50.6%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Katol, MH ★</div><div class="pin-desc">Water Supply</div></div>
-        </div>
-
-        <!-- Dewas: 76°E, 22.96°N → x=27.6%, y=45.3% -->
-        <div class="pin done" style="left:27.6%;top:45.3%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Dewas, MP ★</div><div class="pin-desc">Water Supply | Sewer</div></div>
-        </div>
-                
-        <!-- Bhopal: 77.4°E, 23.3°N → x=32.2%, y=44.5% -->
-        <div class="pin active" style="left:32.2%;top:44.5%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Bhopal, MP ★ HQ</div><div class="pin-desc">Multiple AMRUT 2.0 · Water Supply · Sewer Projects</div></div>
-        </div>
-
-        <!-- Indore: 75.8°E, 22.7°N → x=27.0%, y=46.5% -->
-        <div class="pin active" style="left:27%;top:46.5%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Indore, MP</div><div class="pin-desc">3000+ KM — AMRUT 2.0 WSS Pipeline Network</div></div>
-        </div>
-
-        <!-- Jabalpur: 79.9°E, 23.2°N → x=40.8%, y=44.8% -->
-        <div class="pin active" style="left:40.8%;top:44.8%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Jabalpur, MP</div><div class="pin-desc">2890 KM — Multi-Village WSS Hydraulic Design</div></div>
-        </div>
-
-        <!-- Rewa: 81.3°E, 24.5°N → x=45.6%, y=40.7% -->
-        <div class="pin done" style="left:45.6%;top:40.7%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Rewa, MP</div><div class="pin-desc">1100 KM — AMRUT 2.0 Water Supply Networks</div></div>
-        </div>
-
-        <!-- Gwalior: 78.2°E, 26.2°N → x=35.2%, y=35.2% -->
-        <div class="pin active" style="left:35.2%;top:35.2%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Gwalior, MP</div><div class="pin-desc">Contour Survey for WTP Sites — AMRUT 2.0</div></div>
-        </div>
-
-        <!-- Ratlam: 75.1°E, 23.3°N → x=24.5%, y=44.5% -->
-        <div class="pin done" style="left:24.5%;top:44.5%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Ratlam, MP</div><div class="pin-desc">655 KM — Pipeline Hydraulic Design, AMRUT 2.0</div></div>
-        </div>
-
-        <!-- Satna: 80.8°E, 24.6°N → x=43.8%, y=40.4% -->
-        <div class="pin done" style="left:43.8%;top:40.4%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Satna, MP</div><div class="pin-desc">179 KM Sewer Network + LWM 7 Towns</div></div>
-        </div>
-
-        <!-- Mandsaur: 75.1°E, 24.1°N → x=24.5%, y=41.9% -->
-        <div class="pin done" style="left:24.5%;top:41.9%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Mandsaur, MP</div><div class="pin-desc">355 KM — Sewerage Scheme Pipeline Survey</div></div>
-        </div>
-
-        <!-- Sehore/Ashta: 77.1°E, 23.2°N → x=31.1%, y=44.8% -->
-        <div class="pin active" style="left:31.1%;top:47%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Sehore / Ashta, MP</div><div class="pin-desc">4745 KM — Multi-Village WSS MPJN Scheme</div></div>
-        </div>
-
-        <!-- Khandwa: 76.4°E, 21.8°N → x=28.8%, y=49.0% -->
-        <div class="pin done" style="left:28.8%;top:49%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Khandwa, MP</div><div class="pin-desc">522 KM — AMRUT 2.0 Water Supply</div></div>
-        </div>
-
-        <!-- Tikamgarh: 78.8°E, 24.7°N → x=37.2%, y=40.1% -->
-        <div class="pin active" style="left:37.2%;top:40.1%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Tikamgarh / Niwari, MP</div><div class="pin-desc">DPR for 12 ULBs — AMRUT 2.0 Sagar Division</div></div>
-        </div>
-
-        <!-- Mumbai: 72.9°E, 19.1°N → x=16.9%, y=58% -->
-        <div class="pin active" style="left:16.9%;top:58%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Mumbai, Maharashtra</div><div class="pin-desc">Mithi River Dev — 250 Acres, Drone + Bathymetry + GPR</div></div>
-        </div>
-
-        <!-- Nagpur: 79.1°E, 21.2°N → x=38.3%, y=51% -->
-        <div class="pin done" style="left:38.3%;top:51%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Nagpur Region, MH</div><div class="pin-desc">Topographical Survey — Various MH Projects</div></div>
-        </div>
-
-        <!-- Anjangaon Surji: 77.3°E, 21.2°N → x=31.8%, y=51% -->
-        <div class="pin done" style="left:31.8%;top:51%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Anjangaon Surji, MH</div><div class="pin-desc">145 KM — Topographical Survey for Sewer Network</div></div>
-        </div>
-
-        <!-- Banda (UP): 80.3°E, 25.5°N → x=42.5%, y=37.6% -->
-        <div class="pin done" style="left:42.5%;top:37.6%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Banda / Hamirpur, UP</div><div class="pin-desc">228 KM — WSS Survey &amp; Pipeline Hydraulic Design</div></div>
-        </div>
-
-        <!-- Bokaro (Jharkhand): 86.0°E, 23.7°N → x=62.0%, y=43.0% -->
-        <div class="pin done" style="left:62%;top:43%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Bokaro, Jharkhand</div><div class="pin-desc">Topographical Survey for Sewerage STP Scheme</div></div>
-        </div>
-
-        <!-- MCAD Jalgaon MH: 75.3°E, 20.9°N → x=25.3%, y=52.0% -->
-        <div class="pin done" style="left:25.3%;top:52%">
-          <div class="pin-ring"></div>
-          <div class="pin-dot"></div>
-          <div class="pin-tip"><div class="pin-city">Jalgaon, Maharashtra</div><div class="pin-desc">3930 Ha — Irrigation Area Contour Survey</div></div>
-        </div>
-      </div><!-- end map-pins -->
-      </div><!-- end map-states-overlay -->
-    </div><!-- end map-wrap -->
+    <div class="rvr" style="border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(24,20,15,.14);height:520px">
+      <div id="gmap" style="width:100%;height:100%"></div>
+    </div>
   </div>
 </section>
-
+ 
 <!-- EQUIPMENT -->
 <section id="equipment">
   <div class="eq-grid">
@@ -1189,6 +920,123 @@ function handleSubmit(e){
     setTimeout(()=>{btn.textContent='Send Message →';btn.style.background='';},4000);
   });
 } 
+
+/* ── GOOGLE MAPS ── */
+
+// ═══════════════════════════════════════════════
+// YOUR PROJECT LOCATIONS — just add/edit here!
+// type: 'active' = orange flag, 'done' = green flag
+// ═══════════════════════════════════════════════
+const PROJECT_LOCATIONS = [
+  // ── TNEC LLP Projects ──
+  { lat:23.2599, lng:77.4126, city:'Bhopal, MP ★ HQ',        desc:'Multiple AMRUT 2.0 · Water Supply · Sewer Projects', qty:'Multiple Projects', type:'active' },
+  { lat:22.7196, lng:75.8577, city:'Indore, MP',              desc:'AMRUT 2.0 WSS Pipeline Network',                     qty:'3000+ KM',         type:'active' },
+  { lat:23.1815, lng:79.9864, city:'Jabalpur, MP',            desc:'Multi-Village WSS Hydraulic Design',                 qty:'2890 KM',          type:'active' },
+  { lat:24.5333, lng:81.3000, city:'Rewa, MP',                desc:'AMRUT 2.0 Water Supply Networks',                    qty:'1100 KM',          type:'done'   },
+  { lat:26.2183, lng:78.1828, city:'Gwalior, MP',             desc:'Contour Survey for WTP Sites — AMRUT 2.0',           qty:'4 WTP Sites',      type:'done'   },
+  { lat:23.3315, lng:75.0367, city:'Ratlam, MP',              desc:'Pipeline Hydraulic Design, AMRUT 2.0',               qty:'655 KM',           type:'done'   },
+  { lat:24.5854, lng:80.8322, city:'Satna, MP',               desc:'Sewer Network + LWM 7 Towns',                        qty:'179 KM',           type:'done'   },
+  { lat:24.0765, lng:75.0667, city:'Mandsaur, MP',            desc:'Sewerage Scheme Pipeline Survey',                    qty:'355 KM',           type:'done'   },
+  { lat:23.1875, lng:77.0833, city:'Sehore / Ashta, MP',      desc:'Multi-Village WSS MPJN Scheme',                      qty:'4745 KM',          type:'active' },
+  { lat:21.8200, lng:76.3500, city:'Khandwa, MP',             desc:'AMRUT 2.0 Water Supply',                             qty:'522 KM',           type:'done'   },
+  { lat:24.7455, lng:78.8320, city:'Tikamgarh / Niwari, MP',  desc:'DPR for 12 ULBs — AMRUT 2.0',                       qty:'12 ULBs',          type:'active' },
+  { lat:19.0760, lng:72.8777, city:'Mumbai, Maharashtra',     desc:'Mithi River Dev — Drone + Bathymetry + GPR',         qty:'250 Acres',        type:'active' },
+  { lat:21.1458, lng:79.0882, city:'Nagpur, MH',              desc:'Topographical Survey — Various MH Projects',         qty:'Multiple',         type:'done'   },
+  { lat:21.1700, lng:77.3200, city:'Anjangaon Surji, MH',     desc:'Topographical Survey for Sewer Network',             qty:'145 KM',           type:'done'   },
+  { lat:22.9734, lng:72.6831, city:'Ahmedabad, Gujarat',      desc:'Krishna Construction + Yogi Construction Projects',  qty:'Multiple',         type:'active' },
+  { lat:25.4670, lng:80.3320, city:'Banda / Hamirpur, UP',    desc:'WSS Survey & Pipeline Hydraulic Design',             qty:'228 KM',           type:'done'   },
+  { lat:21.2514, lng:81.6296, city:'Chhattisgarh',            desc:'Chapora MVWSS + LWM Schemes',                        qty:'65 KM',            type:'done'   },
+  { lat:25.5941, lng:85.1376, city:'Bihar (21 Towns)',        desc:'DPR for STP & FSTP under SBM 2.0',                  qty:'21 Towns',         type:'active' },
+  { lat:23.6693, lng:86.1511, city:'Bokaro, Jharkhand',       desc:'Topographical Survey for Sewerage STP',              qty:'STP Survey',       type:'done'   },
+  { lat:26.2917, lng:73.0169, city:'Rajasthan',               desc:'BLG Construction — DPR Projects',                   qty:'Multiple',         type:'done'   },
+  { lat:20.9200, lng:75.3200, city:'Jalgaon, Maharashtra',    desc:'Irrigation Area Contour Survey',                     qty:'3930 Ha',          type:'done'   },
+
+  // ── Leadership team prior experience (Shristi) ──
+  { lat:24.6637, lng:77.3167, city:'Guna, MP',                desc:'Multi-Village WSS — 354 Villages',                   qty:'3000 KM',          type:'done'   },
+  { lat:26.7606, lng:83.3732, city:'Gorakhpur, UP',           desc:'Multi-Village WSS — 200 Villages',                   qty:'3000 KM',          type:'done'   },
+  { lat:28.7333, lng:77.7833, city:'Hapur, UP',               desc:'Multi-Village WSS — 200 Villages',                   qty:'1400 KM',          type:'done'   },
+  { lat:26.7000, lng:93.0000, city:'Biswanath, Assam',        desc:'Multi-Village Rural WSS',                            qty:'3000 KM',          type:'done'   },
+  { lat:26.0100, lng:89.9700, city:'Dhubri, Assam',           desc:'Multi-Village Rural WSS',                            qty:'648 KM',           type:'done'   },
+  { lat:30.3165, lng:78.0322, city:'Rishikesh & Dehradun, UK',desc:'Storm Water Drainage Master Plan',                   qty:'218 Sq.KM',        type:'done'   },
+  { lat:15.5057, lng:73.8258, city:'Goa',                     desc:'Topographical Survey of Sewage Main Trunk',          qty:'50 KM',            type:'done'   },
+  { lat:19.9975, lng:73.7898, city:'Nashik, MH',              desc:'Bathymetry of Godavari River, Smart City',           qty:'64 Ha',            type:'done'   },
+  { lat:24.8000, lng:87.9200, city:'Farakkha, WB',            desc:'Bathymetric Survey of Ganga River',                  qty:'100 Ha',           type:'done'   },
+  { lat:23.1300, lng:80.7200, city:'Anuppur, MP',             desc:'Dameri MVWSS — 78 Villages + Bathymetry',            qty:'1000 KM',          type:'done'   },
+  { lat:21.8200, lng:75.6200, city:'Khargone & Burhanpur, MP',desc:'Water Supply & Sewerage under AMRUT 2.0',            qty:'800 KM',           type:'done'   },
+  { lat:22.0000, lng:76.9600, city:'Dewas, MP',               desc:'Water Supply | Sewer Network Design',                qty:'700 KM',           type:'done'   },
+  { lat:24.1500, lng:78.6500, city:'Chhatarpur, MP',          desc:'Water Supply Survey — Khajuraho Region',             qty:'182 KM',           type:'done'   },
+  { lat:22.6900, lng:74.9000, city:'Barwani & Sheopur, MP',   desc:'Multi-Village Rural WSS — 210 Villages',             qty:'2000 KM',          type:'done'   },
+];
+
+function initMap() {
+  // Custom dark map style to match website theme
+  const mapStyle = [
+    { elementType:'geometry',        stylers:[{color:'#1a1714'}] },
+    { elementType:'labels.text.fill',stylers:[{color:'#9a938c'}] },
+    { elementType:'labels.text.stroke',stylers:[{color:'#1a1714'}] },
+    { featureType:'administrative',  elementType:'geometry',stylers:[{color:'#2a2520'}] },
+    { featureType:'administrative.country', elementType:'geometry.stroke', stylers:[{color:'#E8622A'},{weight:1.2}] },
+    { featureType:'administrative.province',elementType:'geometry.stroke',stylers:[{color:'#3a3530'},{weight:0.8}] },
+    { featureType:'road',            elementType:'geometry',stylers:[{color:'#2a2520'}] },
+    { featureType:'road.highway',    elementType:'geometry',stylers:[{color:'#333028'}] },
+    { featureType:'water',           elementType:'geometry',stylers:[{color:'#0f1520'}] },
+    { featureType:'water',           elementType:'labels.text.fill',stylers:[{color:'#3d5970'}] },
+    { featureType:'poi',             stylers:[{visibility:'off'}] },
+    { featureType:'transit',         stylers:[{visibility:'off'}] },
+    { featureType:'landscape',       elementType:'geometry',stylers:[{color:'#1e1a16'}] },
+    { featureType:'administrative.locality', elementType:'labels', stylers:[{visibility:'off'}] },
+  ];
+
+  const map = new google.maps.Map(document.getElementById('gmap'), {
+    center: { lat: 22.5, lng: 80.0 },
+    zoom: 5,
+    styles: mapStyle,
+    disableDefaultUI: false,
+    zoomControl: true,
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: true,
+    gestureHandling: 'cooperative',
+  });
+
+  const infoWindow = new google.maps.InfoWindow();
+
+  PROJECT_LOCATIONS.forEach(loc => {
+    const isActive = loc.type === 'active';
+
+    // Custom flag SVG marker
+    const flagSvg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="28" viewBox="0 0 24 28">
+        <line x1="3" y1="4" x2="3" y2="27" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <polygon points="3,4 20,8 20,18 3,22" fill="${isActive ? '#E8622A' : '#2DBC6E'}" opacity="0.95"/>
+        <circle cx="3" cy="27" r="2.5" fill="${isActive ? '#E8622A' : '#2DBC6E'}"/>
+      </svg>`;
+
+    const marker = new google.maps.Marker({
+      position: { lat: loc.lat, lng: loc.lng },
+      map: map,
+      icon: {
+        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(flagSvg),
+        scaledSize: new google.maps.Size(24, 28),
+        anchor: new google.maps.Point(3, 27),
+      },
+      title: loc.city,
+    });
+
+    marker.addListener('click', () => {
+      infoWindow.setContent(`
+        <div class="map-popup">
+          <div class="map-popup-tag ${loc.type}">${loc.type === 'active' ? '🟠 Active Project' : '🟢 Completed Project'}</div>
+          <div class="map-popup-title">${loc.city}</div>
+          <div class="map-popup-desc">${loc.desc}</div>
+          <div class="map-popup-qty ${loc.type}">${loc.qty}</div>
+        </div>
+      `);
+      infoWindow.open(map, marker);
+    });
+  });
+}
+
 </script>
 </body>
 </html>

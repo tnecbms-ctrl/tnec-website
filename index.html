@@ -399,6 +399,76 @@ footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-
 .pj-marquee-inner{display:flex;gap:1.1rem;width:max-content;animation:pjmq 40s linear infinite}
 .pj-marquee-inner:hover{animation-play-state:paused}
 @keyframes pjmq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── SCROLL STATS FLYER ── */
+.stats-flyer{
+  position:fixed;
+  right:-220px;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:150;
+  display:flex;
+  flex-direction:column;
+  gap:.6rem;
+  transition:right .5s cubic-bezier(.22,1,.36,1);
+  pointer-events:none;
+}
+.stats-flyer.visible{
+  right:1.2rem;
+  pointer-events:auto;
+}
+.flyer-card{
+  background:var(--white);
+  border:1px solid var(--rule);
+  border-radius:14px;
+  padding:.75rem 1.1rem;
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+  box-shadow:0 8px 32px rgba(24,20,15,.12);
+  opacity:0;
+  transform:translateX(30px);
+  transition:opacity .4s ease, transform .4s ease;
+  min-width:190px;
+  border-left:3px solid var(--or);
+  cursor:default;
+}
+.flyer-card.show{
+  opacity:1;
+  transform:translateX(0);
+}
+.flyer-card:nth-child(2){transition-delay:.1s}
+.flyer-card:nth-child(3){transition-delay:.2s}
+.flyer-card:nth-child(4){transition-delay:.3s}
+.flyer-card.green{border-left-color:#2DBC6E}
+.flyer-ico{
+  width:34px;height:34px;
+  border-radius:10px;
+  background:var(--or-dim);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;flex-shrink:0;
+}
+.flyer-card.green .flyer-ico{background:rgba(45,188,110,.1)}
+.flyer-num{
+  font-family:'Playfair Display',serif;
+  font-weight:800;
+  font-size:1.1rem;
+  color:var(--ink);
+  line-height:1;
+}
+.flyer-num span{color:var(--or);font-size:.85rem}
+.flyer-card.green .flyer-num span{color:#2DBC6E}
+.flyer-lbl{
+  font-size:.6rem;
+  color:var(--ink3);
+  font-weight:500;
+  letter-spacing:.05em;
+  margin-top:.18rem;
+  text-transform:uppercase;
+}
+
+/* hide on small screens */
+@media(max-width:960px){.stats-flyer{display:none}}
   
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -1189,6 +1259,80 @@ function handleSubmit(e){
     setTimeout(()=>{btn.textContent='Send Message →';btn.style.background='';},4000);
   });
 }
+
+/* ── SCROLL STATS FLYER ── */
+const flyer = document.getElementById('statsFlyer');
+const flyerCards = flyer.querySelectorAll('.flyer-card');
+
+// Show flyer when user scrolls past the hero section
+// Hide it when near footer
+let flyerVisible = false;
+let flyerAnimated = false;
+
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const docH = document.body.scrollHeight;
+  const winH = window.innerHeight;
+  const heroH = document.getElementById('hero').offsetHeight;
+  const footerH = document.querySelector('footer').offsetHeight;
+
+  // Show after hero, hide near footer
+  const shouldShow = scrollY > heroH * 0.6 && scrollY < docH - winH - footerH - 100;
+
+  if(shouldShow && !flyerVisible){
+    flyerVisible = true;
+    flyer.classList.add('visible');
+    // Stagger card animations
+    if(!flyerAnimated){
+      flyerAnimated = true;
+      flyerCards.forEach((card, i) => {
+        setTimeout(() => card.classList.add('show'), i * 120);
+      });
+    }
+  } else if(!shouldShow && flyerVisible){
+    flyerVisible = false;
+    flyer.classList.remove('visible');
+    // Reset animation when hidden
+    flyerCards.forEach(card => card.classList.remove('show'));
+    setTimeout(() => {
+      if(!flyerVisible) flyerAnimated = false;
+    }, 500);
+  }
+}, { passive: true });
+
 </script>
+
+<!-- SCROLL STATS FLYER -->
+<div class="stats-flyer" id="statsFlyer">
+  <div class="flyer-card" id="fc1">
+    <div class="flyer-ico">📐</div>
+    <div>
+      <div class="flyer-num" id="fn1">50K<span>+ KM</span></div>
+      <div class="flyer-lbl">Surveyed Across India</div>
+    </div>
+  </div>
+  <div class="flyer-card" id="fc2">
+    <div class="flyer-ico">📁</div>
+    <div>
+      <div class="flyer-num" id="fn2">165<span>+</span></div>
+      <div class="flyer-lbl">Projects Delivered</div>
+    </div>
+  </div>
+  <div class="flyer-card green" id="fc3">
+    <div class="flyer-ico">🏘️</div>
+    <div>
+      <div class="flyer-num green" id="fn3">1.5L<span>+</span></div>
+      <div class="flyer-lbl">Households Surveyed</div>
+    </div>
+  </div>
+  <div class="flyer-card green" id="fc4">
+    <div class="flyer-ico">🗺️</div>
+    <div>
+      <div class="flyer-num green" id="fn4">12<span>+</span></div>
+      <div class="flyer-lbl">States Covered</div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

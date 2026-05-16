@@ -1122,26 +1122,113 @@ function initMap() {
   // JOURNEY STOPS — add/edit freely
   // ═══════════════════════════════════════════
   const JOURNEY = [
-    { year:'2015', label:'Journey Begins',         lat:23.26,  lng:77.41, city:'Bhopal, MP',              desc:'Shristi Survey Consulting founded. First GIS & Survey projects begin.',          qty:'Est. 2015',    color:'#E8622A' },
-    { year:'2016', label:'First Big Project',      lat:24.53,  lng:81.30, city:'Rewa, MP',                desc:'Town WSS Distribution network.',      qty:'1000 KM',      color:'#E8622A' },
-    { year:'2016', label:'Growing Up',             lat:24.66,  lng:77.32, city:'Guna, MP',                desc:'Multi-Village WSS — 354 Villages. 3000 KM feeder & distribution network.',      qty:'3000 KM',      color:'#E8622A' },
-    { year:'2017', label:'Expanding UP',           lat:28.73,  lng:77.78, city:'Hapur, Uttar Pradesh',    desc:'Multi-Village WSS — 200 Villages. Expanding into Uttar Pradesh.',               qty:'1400 KM',      color:'#E8622A' },
-    { year:'2017', label:'Northeast Push',         lat:26.70,  lng:83.37, city:'Gorakhpur, UP',           desc:'Multi-Village WSS — 200 Villages along Gorakhpur district.',                    qty:'3000 KM',      color:'#E8622A' },
-    { year:'2018', label:'Assam Expansion',        lat:26.70,  lng:93.00, city:'Biswanath, Assam',        desc:'Multi-Village Rural WSS in Assam. First northeast India project.',              qty:'3000 KM',      color:'#F07845' },
-    { year:'2018', label:'Hill Stations',          lat:30.32,  lng:78.03, city:'Rishikesh & Dehradun, UK',desc:'Storm Water Drainage Master Plan across Uttarakhand hills.',                    qty:'218 Sq.KM',    color:'#F07845' },
-    { year:'2019', label:'West Coast',             lat:15.51,  lng:73.83, city:'Porvorim & Candolim, Goa',desc:'Topographical Survey of Sewage Main Trunk along the Goa coast.',               qty:'50 KM',        color:'#F07845' },
-    { year:'2019', label:'Smart City',             lat:19.99,  lng:73.79, city:'Nashik, Maharashtra',     desc:'Bathymetric Survey of Godavari River for Nashik Smart City project.',           qty:'64 Ha',        color:'#F07845' },
-    { year:'2020', label:'River Survey',           lat:24.80,  lng:87.92, city:'Farakkha, West Bengal',   desc:'Bathymetric Survey of Ganga River.',                                           qty:'100 Ha',       color:'#F07845' },
-    { year:'2021', label:'Mining Survey',          lat:23.67,  lng:86.15, city:'Bokaro, Jharkhand',       desc:'Coal Mine Contour Survey & Sewerage Scheme Topographical Survey.',             qty:'63 Ha',        color:'#F07845' },
-    { year:'2022', label:'TNEC LLP Founded! 🎉',  lat:23.26,  lng:77.41, city:'Bhopal, MP — HQ',         desc:'True North Engineering Consultants LLP established. ISO 9001:2015 certified.',  qty:'New Chapter',  color:'#fff'    },
-    { year:'2023', label:'AMRUT 2.0 Era',          lat:22.72,  lng:75.86, city:'Indore, MP',              desc:'AMRUT 2.0 WSS Pipeline Network — largest single project.',                     qty:'3000+ KM',     color:'#2DBC6E' },
-    { year:'2023', label:'Multi-Village MP',       lat:23.18,  lng:79.99, city:'Jabalpur, MP',            desc:'Multi-Village WSS Hydraulic Design. 280 OHTs, 5 MBRs.',                        qty:'2890 KM',      color:'#2DBC6E' },
-    { year:'2024', label:'Massive WSS',            lat:23.19,  lng:77.08, city:'Sehore / Ashta, MP',      desc:'Multi-Village WSS — Ashta Ranipura. Largest MP project.',                      qty:'4745 KM',      color:'#2DBC6E' },
-    { year:'2026', label:'Bihar DPR',              lat:25.59,  lng:85.14, city:'Bihar — 21 Towns',        desc:'DPR for STP & FSTP across 21 towns under SBM 2.0.',                           qty:'21 Towns',     color:'#2DBC6E' },
-    { year:'2026', label:'Mumbai!',                lat:19.08,  lng:72.88, city:'Mumbai, Maharashtra',     desc:'Mithi River Development — Drone, Bathymetry, GPR Survey for BMC Mumbai.',      qty:'250 Acres',    color:'#2DBC6E' },
-    { year:'2026', label:'Today & Beyond',         lat:23.26,  lng:77.41, city:'Bhopal, MP — HQ',         desc:'50,000+ KM surveyed. 165+ projects. 12+ states. Still growing!',              qty:'50K+ KM',      color:'#2DBC6E' },
-  ];
-
+  {
+    year:'2015', label:'Shristi Survey Consulting Founded',
+    stops:[
+      { lat:23.26, lng:77.41, city:'Bhopal, MP',       desc:'Founded. First GIS & Survey projects begin.',         qty:'HQ',        color:'#E8622A' },
+    ]
+  },
+  {
+    year:'2016', label:'First Major Projects',
+    stops:[
+      { lat:24.66, lng:77.32, city:'Guna, MP',          desc:'Multi-Village WSS — 354 Villages.',                  qty:'3000 KM',   color:'#E8622A' },
+      { lat:22.00, lng:76.95, city:'Dewas, MP',          desc:'Water Supply & Sewer Survey.',                       qty:'Survey',    color:'#E8622A' },
+      { lat:23.33, lng:75.04, city:'Ratlam, MP',         desc:'Water Supply Network Survey.',                       qty:'Survey',    color:'#E8622A' },
+    ]
+  },
+  {
+    year:'2017', label:'Expanding into UP & Bihar',
+    stops:[
+      { lat:28.73, lng:77.78, city:'Hapur, UP',          desc:'Multi-Village WSS — 200 Villages.',                  qty:'1400 KM',   color:'#E8622A' },
+      { lat:28.57, lng:77.32, city:'Gautam Buddha Nagar, UP', desc:'Multi-Village WSS — 117 Villages.',             qty:'500 KM',    color:'#E8622A' },
+      { lat:26.76, lng:83.37, city:'Gorakhpur, UP',       desc:'Multi-Village WSS — 200 Villages.',                  qty:'3000 KM',   color:'#E8622A' },
+      { lat:24.15, lng:78.65, city:'Chhatarpur, MP',      desc:'Water Supply Survey — Khajuraho Region.',            qty:'182 KM',    color:'#E8622A' },
+    ]
+  },
+  {
+    year:'2018', label:'Northeast & Hill Stations',
+    stops:[
+      { lat:26.70, lng:93.00, city:'Biswanath, Assam',   desc:'Multi-Village Rural WSS.',                           qty:'3000 KM',   color:'#F07845' },
+      { lat:26.01, lng:89.97, city:'Dhubri, Assam',       desc:'Multi-Village Rural WSS.',                           qty:'648 KM',    color:'#F07845' },
+      { lat:30.32, lng:78.03, city:'Rishikesh & Dehradun, UK', desc:'Storm Water Drainage Master Plan.',             qty:'218 Sq.KM', color:'#F07845' },
+      { lat:24.13, lng:79.90, city:'Khajuraho, MP',        desc:'Khajuraho Airport Topographical Survey.',            qty:'150 Ha',    color:'#F07845' },
+    ]
+  },
+  {
+    year:'2019', label:'West Coast & Bathymetry',
+    stops:[
+      { lat:15.51, lng:73.83, city:'Goa',                 desc:'Topographical Survey of Sewage Main Trunk.',         qty:'50 KM',     color:'#F07845' },
+      { lat:19.99, lng:73.79, city:'Nashik, MH',           desc:'Bathymetry of Godavari River, Smart City.',          qty:'64 Ha',     color:'#F07845' },
+      { lat:23.13, lng:80.72, city:'Anuppur, MP',           desc:'Dameri MVWSS — 78 Villages + Bathymetry.',           qty:'1000 KM',   color:'#F07845' },
+      { lat:22.69, lng:74.90, city:'Barwani & Sheopur, MP', desc:'Multi-Village Rural WSS — 210 Villages.',            qty:'2000 KM',   color:'#F07845' },
+    ]
+  },
+  {
+    year:'2020', label:'River Surveys & Mining',
+    stops:[
+      { lat:24.80, lng:87.92, city:'Farakkha, WB',         desc:'Bathymetric Survey of Ganga River.',                 qty:'100 Ha',    color:'#F07845' },
+      { lat:23.67, lng:86.15, city:'Bokaro, Jharkhand',    desc:'Coal Mine Contour + Sewerage STP Survey.',           qty:'63 Ha',     color:'#F07845' },
+      { lat:21.82, lng:75.62, city:'Khargone, MP',          desc:'Water Supply & Sewerage under AMRUT.',               qty:'800 KM',    color:'#F07845' },
+      { lat:21.82, lng:76.35, city:'Khandwa, MP',           desc:'AMRUT Water Supply Network.',                        qty:'522 KM',    color:'#F07845' },
+    ]
+  },
+  {
+    year:'2021', label:'Large Scale WSS',
+    stops:[
+      { lat:24.53, lng:81.30, city:'Rewa, MP',              desc:'Rewa Division — 23 ULBs Water & Sewer.',            qty:'4500 KM',   color:'#F07845' },
+      { lat:24.59, lng:80.83, city:'Satna, MP',             desc:'Hydraulic Design — Sewer Network.',                  qty:'179 KM',    color:'#F07845' },
+      { lat:24.53, lng:81.30, city:'Waidhan, MP',           desc:'Hydraulic Design — Feeder & Distribution.',          qty:'4172 KM',   color:'#F07845' },
+      { lat:21.26, lng:81.63, city:'Chhattisgarh',          desc:'Chapora MVWSS + LWM Schemes.',                       qty:'65 KM',     color:'#F07845' },
+    ]
+  },
+  {
+    year:'2022', label:'🎉 TNEC LLP Founded!',
+    stops:[
+      { lat:23.26, lng:77.41, city:'Bhopal, MP — HQ ★',    desc:'True North Engineering Consultants LLP established. ISO 9001:2015 certified, MSME & GST registered.', qty:'New Chapter', color:'#fff' },
+    ]
+  },
+  {
+    year:'2023', label:'AMRUT 2.0 Domination',
+    stops:[
+      { lat:24.53, lng:81.30, city:'Rewa, MP',              desc:'AMRUT 2.0 Water Supply Networks.',                   qty:'1100 KM',   color:'#2DBC6E' },
+      { lat:23.33, lng:75.04, city:'Ratlam, MP',            desc:'Pipeline Hydraulic Design.',                         qty:'655 KM',    color:'#2DBC6E' },
+      { lat:21.82, lng:76.35, city:'Khandwa, MP',           desc:'AMRUT 2.0 Water Supply.',                            qty:'522 KM',    color:'#2DBC6E' },
+      { lat:24.08, lng:75.07, city:'Mandsaur, MP',          desc:'Sewerage Scheme Pipeline Survey.',                   qty:'355 KM',    color:'#2DBC6E' },
+      { lat:24.75, lng:78.83, city:'Tikamgarh, MP',         desc:'DPR for 12 ULBs — AMRUT 2.0.',                      qty:'12 ULBs',   color:'#2DBC6E' },
+    ]
+  },
+  {
+    year:'2024', label:'Multi-Village WSS Sewerage & LWM',
+    stops:[
+      
+      { lat:23.18, lng:79.99, city:'Jabalpur, MP',          desc:'Multi-Village WSS Hydraulic Design.',                qty:'2890 KM',   color:'#2DBC6E' },
+      { lat:23.19, lng:77.08, city:'Sehore / Ashta, MP',   desc:'Ashta-Ranipura MVWSS — 250 OHTs.',                   qty:'4745 KM',   color:'#2DBC6E' },
+      { lat:26.22, lng:78.18, city:'Gwalior, MP',           desc:'Contour Survey for WTP Sites.',                      qty:'4 WTP',     color:'#2DBC6E' },
+      { lat:20.92, lng:75.32, city:'Jalgaon, MH',           desc:'Irrigation Area Contour Survey.',                    qty:'3930 Ha',   color:'#2DBC6E' },
+      { lat:21.17, lng:77.32, city:'Anjangaon Surji, MH',  desc:'Topographical Survey — Sewer Network.',              qty:'145 KM',    color:'#2DBC6E' },
+    ]
+  },
+  {
+    year:'2025', label:'Bihar, Consumer Surveys & More',
+    stops:[
+      { lat:23.26, lng:77.41, city:'Bhopal, MP',            desc:'GTI Survey — 36 OHTs, 6 WTP, 4 CLF.',               qty:'1000 KM',   color:'#2DBC6E' },
+      { lat:24.09, lng:80.83, city:'Maihar, MP',            desc:'Consumer Survey — Sewerage Scheme.',                 qty:'15,513 HH', color:'#2DBC6E' },
+      { lat:23.85, lng:79.55, city:'Bandri, MP',            desc:'Consumer Survey — Sewerage Scheme.',                 qty:'8,688 HH',  color:'#2DBC6E' },
+      { lat:25.47, lng:80.33, city:'Charkhari, UP',         desc:'Consumer Survey — WSS Jal Jeevan Mission.',          qty:'7,700 HH',  color:'#2DBC6E' },
+      { lat:22.60, lng:76.55, city:'Dewas Package 3D, MP',  desc:'Consumer Survey — 4 Towns MPUDCL.',                  qty:'12,318 HH', color:'#2DBC6E' },
+      { lat:22.72, lng:75.86, city:'Chhuriya, CH',          desc:'Consumer Survey WSS — Digital Survey.',              qty:'960 HH',    color:'#2DBC6E' },
+    ]
+  },
+  {
+    year:'2026', label:'Still Growing — 50K+ KM!',
+    stops:[
+      { lat:23.26, lng:77.41, city:'Bhopal, MP — HQ ★',    desc:'50,000+ KM · 165+ Projects · 12+ States. And counting!', qty:'50K+ KM', color:'#2DBC6E' },
+      { lat:22.72, lng:75.86, city:'Indore, MP',            desc:'AMRUT 2.0 WSS Pipeline Network.',                   qty:'3000+ KM',  color:'#2DBC6E' },
+      { lat:25.59, lng:85.14, city:'Bihar — 21 Towns',      desc:'DPR for STP & FSTP under SBM 2.0.',                 qty:'21 Towns',  color:'#2DBC6E' },
+      { lat:19.08, lng:72.88, city:'Mumbai, Maharashtra',   desc:'Mithi River — Drone, Bathymetry, GPR for BMC.',      qty:'250 Acres', color:'#2DBC6E' },
+    ]
+  },
+];
   const svg    = document.getElementById('journeySvg');
   const jYear  = document.getElementById('jYear');
   const jLabel = document.getElementById('jLabel');
@@ -1267,99 +1354,100 @@ function initMap() {
     return g;
   }
 
-  let currentIndex = 0;
+const STEP_DURATION = 500;  // ms per arrow draw
+const STOP_PAUSE    = 600;  // ms pause at each stop
+const YEAR_PAUSE    = 900;  // ms pause between years
 
-  function runFrom(startIdx){
-    // Clear SVG
-    while(svg.firstChild) svg.removeChild(svg.firstChild);
-    dotEls.forEach(d=>{ d.classList.remove('active','visited'); });
-    jReplay.style.display='none';
-    currentIndex = startIdx;
+let currentYearIdx = 0;
 
-    // Re-place all visited pins up to startIdx
-    for(let i=0;i<startIdx;i++){
-      const s=JOURNEY[i];
-      const p=toXY(s.lat,s.lng);
-      placePinSVG(p.x,p.y,s.color,s.city,s.city.includes('HQ'));
-      dotEls[i].classList.add('visited');
-    }
+function runFrom(startYearIdx){
+  while(svg.firstChild) svg.removeChild(svg.firstChild);
+  dotEls.forEach(d=>d.classList.remove('active','visited'));
+  jReplay.style.display='none';
+  currentYearIdx = startYearIdx;
 
-    step(startIdx);
+  // Re-draw all previous years instantly
+  for(let y=0; y<startYearIdx; y++){
+    const yr = JOURNEY[y];
+    yr.stops.forEach(s=>{
+      const p = toXY(s.lat, s.lng);
+      placePinSVG(p.x, p.y, s.color, s.city, s.city.includes('★'));
+    });
+    dotEls[y].classList.add('visited');
   }
 
-  function step(i){
-    if(i >= JOURNEY.length){
-      // End of journey
-      jReplay.style.display='block';
-      dotEls.forEach(d=>d.classList.add('visited'));
-      return;
-    }
+  stepYear(startYearIdx);
+}
 
-    const stop  = JOURNEY[i];
-    const prev  = i > 0 ? JOURNEY[i-1] : null;
-    const pt    = toXY(stop.lat, stop.lng);
-    const PAUSE = 2200;
+function stepYear(yi){
+  if(yi >= JOURNEY.length){
+    jReplay.style.display='block';
+    dotEls.forEach(d=>d.classList.add('visited'));
+    return;
+  }
 
-    // Update dot indicators
-    dotEls.forEach((d,idx)=>{
-      d.classList.remove('active');
-      if(idx < i)  d.classList.add('visited');
-    });
-    dotEls[i].classList.add('active');
+  const yr = JOURNEY[yi];
 
-    // Update year + label
-    jYear.style.opacity='0';
-    jLabel.style.opacity='0';
+  // Update dot indicators
+  dotEls.forEach((d,i)=>{
+    d.classList.remove('active');
+    if(i<yi) d.classList.add('visited');
+  });
+  dotEls[yi].classList.add('active');
+
+  // Update year display
+  jYear.style.transition='opacity .3s';
+  jYear.style.opacity='0';
+  jLabel.style.opacity='0';
+  t(()=>{
+    jYear.textContent  = yr.year;
+    jLabel.textContent = yr.label;
+    jYear.style.opacity='1';
+    jLabel.style.opacity='1';
+    jYear.style.color = yr.stops[0].color==='#fff' ? '#fff' : yr.stops[0].color;
+  },150);
+
+  // Bhopal is always the origin for arrows
+  const origin = toXY(23.26, 77.41);
+
+  // Always place/pulse HQ pin
+  placePinSVG(origin.x, origin.y, '#E8622A', 'Bhopal HQ', true);
+
+  let totalDelay = 300;
+
+  yr.stops.forEach((stop, si)=>{
+    const pt = toXY(stop.lat, stop.lng);
+    const isHome = stop.city.includes('★') || (stop.lat===23.26 && stop.lng===77.41);
+
     t(()=>{
-      jYear.textContent  = stop.year;
-      jLabel.textContent = stop.label;
-      jYear.style.transition='opacity .4s';
-      jLabel.style.transition='opacity .4s';
-      jYear.style.opacity='1';
-      jLabel.style.opacity='1';
-      jYear.style.color = stop.color==='#fff' ? '#fff' : stop.color;
-    }, 100);
-
-    // Float badge
-    jFNum.textContent = stop.year;
-    jFLbl.textContent = stop.city;
-
-    function showCard(){
+      // Show card
       jCity.textContent = stop.city;
       jDesc.textContent = stop.desc;
       jQty.textContent  = stop.qty;
       jQty.style.color  = stop.color==='#fff' ? '#E8622A' : stop.color;
       jCard.style.opacity='1';
       jCard.style.transform='translateY(0)';
-      // Place pin
-      placePinSVG(pt.x, pt.y, stop.color, stop.city, stop.city.includes('HQ'));
-      // Next step
-      t(()=>{ step(i+1); }, PAUSE);
-    }
+      jFNum.textContent = yr.year;
+      jFLbl.textContent = stop.city;
 
-    if(prev){
-      const pp = toXY(prev.lat, prev.lng);
-      // Hide card during path draw
-      jCard.style.opacity='0';
-      jCard.style.transform='translateY(8px)';
-      drawPath(pp.x, pp.y, pt.x, pt.y, ()=>{ t(showCard, 200); });
-    } else {
-      showCard();
-    }
-  }
+      if(!isHome){
+        // Draw arrow from Bhopal to this stop
+        drawPath(origin.x, origin.y, pt.x, pt.y, stop.color, ()=>{
+          placePinSVG(pt.x, pt.y, stop.color, stop.city, false);
+        });
+      }
+    }, totalDelay);
 
-  window.startJourney = function(){ clearAllTimers(); runFrom(0); };
+    totalDelay += STEP_DURATION + STOP_PAUSE;
+  });
 
-  // Auto-start when section scrolls into view
-  const journeySection = document.getElementById('journeyMap');
-  if(journeySection){
-    const jObs = new IntersectionObserver(entries=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting){ startJourney(); jObs.unobserve(e.target); }
-      });
-    },{ threshold:0.3 });
-    jObs.observe(journeySection);
-  }
+  // Move to next year
+  t(()=>{
+    stepYear(yi+1);
+  }, totalDelay + YEAR_PAUSE);
+}
+
+window.startJourney = function(){ clearAllTimers(); runFrom(0); };
 })();
 
 </script>

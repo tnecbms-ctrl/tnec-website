@@ -1257,64 +1257,47 @@ function initMap() {
   function t(fn, ms){ const id=setTimeout(fn,ms); timers.push(id); return id; }
 
   // Draw animated path between two points
-  function drawPath(x1,y1,x2,y2, onDone){
-    const pathId = 'jp'+Date.now();
-    const dx=x2-x1, dy=y2-y1;
-    const len=Math.sqrt(dx*dx+dy*dy);
+  function drawPath(x1,y1,x2,y2, color, onDone){
+  const dx=x2-x1, dy=y2-y1;
+  const path = document.createElementNS('http://www.w3.org/2000/svg','line');
+  path.setAttribute('x1',x1); path.setAttribute('y1',y1);
+  path.setAttribute('x2',x1); path.setAttribute('y2',y1);
+  path.setAttribute('stroke', color==='#fff'?'#E8622A':color);
+  path.setAttribute('stroke-width','1.8');
+  path.setAttribute('stroke-linecap','round');
+  path.setAttribute('stroke-dasharray','5 3');
+  path.setAttribute('opacity','0.75');
+  svg.appendChild(path);
 
-    // Create dashed path
-    const path = document.createElementNS('http://www.w3.org/2000/svg','line');
-    path.setAttribute('x1',x1); path.setAttribute('y1',y1);
-    path.setAttribute('x2',x1); path.setAttribute('y2',y1);
-    path.setAttribute('class','j-path');
-    path.setAttribute('stroke-dasharray','6 4');
-    svg.appendChild(path);
+  const arrow = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  arrow.setAttribute('fill', color==='#fff'?'#E8622A':color);
+  arrow.style.opacity='0';
+  svg.appendChild(arrow);
 
-    // Arrowhead
-    const arrow = document.createElementNS('http://www.w3.org/2000/svg','polygon');
-    arrow.setAttribute('class','j-arrow');
-    arrow.style.opacity='0';
-    svg.appendChild(arrow);
+  const start = performance.now();
 
-    const DRAW_DURATION = 900;
-    const start = performance.now();
+  function animate(now){
+    const progress = Math.min((now-start)/STEP_DURATION, 1);
+    const eased = 1-(1-progress)**2;
+    const cx = x1+dx*eased, cy = y1+dy*eased;
 
-    function animate(now){
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / DRAW_DURATION, 1);
-      const eased = 1 - Math.pow(1-progress, 3);
+    path.setAttribute('x2',cx); path.setAttribute('y2',cy);
 
-      const cx = x1 + dx*eased;
-      const cy = y1 + dy*eased;
-
-      // Animate line
-      path.setAttribute('x2', cx);
-      path.setAttribute('y2', cy);
-
-      // Animate arrowhead at tip
-      if(progress > 0.3){
-        const angle = Math.atan2(dy,dx) * 180/Math.PI;
-        const ax = cx, ay = cy;
-        const size = 7;
-        const rad = Math.atan2(dy,dx);
-        const p1x = ax + size*Math.cos(rad);
-        const p1y = ay + size*Math.sin(rad);
-        const p2x = ax - size*0.6*Math.cos(rad) + size*0.6*Math.sin(rad);
-        const p2y = ay - size*0.6*Math.sin(rad) - size*0.6*Math.cos(rad);
-        const p3x = ax - size*0.6*Math.cos(rad) - size*0.6*Math.sin(rad);
-        const p3y = ay - size*0.6*Math.sin(rad) + size*0.6*Math.cos(rad);
-        arrow.setAttribute('points',`${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y}`);
-        arrow.style.opacity = '0.9';
-      }
-
-      if(progress < 1){
-        requestAnimationFrame(animate);
-      } else {
-        if(onDone) onDone();
-      }
+    if(progress>0.2){
+      const rad=Math.atan2(dy,dx), sz=6;
+      const p1x=cx+sz*Math.cos(rad), p1y=cy+sz*Math.sin(rad);
+      const p2x=cx-sz*.6*Math.cos(rad)+sz*.6*Math.sin(rad);
+      const p2y=cy-sz*.6*Math.sin(rad)-sz*.6*Math.cos(rad);
+      const p3x=cx-sz*.6*Math.cos(rad)-sz*.6*Math.sin(rad);
+      const p3y=cy-sz*.6*Math.sin(rad)+sz*.6*Math.cos(rad);
+      arrow.setAttribute('points',`${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y}`);
+      arrow.style.opacity='0.9';
     }
-    requestAnimationFrame(animate);
+    if(progress<1){ requestAnimationFrame(animate); }
+    else { if(onDone) onDone(); }
   }
+  requestAnimationFrame(animate);
+}
 
   // Place a pin on the map
   function placePinSVG(x, y, color, label, isHQ){

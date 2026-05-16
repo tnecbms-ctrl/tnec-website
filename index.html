@@ -411,7 +411,44 @@ footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-
 .map-popup-desc{font-size:.72rem;color:#4A4540;line-height:1.5}
 .map-popup-qty{font-weight:800;font-size:1rem;color:var(--or);margin-top:.5rem;font-family:'Playfair Display',serif}
 .map-popup-qty.done{color:#2DBC6E}
-  
+
+/* ── JOURNEY MAP ── */
+.j-dot-ind{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.2);
+  transition:background .3s,transform .3s;
+  cursor:pointer;
+}
+.j-dot-ind.visited{background:var(--or)}
+.j-dot-ind.active{background:#fff;transform:scale(1.4)}
+
+/* SVG path animation */
+.j-path{
+  fill:none;
+  stroke:var(--or);
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-dasharray:6 4;
+  opacity:0.8;
+}
+.j-arrow{
+  fill:var(--or);
+  opacity:0.9;
+}
+.j-pin-circle{
+  fill:var(--or);
+  stroke:#fff;
+  stroke-width:1.5;
+}
+.j-pin-circle.done{fill:#2DBC6E}
+.j-pin-label{
+  font-family:'Inter',sans-serif;
+  font-size:7px;
+  font-weight:700;
+  fill:rgba(255,255,255,0.9);
+  text-shadow:0 1px 3px rgba(0,0,0,.8);
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnLBtOeixDJN9BZdCXJ_PaZTOUU469uV0&callback=initMap"></script>
@@ -470,8 +507,38 @@ footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-
 <section id="about">
   <div class="about-grid">
     <div class="about-vis rvl">
-      <div class="about-img-wrap"><img src="TNEC_PAMPHLET_1.png" alt="TNEC"/><div class="about-corner"><div class="big">2022</div><div class="sm">Established</div></div></div>
-      <div class="about-float"><div class="num">50K+</div><div class="lbl">KM Surveyed</div></div>
+      <div style="border-radius:20px;overflow:hidden;box-shadow:0 28px 70px rgba(24,20,15,.11);height:490px;position:relative;background:#1a1714" id="journeyMap">
+        
+        <svg id="journeySvg" viewBox="0 0 500 490" style="width:100%;height:100%;position:absolute;inset:0;z-index:2;pointer-events:none"></svg>
+    
+        <!-- Map background — dimmed India map -->
+        <img src="INdiamap.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;filter:grayscale(40%) brightness(0.25);position:absolute;inset:0"/>
+    
+        <!-- Year display -->
+        <div style="position:absolute;top:1.2rem;left:1.4rem;z-index:10">
+          <div id="jYear" style="font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;color:var(--or);line-height:1;text-shadow:0 2px 12px rgba(0,0,0,.5)">2015</div>
+          <div id="jLabel" style="font-size:.7rem;font-weight:600;color:rgba(244,241,236,.6);letter-spacing:.1em;text-transform:uppercase;margin-top:.15rem">Journey Begins</div>
+        </div>
+    
+        <!-- Current place card -->
+        <div id="jCard" style="position:absolute;bottom:1.4rem;left:1.4rem;right:1.4rem;z-index:10;background:rgba(24,20,15,.85);backdrop-filter:blur(10px);border-radius:14px;padding:1rem 1.2rem;border:1px solid rgba(232,98,42,.3);transform:translateY(8px);opacity:0;transition:all .4s ease">
+          <div id="jCity" style="font-weight:700;font-size:.88rem;color:#fff;margin-bottom:.2rem"></div>
+          <div id="jDesc" style="font-size:.7rem;color:rgba(244,241,236,.55);line-height:1.5"></div>
+          <div id="jQty" style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;color:var(--or);margin-top:.4rem"></div>
+        </div>
+    
+        <!-- Progress dots at top right -->
+        <div id="jDots" style="position:absolute;top:1.4rem;right:1.4rem;z-index:10;display:flex;flex-direction:column;gap:.35rem"></div>
+    
+        <!-- Replay button -->
+        <button onclick="startJourney()" id="jReplay" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:none;background:var(--or);color:#fff;border:none;border-radius:100px;padding:.7rem 1.6rem;font-family:'Inter',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;z-index:10;box-shadow:0 6px 24px rgba(232,98,42,.4)">↺ Replay Journey</button>
+    
+      </div>
+    
+      <div class="about-float">
+        <div class="num" id="jFloatNum">2015</div>
+        <div class="lbl" id="jFloatLbl">Journey Begins</div>
+      </div>
     </div>
     <div class="rvr">
       <div class="sec-lbl">About Us</div>
@@ -1036,6 +1103,264 @@ function initMap() {
     });
   });
 }
+
+/* ── JOURNEY MAP ANIMATION ── */
+(function(){
+
+  // Map image covers India: lon 68-97°E, lat 6-37°N
+  // SVG viewBox 0 0 500 490
+  // x = (lng - 68) / (97 - 68) * 500
+  // y = (37 - lat) / (37 - 6)  * 490
+  function toXY(lat, lng){
+    return {
+      x: ((lng - 68) / (97 - 68)) * 500,
+      y: ((37 - lat) / (37 - 6))  * 490
+    };
+  }
+
+  // ═══════════════════════════════════════════
+  // JOURNEY STOPS — add/edit freely
+  // ═══════════════════════════════════════════
+  const JOURNEY = [
+    { year:'2015', label:'Journey Begins',        lat:23.26,  lng:77.41, city:'Bhopal, MP',              desc:'Shristi Survey Consulting founded. First GIS & Survey projects begin.',          qty:'Est. 2015',    color:'#E8622A' },
+    { year:'2016', label:'First Big Project',      lat:24.66,  lng:77.32, city:'Guna, MP',                desc:'Multi-Village WSS — 354 Villages. 3000 KM feeder & distribution network.',      qty:'3000 KM',      color:'#E8622A' },
+    { year:'2017', label:'Expanding UP',           lat:28.73,  lng:77.78, city:'Hapur, Uttar Pradesh',    desc:'Multi-Village WSS — 200 Villages. Expanding into Uttar Pradesh.',               qty:'1400 KM',      color:'#E8622A' },
+    { year:'2017', label:'Northeast Push',         lat:26.70,  lng:83.37, city:'Gorakhpur, UP',           desc:'Multi-Village WSS — 200 Villages along Gorakhpur district.',                    qty:'3000 KM',      color:'#E8622A' },
+    { year:'2018', label:'Assam Expansion',        lat:26.70,  lng:93.00, city:'Biswanath, Assam',        desc:'Multi-Village Rural WSS in Assam. First northeast India project.',              qty:'3000 KM',      color:'#F07845' },
+    { year:'2018', label:'Hill Stations',          lat:30.32,  lng:78.03, city:'Rishikesh & Dehradun, UK',desc:'Storm Water Drainage Master Plan across Uttarakhand hills.',                    qty:'218 Sq.KM',    color:'#F07845' },
+    { year:'2019', label:'West Coast',             lat:15.51,  lng:73.83, city:'Porvorim & Candolim, Goa',desc:'Topographical Survey of Sewage Main Trunk along the Goa coast.',               qty:'50 KM',        color:'#F07845' },
+    { year:'2019', label:'Smart City',             lat:19.99,  lng:73.79, city:'Nashik, Maharashtra',     desc:'Bathymetric Survey of Godavari River for Nashik Smart City project.',           qty:'64 Ha',        color:'#F07845' },
+    { year:'2020', label:'River Survey',           lat:24.80,  lng:87.92, city:'Farakkha, West Bengal',   desc:'Bathymetric Survey of Ganga River.',                                           qty:'100 Ha',       color:'#F07845' },
+    { year:'2021', label:'Mining Survey',          lat:23.67,  lng:86.15, city:'Bokaro, Jharkhand',       desc:'Coal Mine Contour Survey & Sewerage Scheme Topographical Survey.',             qty:'63 Ha',        color:'#F07845' },
+    { year:'2022', label:'TNEC LLP Founded! 🎉',  lat:23.26,  lng:77.41, city:'Bhopal, MP — HQ',         desc:'True North Engineering Consultants LLP established. ISO 9001:2015 certified.',  qty:'New Chapter',  color:'#fff'    },
+    { year:'2023', label:'AMRUT 2.0 Era',          lat:22.72,  lng:75.86, city:'Indore, MP',              desc:'AMRUT 2.0 WSS Pipeline Network — largest single project.',                     qty:'3000+ KM',     color:'#2DBC6E' },
+    { year:'2023', label:'Multi-Village MP',       lat:23.18,  lng:79.99, city:'Jabalpur, MP',            desc:'Multi-Village WSS Hydraulic Design. 280 OHTs, 5 MBRs.',                        qty:'2890 KM',      color:'#2DBC6E' },
+    { year:'2024', label:'Mumbai!',                lat:19.08,  lng:72.88, city:'Mumbai, Maharashtra',     desc:'Mithi River Development — Drone, Bathymetry, GPR Survey for BMC Mumbai.',      qty:'250 Acres',    color:'#2DBC6E' },
+    { year:'2024', label:'Massive WSS',            lat:23.19,  lng:77.08, city:'Sehore / Ashta, MP',      desc:'Multi-Village WSS — Ashta Ranipura. Largest MP project.',                      qty:'4745 KM',      color:'#2DBC6E' },
+    { year:'2025', label:'Bihar DPR',              lat:25.59,  lng:85.14, city:'Bihar — 21 Towns',        desc:'DPR for STP & FSTP across 21 towns under SBM 2.0.',                           qty:'21 Towns',     color:'#2DBC6E' },
+    { year:'2025', label:'1.5L Households',        lat:24.09,  lng:80.83, city:'Maihar, MP',              desc:'Consumer Surveys — 15,513 Households. D2D Digital Survey.',                   qty:'15,513 HH',    color:'#2DBC6E' },
+    { year:'2026', label:'Today & Beyond',         lat:23.26,  lng:77.41, city:'Bhopal, MP — HQ',         desc:'50,000+ KM surveyed. 165+ projects. 12+ states. Still growing!',              qty:'50K+ KM',      color:'#2DBC6E' },
+  ];
+
+  const svg    = document.getElementById('journeySvg');
+  const jYear  = document.getElementById('jYear');
+  const jLabel = document.getElementById('jLabel');
+  const jCard  = document.getElementById('jCard');
+  const jCity  = document.getElementById('jCity');
+  const jDesc  = document.getElementById('jDesc');
+  const jQty   = document.getElementById('jQty');
+  const jDots  = document.getElementById('jDots');
+  const jReplay= document.getElementById('jReplay');
+  const jFNum  = document.getElementById('jFloatNum');
+  const jFLbl  = document.getElementById('jFloatLbl');
+  if(!svg) return;
+
+  // Build indicator dots
+  JOURNEY.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className = 'j-dot-ind';
+    d.onclick = ()=>{ clearAllTimers(); runFrom(i); };
+    jDots.appendChild(d);
+  });
+  const dotEls = jDots.querySelectorAll('.j-dot-ind');
+
+  let timers = [];
+  function clearAllTimers(){ timers.forEach(clearTimeout); timers=[]; }
+
+  function t(fn, ms){ const id=setTimeout(fn,ms); timers.push(id); return id; }
+
+  // Draw animated path between two points
+  function drawPath(x1,y1,x2,y2, onDone){
+    const pathId = 'jp'+Date.now();
+    const dx=x2-x1, dy=y2-y1;
+    const len=Math.sqrt(dx*dx+dy*dy);
+
+    // Create dashed path
+    const path = document.createElementNS('http://www.w3.org/2000/svg','line');
+    path.setAttribute('x1',x1); path.setAttribute('y1',y1);
+    path.setAttribute('x2',x1); path.setAttribute('y2',y1);
+    path.setAttribute('class','j-path');
+    path.setAttribute('stroke-dasharray','6 4');
+    svg.appendChild(path);
+
+    // Arrowhead
+    const arrow = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    arrow.setAttribute('class','j-arrow');
+    arrow.style.opacity='0';
+    svg.appendChild(arrow);
+
+    const DRAW_DURATION = 900;
+    const start = performance.now();
+
+    function animate(now){
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / DRAW_DURATION, 1);
+      const eased = 1 - Math.pow(1-progress, 3);
+
+      const cx = x1 + dx*eased;
+      const cy = y1 + dy*eased;
+
+      // Animate line
+      path.setAttribute('x2', cx);
+      path.setAttribute('y2', cy);
+
+      // Animate arrowhead at tip
+      if(progress > 0.3){
+        const angle = Math.atan2(dy,dx) * 180/Math.PI;
+        const ax = cx, ay = cy;
+        const size = 7;
+        const rad = Math.atan2(dy,dx);
+        const p1x = ax + size*Math.cos(rad);
+        const p1y = ay + size*Math.sin(rad);
+        const p2x = ax - size*0.6*Math.cos(rad) + size*0.6*Math.sin(rad);
+        const p2y = ay - size*0.6*Math.sin(rad) - size*0.6*Math.cos(rad);
+        const p3x = ax - size*0.6*Math.cos(rad) - size*0.6*Math.sin(rad);
+        const p3y = ay - size*0.6*Math.sin(rad) + size*0.6*Math.cos(rad);
+        arrow.setAttribute('points',`${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y}`);
+        arrow.style.opacity = '0.9';
+      }
+
+      if(progress < 1){
+        requestAnimationFrame(animate);
+      } else {
+        if(onDone) onDone();
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  // Place a pin on the map
+  function placePinSVG(x, y, color, label, isHQ){
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.style.opacity='0';
+    g.style.transition='opacity .4s';
+
+    // Glow
+    const glow = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    glow.setAttribute('cx',x); glow.setAttribute('cy',y); glow.setAttribute('r',isHQ?10:7);
+    glow.setAttribute('fill',color); glow.setAttribute('opacity','0.2');
+    g.appendChild(glow);
+
+    // Flag pole
+    const pole = document.createElementNS('http://www.w3.org/2000/svg','line');
+    pole.setAttribute('x1',x); pole.setAttribute('y1',y);
+    pole.setAttribute('x2',x); pole.setAttribute('y2',y-14);
+    pole.setAttribute('stroke','#fff'); pole.setAttribute('stroke-width','1.5');
+    pole.setAttribute('stroke-linecap','round');
+    g.appendChild(pole);
+
+    // Flag
+    const flag = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    flag.setAttribute('points',`${x},${y-14} ${x+9},${y-11} ${x+9},${y-7} ${x},${y-4}`);
+    flag.setAttribute('fill', color==='#fff'?'#E8622A':color);
+    g.appendChild(flag);
+
+    // Base dot
+    const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    dot.setAttribute('cx',x); dot.setAttribute('cy',y); dot.setAttribute('r',isHQ?4:3);
+    dot.setAttribute('fill',color==='#fff'?'#E8622A':color);
+    dot.setAttribute('stroke','#fff'); dot.setAttribute('stroke-width','1.5');
+    g.appendChild(dot);
+
+    svg.appendChild(g);
+    requestAnimationFrame(()=>{ g.style.opacity='1'; });
+    return g;
+  }
+
+  let currentIndex = 0;
+
+  function runFrom(startIdx){
+    // Clear SVG
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    dotEls.forEach(d=>{ d.classList.remove('active','visited'); });
+    jReplay.style.display='none';
+    currentIndex = startIdx;
+
+    // Re-place all visited pins up to startIdx
+    for(let i=0;i<startIdx;i++){
+      const s=JOURNEY[i];
+      const p=toXY(s.lat,s.lng);
+      placePinSVG(p.x,p.y,s.color,s.city,s.city.includes('HQ'));
+      dotEls[i].classList.add('visited');
+    }
+
+    step(startIdx);
+  }
+
+  function step(i){
+    if(i >= JOURNEY.length){
+      // End of journey
+      jReplay.style.display='block';
+      dotEls.forEach(d=>d.classList.add('visited'));
+      return;
+    }
+
+    const stop  = JOURNEY[i];
+    const prev  = i > 0 ? JOURNEY[i-1] : null;
+    const pt    = toXY(stop.lat, stop.lng);
+    const PAUSE = 2200;
+
+    // Update dot indicators
+    dotEls.forEach((d,idx)=>{
+      d.classList.remove('active');
+      if(idx < i)  d.classList.add('visited');
+    });
+    dotEls[i].classList.add('active');
+
+    // Update year + label
+    jYear.style.opacity='0';
+    jLabel.style.opacity='0';
+    t(()=>{
+      jYear.textContent  = stop.year;
+      jLabel.textContent = stop.label;
+      jYear.style.transition='opacity .4s';
+      jLabel.style.transition='opacity .4s';
+      jYear.style.opacity='1';
+      jLabel.style.opacity='1';
+      jYear.style.color = stop.color==='#fff' ? '#fff' : stop.color;
+    }, 100);
+
+    // Float badge
+    jFNum.textContent = stop.year;
+    jFLbl.textContent = stop.city;
+
+    function showCard(){
+      jCity.textContent = stop.city;
+      jDesc.textContent = stop.desc;
+      jQty.textContent  = stop.qty;
+      jQty.style.color  = stop.color==='#fff' ? '#E8622A' : stop.color;
+      jCard.style.opacity='1';
+      jCard.style.transform='translateY(0)';
+      // Place pin
+      placePinSVG(pt.x, pt.y, stop.color, stop.city, stop.city.includes('HQ'));
+      // Next step
+      t(()=>{ step(i+1); }, PAUSE);
+    }
+
+    if(prev){
+      const pp = toXY(prev.lat, prev.lng);
+      // Hide card during path draw
+      jCard.style.opacity='0';
+      jCard.style.transform='translateY(8px)';
+      drawPath(pp.x, pp.y, pt.x, pt.y, ()=>{ t(showCard, 200); });
+    } else {
+      showCard();
+    }
+  }
+
+  window.startJourney = function(){ clearAllTimers(); runFrom(0); };
+
+  // Auto-start when section scrolls into view
+  const journeySection = document.getElementById('journeyMap');
+  if(journeySection){
+    const jObs = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ startJourney(); jObs.unobserve(e.target); }
+      });
+    },{ threshold:0.3 });
+    jObs.observe(journeySection);
+  }
+})();
 
 </script>
 </body>

@@ -1431,6 +1431,22 @@ function stepYear(yi){
 }
 
 window.startJourney = function(){ clearAllTimers(); runFrom(0); };
+// Auto start when About section enters viewport
+const aboutSection = document.getElementById('about');
+let journeyStarted = false;
+
+const journeyObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !journeyStarted) {
+      journeyStarted = true;
+      startJourney();
+    }
+  });
+}, {
+  threshold: 0.45
+});
+
+journeyObserver.observe(aboutSection);
 })();
 
 </script>

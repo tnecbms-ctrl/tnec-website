@@ -451,7 +451,7 @@ footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnLBtOeixDJN9BZdCXJ_PaZTOUU469uV0&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnLBtOeixDJN9BZdCXJ_PaZTOUU469uV0&callback=initJourneyMap"></script>
 </head>
 <body>
 <div class="cur" id="cur"></div>
@@ -508,39 +508,13 @@ footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-
   <div class="about-grid">
     <div class="about-vis rvl">
       <div style="border-radius:20px;overflow:hidden;box-shadow:0 28px 70px rgba(24,20,15,.11);height:490px;position:relative;background:#1a1714" id="journeyMap">
-        
-        <svg id="journeySvg" viewBox="0 0 500 490" style="width:100%;height:100%;position:absolute;inset:0;z-index:2;pointer-events:none"></svg>
     
-        <!-- Map background — dimmed India map -->
-        <img src="INdiamap.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;filter:grayscale(40%) brightness(0.25);position:absolute;inset:0"/>
+        <!-- Google Map -->
+        <div id="journeyGmap" style="width:100%;height:100%;position:absolute;inset:0;z-index:1"></div>
     
-        <!-- Year display -->
-        <div style="position:absolute;top:1.2rem;left:1.4rem;z-index:10">
-          <div id="jYear" style="font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;color:var(--or);line-height:1;text-shadow:0 2px 12px rgba(0,0,0,.5)">2015</div>
-          <div id="jLabel" style="font-size:.7rem;font-weight:600;color:rgba(244,241,236,.6);letter-spacing:.1em;text-transform:uppercase;margin-top:.15rem">Journey Begins</div>
-        </div>
-    
-        <!-- Current place card -->
-        <div id="jCard" style="position:absolute;bottom:1.4rem;left:1.4rem;right:1.4rem;z-index:10;background:rgba(24,20,15,.85);backdrop-filter:blur(10px);border-radius:14px;padding:1rem 1.2rem;border:1px solid rgba(232,98,42,.3);transform:translateY(8px);opacity:0;transition:all .4s ease">
-          <div id="jCity" style="font-weight:700;font-size:.88rem;color:#fff;margin-bottom:.2rem"></div>
-          <div id="jDesc" style="font-size:.7rem;color:rgba(244,241,236,.55);line-height:1.5"></div>
-          <div id="jQty" style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;color:var(--or);margin-top:.4rem"></div>
-        </div>
-    
-        <!-- Progress dots at top right -->
-        <div id="jDots" style="position:absolute;top:1.4rem;right:1.4rem;z-index:10;display:flex;flex-direction:column;gap:.35rem"></div>
-    
-        <!-- Replay button -->
-        <button onclick="startJourney()" id="jReplay" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:none;background:var(--or);color:#fff;border:none;border-radius:100px;padding:.7rem 1.6rem;font-family:'Inter',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;z-index:10;box-shadow:0 6px 24px rgba(232,98,42,.4)">↺ Replay Journey</button>
-    
-      </div>
-    
-      <div class="about-float">
-        <div class="num" id="jFloatNum">2015</div>
-        <div class="lbl" id="jFloatLbl">Journey Begins</div>
-      </div>
-    </div>
-    <div class="rvr">
+        <!-- SVG overlay for arrows on top of Google Map -->
+        <svg id="journeySvg" style="width:100%;height:100%;position:absolute;inset:0;z-index:2;pointer-events:none"></svg>
+      <div class="rvr">
       <div class="sec-lbl">About Us</div>
       <h2>An Emerging Force in Infrastructure Consultancy</h2>
       <div style="margin-top:1rem">
@@ -1104,335 +1078,388 @@ function initMap() {
   });
 }
 
-/* ── JOURNEY MAP ANIMATION ── */
+/* ── JOURNEY MAP — Google Maps + SVG arrows ── */
 (function(){
 
-  // Map image covers India: lon 68-97°E, lat 6-37°N
-  // SVG viewBox 0 0 500 490
-  // x = (lng - 68) / (97 - 68) * 500
-  // y = (37 - lat) / (37 - 6)  * 490
-  function toXY(lat, lng){
+  const JOURNEY = [
+    {
+      year:'2015', label:'Shristi Survey Consulting Founded',
+      stops:[
+        { lat:23.26, lng:77.41, city:'Bhopal, MP — HQ ★', desc:'Shristi Survey Consulting founded. First GIS & Survey projects begin.', qty:'HQ', color:'#E8622A' },
+      ]
+    },
+    {
+      year:'2016', label:'First Major Projects',
+      stops:[
+        { lat:24.66, lng:77.32, city:'Guna, MP',           desc:'Multi-Village WSS — 354 Villages.',      qty:'3000 KM',   color:'#E8622A' },
+        { lat:22.00, lng:76.95, city:'Dewas, MP',           desc:'Water Supply & Sewer Survey.',           qty:'Survey',    color:'#E8622A' },
+        { lat:23.33, lng:75.04, city:'Ratlam, MP',          desc:'Water Supply Network Survey.',           qty:'Survey',    color:'#E8622A' },
+      ]
+    },
+    {
+      year:'2017', label:'Expanding into UP',
+      stops:[
+        { lat:28.73, lng:77.78, city:'Hapur, UP',           desc:'Multi-Village WSS — 200 Villages.',      qty:'1400 KM',   color:'#E8622A' },
+        { lat:28.57, lng:77.32, city:'Gautam Buddha Nagar', desc:'Multi-Village WSS — 117 Villages.',      qty:'500 KM',    color:'#E8622A' },
+        { lat:26.76, lng:83.37, city:'Gorakhpur, UP',        desc:'Multi-Village WSS — 200 Villages.',      qty:'3000 KM',   color:'#E8622A' },
+        { lat:24.15, lng:78.65, city:'Chhatarpur, MP',       desc:'Water Supply Survey.',                   qty:'182 KM',    color:'#E8622A' },
+      ]
+    },
+    {
+      year:'2018', label:'Northeast & Uttarakhand',
+      stops:[
+        { lat:26.70, lng:93.00, city:'Biswanath, Assam',    desc:'Multi-Village Rural WSS.',               qty:'3000 KM',   color:'#F07845' },
+        { lat:26.01, lng:89.97, city:'Dhubri, Assam',        desc:'Multi-Village Rural WSS.',               qty:'648 KM',    color:'#F07845' },
+        { lat:30.32, lng:78.03, city:'Rishikesh & Dehradun', desc:'Storm Water Drainage Master Plan.',      qty:'218 Sq.KM', color:'#F07845' },
+        { lat:24.13, lng:79.90, city:'Khajuraho, MP',         desc:'Khajuraho Airport Survey.',              qty:'150 Ha',    color:'#F07845' },
+      ]
+    },
+    {
+      year:'2019', label:'West Coast & Bathymetry',
+      stops:[
+        { lat:15.51, lng:73.83, city:'Goa',                  desc:'Topographical Survey of Sewage Trunk.',  qty:'50 KM',     color:'#F07845' },
+        { lat:19.99, lng:73.79, city:'Nashik, MH',            desc:'Bathymetry of Godavari River.',          qty:'64 Ha',     color:'#F07845' },
+        { lat:23.13, lng:80.72, city:'Anuppur, MP',           desc:'Dameri MVWSS — 78 Villages.',            qty:'1000 KM',   color:'#F07845' },
+        { lat:22.69, lng:74.90, city:'Barwani & Sheopur, MP', desc:'Multi-Village WSS — 210 Villages.',      qty:'2000 KM',   color:'#F07845' },
+      ]
+    },
+    {
+      year:'2020', label:'River Surveys & Mining',
+      stops:[
+        { lat:24.80, lng:87.92, city:'Farakkha, WB',          desc:'Bathymetric Survey of Ganga River.',     qty:'100 Ha',    color:'#F07845' },
+        { lat:23.67, lng:86.15, city:'Bokaro, Jharkhand',     desc:'Coal Mine Contour + Sewerage STP.',      qty:'63 Ha',     color:'#F07845' },
+        { lat:21.82, lng:75.62, city:'Khargone, MP',           desc:'Water Supply & Sewerage AMRUT.',         qty:'800 KM',    color:'#F07845' },
+        { lat:21.82, lng:76.35, city:'Khandwa, MP',            desc:'AMRUT Water Supply Network.',            qty:'522 KM',    color:'#F07845' },
+      ]
+    },
+    {
+      year:'2021', label:'Large Scale WSS',
+      stops:[
+        { lat:24.53, lng:81.30, city:'Rewa Division, MP',     desc:'23 ULBs Water & Sewer Schemes.',         qty:'4500 KM',   color:'#F07845' },
+        { lat:24.59, lng:80.83, city:'Satna, MP',             desc:'Hydraulic Design — Sewer Network.',      qty:'179 KM',    color:'#F07845' },
+        { lat:21.26, lng:81.63, city:'Chhattisgarh',          desc:'Chapora MVWSS + LWM Schemes.',           qty:'65 KM',     color:'#F07845' },
+        { lat:24.80, lng:80.82, city:'Waidhan, MP',           desc:'Hydraulic Design — Feeder Network.',     qty:'4172 KM',   color:'#F07845' },
+      ]
+    },
+    {
+      year:'2022', label:'🎉 TNEC LLP Founded!',
+      stops:[
+        { lat:23.26, lng:77.41, city:'Bhopal, MP — HQ ★',   desc:'True North Engineering Consultants LLP established. ISO 9001:2015 · MSME · GST Registered.', qty:'New Chapter ✨', color:'#fff' },
+      ]
+    },
+    {
+      year:'2023', label:'AMRUT 2.0 Domination',
+      stops:[
+        { lat:22.72, lng:75.86, city:'Indore, MP',            desc:'AMRUT 2.0 WSS Pipeline Network.',        qty:'3000+ KM',  color:'#2DBC6E' },
+        { lat:23.26, lng:77.41, city:'Bhopal, MP',            desc:'GTI Survey — 36 OHTs, 6 WTP, 4 CLF.',   qty:'1000 KM',   color:'#2DBC6E' },
+        { lat:24.53, lng:81.30, city:'Rewa, MP',              desc:'AMRUT 2.0 Water Supply Networks.',       qty:'1100 KM',   color:'#2DBC6E' },
+        { lat:23.33, lng:75.04, city:'Ratlam, MP',            desc:'Pipeline Hydraulic Design.',             qty:'655 KM',    color:'#2DBC6E' },
+        { lat:21.82, lng:76.35, city:'Khandwa, MP',           desc:'AMRUT 2.0 Water Supply.',                qty:'522 KM',    color:'#2DBC6E' },
+        { lat:24.08, lng:75.07, city:'Mandsaur, MP',          desc:'Sewerage Scheme Pipeline Survey.',       qty:'355 KM',    color:'#2DBC6E' },
+        { lat:24.75, lng:78.83, city:'Tikamgarh, MP',         desc:'DPR for 12 ULBs — AMRUT 2.0.',          qty:'12 ULBs',   color:'#2DBC6E' },
+      ]
+    },
+    {
+      year:'2024', label:'Mumbai, Big WSS & DPR',
+      stops:[
+        { lat:19.08, lng:72.88, city:'Mumbai, Maharashtra',   desc:'Mithi River — Drone, Bathymetry, GPR.',  qty:'250 Acres', color:'#2DBC6E' },
+        { lat:23.18, lng:79.99, city:'Jabalpur, MP',          desc:'Multi-Village WSS Hydraulic Design.',    qty:'2890 KM',   color:'#2DBC6E' },
+        { lat:23.19, lng:77.08, city:'Sehore / Ashta, MP',   desc:'Ashta-Ranipura MVWSS — 250 OHTs.',       qty:'4745 KM',   color:'#2DBC6E' },
+        { lat:26.22, lng:78.18, city:'Gwalior, MP',           desc:'Contour Survey for WTP Sites.',          qty:'4 WTP',     color:'#2DBC6E' },
+        { lat:20.92, lng:75.32, city:'Jalgaon, MH',           desc:'Irrigation Area Contour Survey.',        qty:'3930 Ha',   color:'#2DBC6E' },
+        { lat:21.17, lng:77.32, city:'Anjangaon Surji, MH',  desc:'Topographical Survey — Sewer Network.',  qty:'145 KM',    color:'#2DBC6E' },
+      ]
+    },
+    {
+      year:'2025', label:'Bihar, Consumer Surveys',
+      stops:[
+        { lat:25.59, lng:85.14, city:'Bihar — 21 Towns',      desc:'DPR for STP & FSTP under SBM 2.0.',     qty:'21 Towns',  color:'#2DBC6E' },
+        { lat:24.09, lng:80.83, city:'Maihar, MP',            desc:'Consumer Survey — Sewerage Scheme.',     qty:'15,513 HH', color:'#2DBC6E' },
+        { lat:23.85, lng:79.55, city:'Bandri, MP',            desc:'Consumer Survey — Sewerage Scheme.',     qty:'8,688 HH',  color:'#2DBC6E' },
+        { lat:25.47, lng:80.33, city:'Charkhari, UP',         desc:'Consumer Survey — Jal Jeevan Mission.',  qty:'7,700 HH',  color:'#2DBC6E' },
+        { lat:22.60, lng:76.55, city:'Dewas Package 3D',      desc:'Consumer Survey — 4 Towns MPUDCL.',      qty:'12,318 HH', color:'#2DBC6E' },
+        { lat:21.27, lng:81.13, city:'Chhuriya, CH',          desc:'Consumer Survey — Digital Survey.',      qty:'960 HH',    color:'#2DBC6E' },
+      ]
+    },
+    {
+      year:'2026', label:'50K+ KM · 165+ Projects · 12+ States',
+      stops:[
+        { lat:22.50, lng:80.00, city:'All Across India 🇮🇳',  desc:'A decade of engineering excellence. Still growing!', qty:'50K+ KM · 165+ Projects', color:'#2DBC6E' },
+      ]
+    },
+  ];
+
+  // DOM refs
+  const svg     = document.getElementById('journeySvg');
+  const jYear   = document.getElementById('jYear');
+  const jLabel  = document.getElementById('jLabel');
+  const jCard   = document.getElementById('jCard');
+  const jCity   = document.getElementById('jCity');
+  const jDesc   = document.getElementById('jDesc');
+  const jQty    = document.getElementById('jQty');
+  const jDots   = document.getElementById('jDots');
+  const jReplay = document.getElementById('jReplay');
+  const jFNum   = document.getElementById('jFloatNum');
+  const jFLbl   = document.getElementById('jFloatLbl');
+
+  const DRAW_MS    = 350;
+  const STOP_PAUSE = 300;
+  const YEAR_PAUSE = 500;
+
+  let gmap, timers=[], drawnMarkers=[];
+
+  // Build year dots
+  JOURNEY.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='j-dot-ind';
+    d.onclick=()=>{ clearAll(); runFromYear(i); };
+    jDots.appendChild(d);
+  });
+  const dotEls=jDots.querySelectorAll('.j-dot-ind');
+
+  function clearAll(){
+    timers.forEach(clearTimeout); timers=[];
+    // Clear SVG arrows
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    // Clear Google Maps markers
+    drawnMarkers.forEach(m=>m.setMap(null)); drawnMarkers=[];
+    dotEls.forEach(d=>d.classList.remove('active','visited'));
+    jReplay.style.display='none';
+    jCard.style.opacity='0';
+  }
+
+  function tick(fn,ms){ const id=setTimeout(fn,ms); timers.push(id); }
+
+  const HQ = {lat:23.26, lng:77.41};
+
+  // Convert lat/lng to SVG pixel position based on map bounds
+  function latLngToSvg(lat, lng){
+    if(!gmap) return {x:0,y:0};
+    const mapDiv  = document.getElementById('journeyGmap');
+    const w = mapDiv.offsetWidth;
+    const h = mapDiv.offsetHeight;
+    const proj    = gmap.getProjection();
+    const bounds  = gmap.getBounds();
+    if(!proj||!bounds) return {x:0,y:0};
+
+    const ne = bounds.getNorthEast();
+    const sw = bounds.getSouthWest();
+
+    const nePoint = proj.fromLatLngToPoint(ne);
+    const swPoint = proj.fromLatLngToPoint(sw);
+    const ptPoint = proj.fromLatLngToPoint(new google.maps.LatLng(lat,lng));
+
+    const scale = Math.pow(2, gmap.getZoom());
+    const x = (ptPoint.x - swPoint.x) * scale;
+    const y = (ptPoint.y - nePoint.y) * scale;
+
+    // Normalize to SVG viewBox
+    const mapW = (nePoint.x - swPoint.x) * scale;
+    const mapH = (swPoint.y - nePoint.y) * scale;
+
     return {
-      x: ((lng - 68) / (97 - 68)) * 500,
-      y: ((37 - lat) / (37 - 6))  * 490
+      x: (x / mapW) * w,
+      y: (y / mapH) * h
     };
   }
 
-  // ═══════════════════════════════════════════
-  // JOURNEY STOPS — add/edit freely
-  // ═══════════════════════════════════════════
-  const JOURNEY = [
-  {
-    year:'2015', label:'Shristi Survey Consulting Founded',
-    stops:[
-      { lat:23.26, lng:77.41, city:'Bhopal, MP',       desc:'Founded. First GIS & Survey projects begin.',         qty:'HQ',        color:'#E8622A' },
-    ]
-  },
-  {
-    year:'2016', label:'First Major Projects',
-    stops:[
-      { lat:24.66, lng:77.32, city:'Guna, MP',          desc:'Multi-Village WSS — 354 Villages.',                  qty:'3000 KM',   color:'#E8622A' },
-      { lat:22.00, lng:76.95, city:'Dewas, MP',          desc:'Water Supply & Sewer Survey.',                       qty:'Survey',    color:'#E8622A' },
-      { lat:23.33, lng:75.04, city:'Ratlam, MP',         desc:'Water Supply Network Survey.',                       qty:'Survey',    color:'#E8622A' },
-    ]
-  },
-  {
-    year:'2017', label:'Expanding into UP & Bihar',
-    stops:[
-      { lat:28.73, lng:77.78, city:'Hapur, UP',          desc:'Multi-Village WSS — 200 Villages.',                  qty:'1400 KM',   color:'#E8622A' },
-      { lat:28.57, lng:77.32, city:'Gautam Buddha Nagar, UP', desc:'Multi-Village WSS — 117 Villages.',             qty:'500 KM',    color:'#E8622A' },
-      { lat:26.76, lng:83.37, city:'Gorakhpur, UP',       desc:'Multi-Village WSS — 200 Villages.',                  qty:'3000 KM',   color:'#E8622A' },
-      { lat:24.15, lng:78.65, city:'Chhatarpur, MP',      desc:'Water Supply Survey — Khajuraho Region.',            qty:'182 KM',    color:'#E8622A' },
-    ]
-  },
-  {
-    year:'2018', label:'Northeast & Hill Stations',
-    stops:[
-      { lat:26.70, lng:93.00, city:'Biswanath, Assam',   desc:'Multi-Village Rural WSS.',                           qty:'3000 KM',   color:'#F07845' },
-      { lat:26.01, lng:89.97, city:'Dhubri, Assam',       desc:'Multi-Village Rural WSS.',                           qty:'648 KM',    color:'#F07845' },
-      { lat:30.32, lng:78.03, city:'Rishikesh & Dehradun, UK', desc:'Storm Water Drainage Master Plan.',             qty:'218 Sq.KM', color:'#F07845' },
-      { lat:24.13, lng:79.90, city:'Khajuraho, MP',        desc:'Khajuraho Airport Topographical Survey.',            qty:'150 Ha',    color:'#F07845' },
-    ]
-  },
-  {
-    year:'2019', label:'West Coast & Bathymetry',
-    stops:[
-      { lat:15.51, lng:73.83, city:'Goa',                 desc:'Topographical Survey of Sewage Main Trunk.',         qty:'50 KM',     color:'#F07845' },
-      { lat:19.99, lng:73.79, city:'Nashik, MH',           desc:'Bathymetry of Godavari River, Smart City.',          qty:'64 Ha',     color:'#F07845' },
-      { lat:23.13, lng:80.72, city:'Anuppur, MP',           desc:'Dameri MVWSS — 78 Villages + Bathymetry.',           qty:'1000 KM',   color:'#F07845' },
-      { lat:22.69, lng:74.90, city:'Barwani & Sheopur, MP', desc:'Multi-Village Rural WSS — 210 Villages.',            qty:'2000 KM',   color:'#F07845' },
-    ]
-  },
-  {
-    year:'2020', label:'River Surveys & Mining',
-    stops:[
-      { lat:24.80, lng:87.92, city:'Farakkha, WB',         desc:'Bathymetric Survey of Ganga River.',                 qty:'100 Ha',    color:'#F07845' },
-      { lat:23.67, lng:86.15, city:'Bokaro, Jharkhand',    desc:'Coal Mine Contour + Sewerage STP Survey.',           qty:'63 Ha',     color:'#F07845' },
-      { lat:21.82, lng:75.62, city:'Khargone, MP',          desc:'Water Supply & Sewerage under AMRUT.',               qty:'800 KM',    color:'#F07845' },
-      { lat:21.82, lng:76.35, city:'Khandwa, MP',           desc:'AMRUT Water Supply Network.',                        qty:'522 KM',    color:'#F07845' },
-    ]
-  },
-  {
-    year:'2021', label:'Large Scale WSS',
-    stops:[
-      { lat:24.53, lng:81.30, city:'Rewa, MP',              desc:'Rewa Division — 23 ULBs Water & Sewer.',            qty:'4500 KM',   color:'#F07845' },
-      { lat:24.59, lng:80.83, city:'Satna, MP',             desc:'Hydraulic Design — Sewer Network.',                  qty:'179 KM',    color:'#F07845' },
-      { lat:24.53, lng:81.30, city:'Waidhan, MP',           desc:'Hydraulic Design — Feeder & Distribution.',          qty:'4172 KM',   color:'#F07845' },
-      { lat:21.26, lng:81.63, city:'Chhattisgarh',          desc:'Chapora MVWSS + LWM Schemes.',                       qty:'65 KM',     color:'#F07845' },
-    ]
-  },
-  {
-    year:'2022', label:'🎉 TNEC LLP Founded!',
-    stops:[
-      { lat:23.26, lng:77.41, city:'Bhopal, MP — HQ ★',    desc:'True North Engineering Consultants LLP established. ISO 9001:2015 certified, MSME & GST registered.', qty:'New Chapter', color:'#fff' },
-    ]
-  },
-  {
-    year:'2023', label:'AMRUT 2.0 Domination',
-    stops:[
-      { lat:24.53, lng:81.30, city:'Rewa, MP',              desc:'AMRUT 2.0 Water Supply Networks.',                   qty:'1100 KM',   color:'#2DBC6E' },
-      { lat:23.33, lng:75.04, city:'Ratlam, MP',            desc:'Pipeline Hydraulic Design.',                         qty:'655 KM',    color:'#2DBC6E' },
-      { lat:21.82, lng:76.35, city:'Khandwa, MP',           desc:'AMRUT 2.0 Water Supply.',                            qty:'522 KM',    color:'#2DBC6E' },
-      { lat:24.08, lng:75.07, city:'Mandsaur, MP',          desc:'Sewerage Scheme Pipeline Survey.',                   qty:'355 KM',    color:'#2DBC6E' },
-      { lat:24.75, lng:78.83, city:'Tikamgarh, MP',         desc:'DPR for 12 ULBs — AMRUT 2.0.',                      qty:'12 ULBs',   color:'#2DBC6E' },
-    ]
-  },
-  {
-    year:'2024', label:'Multi-Village WSS Sewerage & LWM',
-    stops:[
-      
-      { lat:23.18, lng:79.99, city:'Jabalpur, MP',          desc:'Multi-Village WSS Hydraulic Design.',                qty:'2890 KM',   color:'#2DBC6E' },
-      { lat:23.19, lng:77.08, city:'Sehore / Ashta, MP',   desc:'Ashta-Ranipura MVWSS — 250 OHTs.',                   qty:'4745 KM',   color:'#2DBC6E' },
-      { lat:26.22, lng:78.18, city:'Gwalior, MP',           desc:'Contour Survey for WTP Sites.',                      qty:'4 WTP',     color:'#2DBC6E' },
-      { lat:20.92, lng:75.32, city:'Jalgaon, MH',           desc:'Irrigation Area Contour Survey.',                    qty:'3930 Ha',   color:'#2DBC6E' },
-      { lat:21.17, lng:77.32, city:'Anjangaon Surji, MH',  desc:'Topographical Survey — Sewer Network.',              qty:'145 KM',    color:'#2DBC6E' },
-    ]
-  },
-  {
-    year:'2025', label:'Bihar, Consumer Surveys & More',
-    stops:[
-      { lat:23.26, lng:77.41, city:'Bhopal, MP',            desc:'GTI Survey — 36 OHTs, 6 WTP, 4 CLF.',               qty:'1000 KM',   color:'#2DBC6E' },
-      { lat:24.09, lng:80.83, city:'Maihar, MP',            desc:'Consumer Survey — Sewerage Scheme.',                 qty:'15,513 HH', color:'#2DBC6E' },
-      { lat:23.85, lng:79.55, city:'Bandri, MP',            desc:'Consumer Survey — Sewerage Scheme.',                 qty:'8,688 HH',  color:'#2DBC6E' },
-      { lat:25.47, lng:80.33, city:'Charkhari, UP',         desc:'Consumer Survey — WSS Jal Jeevan Mission.',          qty:'7,700 HH',  color:'#2DBC6E' },
-      { lat:22.60, lng:76.55, city:'Dewas Package 3D, MP',  desc:'Consumer Survey — 4 Towns MPUDCL.',                  qty:'12,318 HH', color:'#2DBC6E' },
-      { lat:22.72, lng:75.86, city:'Chhuriya, CH',          desc:'Consumer Survey WSS — Digital Survey.',              qty:'960 HH',    color:'#2DBC6E' },
-    ]
-  },
-  {
-    year:'2026', label:'Still Growing — 50K+ KM!',
-    stops:[
-      { lat:23.26, lng:77.41, city:'Bhopal, MP — HQ ★',    desc:'50,000+ KM · 165+ Projects · 12+ States. And counting!', qty:'50K+ KM', color:'#2DBC6E' },
-      { lat:22.72, lng:75.86, city:'Indore, MP',            desc:'AMRUT 2.0 WSS Pipeline Network.',                   qty:'3000+ KM',  color:'#2DBC6E' },
-      { lat:25.59, lng:85.14, city:'Bihar — 21 Towns',      desc:'DPR for STP & FSTP under SBM 2.0.',                 qty:'21 Towns',  color:'#2DBC6E' },
-      { lat:19.08, lng:72.88, city:'Mumbai, Maharashtra',   desc:'Mithi River — Drone, Bathymetry, GPR for BMC.',      qty:'250 Acres', color:'#2DBC6E' },
-    ]
-  },
-];
-  const svg    = document.getElementById('journeySvg');
-  const jYear  = document.getElementById('jYear');
-  const jLabel = document.getElementById('jLabel');
-  const jCard  = document.getElementById('jCard');
-  const jCity  = document.getElementById('jCity');
-  const jDesc  = document.getElementById('jDesc');
-  const jQty   = document.getElementById('jQty');
-  const jDots  = document.getElementById('jDots');
-  const jReplay= document.getElementById('jReplay');
-  const jFNum  = document.getElementById('jFloatNum');
-  const jFLbl  = document.getElementById('jFloatLbl');
-  if(!svg) return;
+  // Draw animated dashed arrow on SVG overlay
+  function drawArrow(fromLat, fromLng, toLat, toLng, color, onDone){
+    const from = latLngToSvg(fromLat, fromLng);
+    const to   = latLngToSvg(toLat,   toLng);
+    const dx   = to.x - from.x;
+    const dy   = to.y - from.y;
+    const col  = color==='#fff' ? '#E8622A' : color;
 
-  // Build indicator dots
-  JOURNEY.forEach((_,i)=>{
-    const d = document.createElement('div');
-    d.className = 'j-dot-ind';
-    d.onclick = ()=>{ clearAllTimers(); runFrom(i); };
-    jDots.appendChild(d);
-  });
-  const dotEls = jDots.querySelectorAll('.j-dot-ind');
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1', from.x); line.setAttribute('y1', from.y);
+    line.setAttribute('x2', from.x); line.setAttribute('y2', from.y);
+    line.setAttribute('stroke', col);
+    line.setAttribute('stroke-width','2');
+    line.setAttribute('stroke-linecap','round');
+    line.setAttribute('stroke-dasharray','5 3');
+    line.setAttribute('opacity','0.8');
+    svg.appendChild(line);
 
-  let timers = [];
-  function clearAllTimers(){ timers.forEach(clearTimeout); timers=[]; }
+    const arrow = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    arrow.setAttribute('fill', col);
+    arrow.style.opacity='0';
+    svg.appendChild(arrow);
 
-  function t(fn, ms){ const id=setTimeout(fn,ms); timers.push(id); return id; }
-
-  // Draw animated path between two points
-  function drawPath(x1,y1,x2,y2, color, onDone){
-  const dx=x2-x1, dy=y2-y1;
-  const path = document.createElementNS('http://www.w3.org/2000/svg','line');
-  path.setAttribute('x1',x1); path.setAttribute('y1',y1);
-  path.setAttribute('x2',x1); path.setAttribute('y2',y1);
-  path.setAttribute('stroke', color==='#fff'?'#E8622A':color);
-  path.setAttribute('stroke-width','1.8');
-  path.setAttribute('stroke-linecap','round');
-  path.setAttribute('stroke-dasharray','5 3');
-  path.setAttribute('opacity','0.75');
-  svg.appendChild(path);
-
-  const arrow = document.createElementNS('http://www.w3.org/2000/svg','polygon');
-  arrow.setAttribute('fill', color==='#fff'?'#E8622A':color);
-  arrow.style.opacity='0';
-  svg.appendChild(arrow);
-
-  const start = performance.now();
-
-  function animate(now){
-    const progress = Math.min((now-start)/STEP_DURATION, 1);
-    const eased = 1-(1-progress)**2;
-    const cx = x1+dx*eased, cy = y1+dy*eased;
-
-    path.setAttribute('x2',cx); path.setAttribute('y2',cy);
-
-    if(progress>0.2){
-      const rad=Math.atan2(dy,dx), sz=6;
-      const p1x=cx+sz*Math.cos(rad), p1y=cy+sz*Math.sin(rad);
-      const p2x=cx-sz*.6*Math.cos(rad)+sz*.6*Math.sin(rad);
-      const p2y=cy-sz*.6*Math.sin(rad)-sz*.6*Math.cos(rad);
-      const p3x=cx-sz*.6*Math.cos(rad)-sz*.6*Math.sin(rad);
-      const p3y=cy-sz*.6*Math.sin(rad)+sz*.6*Math.cos(rad);
-      arrow.setAttribute('points',`${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y}`);
-      arrow.style.opacity='0.9';
-    }
-    if(progress<1){ requestAnimationFrame(animate); }
-    else { if(onDone) onDone(); }
-  }
-  requestAnimationFrame(animate);
-}
-
-  // Place a pin on the map
-  function placePinSVG(x, y, color, label, isHQ){
-    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.style.opacity='0';
-    g.style.transition='opacity .4s';
-
-    // Glow
-    const glow = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    glow.setAttribute('cx',x); glow.setAttribute('cy',y); glow.setAttribute('r',isHQ?10:7);
-    glow.setAttribute('fill',color); glow.setAttribute('opacity','0.2');
-    g.appendChild(glow);
-
-    // Flag pole
-    const pole = document.createElementNS('http://www.w3.org/2000/svg','line');
-    pole.setAttribute('x1',x); pole.setAttribute('y1',y);
-    pole.setAttribute('x2',x); pole.setAttribute('y2',y-14);
-    pole.setAttribute('stroke','#fff'); pole.setAttribute('stroke-width','1.5');
-    pole.setAttribute('stroke-linecap','round');
-    g.appendChild(pole);
-
-    // Flag
-    const flag = document.createElementNS('http://www.w3.org/2000/svg','polygon');
-    flag.setAttribute('points',`${x},${y-14} ${x+9},${y-11} ${x+9},${y-7} ${x},${y-4}`);
-    flag.setAttribute('fill', color==='#fff'?'#E8622A':color);
-    g.appendChild(flag);
-
-    // Base dot
-    const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    dot.setAttribute('cx',x); dot.setAttribute('cy',y); dot.setAttribute('r',isHQ?4:3);
-    dot.setAttribute('fill',color==='#fff'?'#E8622A':color);
-    dot.setAttribute('stroke','#fff'); dot.setAttribute('stroke-width','1.5');
-    g.appendChild(dot);
-
-    svg.appendChild(g);
-    requestAnimationFrame(()=>{ g.style.opacity='1'; });
-    return g;
-  }
-
-const STEP_DURATION = 500;  // ms per arrow draw
-const STOP_PAUSE    = 600;  // ms pause at each stop
-const YEAR_PAUSE    = 900;  // ms pause between years
-
-let currentYearIdx = 0;
-
-function runFrom(startYearIdx){
-  while(svg.firstChild) svg.removeChild(svg.firstChild);
-  dotEls.forEach(d=>d.classList.remove('active','visited'));
-  jReplay.style.display='none';
-  currentYearIdx = startYearIdx;
-
-  // Re-draw all previous years instantly
-  for(let y=0; y<startYearIdx; y++){
-    const yr = JOURNEY[y];
-    yr.stops.forEach(s=>{
-      const p = toXY(s.lat, s.lng);
-      placePinSVG(p.x, p.y, s.color, s.city, s.city.includes('★'));
-    });
-    dotEls[y].classList.add('visited');
-  }
-
-  stepYear(startYearIdx);
-}
-
-function stepYear(yi){
-  if(yi >= JOURNEY.length){
-    jReplay.style.display='block';
-    dotEls.forEach(d=>d.classList.add('visited'));
-    return;
-  }
-
-  const yr = JOURNEY[yi];
-
-  // Update dot indicators
-  dotEls.forEach((d,i)=>{
-    d.classList.remove('active');
-    if(i<yi) d.classList.add('visited');
-  });
-  dotEls[yi].classList.add('active');
-
-  // Update year display
-  jYear.style.transition='opacity .3s';
-  jYear.style.opacity='0';
-  jLabel.style.opacity='0';
-  t(()=>{
-    jYear.textContent  = yr.year;
-    jLabel.textContent = yr.label;
-    jYear.style.opacity='1';
-    jLabel.style.opacity='1';
-    jYear.style.color = yr.stops[0].color==='#fff' ? '#fff' : yr.stops[0].color;
-  },150);
-
-  // Bhopal is always the origin for arrows
-  const origin = toXY(23.26, 77.41);
-
-  // Always place/pulse HQ pin
-  placePinSVG(origin.x, origin.y, '#E8622A', 'Bhopal HQ', true);
-
-  let totalDelay = 300;
-
-  yr.stops.forEach((stop, si)=>{
-    const pt = toXY(stop.lat, stop.lng);
-    const isHome = stop.city.includes('★') || (stop.lat===23.26 && stop.lng===77.41);
-
-    t(()=>{
-      // Show card
-      jCity.textContent = stop.city;
-      jDesc.textContent = stop.desc;
-      jQty.textContent  = stop.qty;
-      jQty.style.color  = stop.color==='#fff' ? '#E8622A' : stop.color;
-      jCard.style.opacity='1';
-      jCard.style.transform='translateY(0)';
-      jFNum.textContent = yr.year;
-      jFLbl.textContent = stop.city;
-
-      if(!isHome){
-        // Draw arrow from Bhopal to this stop
-        drawPath(origin.x, origin.y, pt.x, pt.y, stop.color, ()=>{
-          placePinSVG(pt.x, pt.y, stop.color, stop.city, false);
-        });
+    const start = performance.now();
+    function animate(now){
+      const p = Math.min((now-start)/DRAW_MS, 1);
+      const e = 1-(1-p)**2;
+      const cx = from.x+dx*e, cy = from.y+dy*e;
+      line.setAttribute('x2',cx); line.setAttribute('y2',cy);
+      if(p>0.2){
+        const rad=Math.atan2(dy,dx), sz=6;
+        arrow.setAttribute('points',`
+          ${cx+sz*Math.cos(rad)},${cy+sz*Math.sin(rad)}
+          ${cx-sz*.6*Math.cos(rad)+sz*.6*Math.sin(rad)},${cy-sz*.6*Math.sin(rad)-sz*.6*Math.cos(rad)}
+          ${cx-sz*.6*Math.cos(rad)-sz*.6*Math.sin(rad)},${cy-sz*.6*Math.sin(rad)+sz*.6*Math.cos(rad)}
+        `);
+        arrow.style.opacity='0.95';
       }
-    }, totalDelay);
+      if(p<1){ requestAnimationFrame(animate); }
+      else { if(onDone) onDone(); }
+    }
+    requestAnimationFrame(animate);
+  }
 
-    totalDelay += STEP_DURATION + STOP_PAUSE;
-  });
+  // Place Google Maps marker (flag)
+  function placeGMarker(lat, lng, color, title, isHQ){
+    const c = color==='#fff' ? '#E8622A' : color;
+    const flagSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewBox="0 0 28 34">
+      <line x1="4" y1="6" x2="4" y2="32" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="4,6 22,10 22,20 4,24" fill="${c}" opacity="0.95"/>
+      <circle cx="4" cy="32" r="${isHQ?4:3}" fill="${c}" stroke="white" stroke-width="1.5"/>
+      ${isHQ ? `<circle cx="4" cy="32" r="9" fill="${c}" opacity="0.18"/>` : ''}
+    </svg>`;
+    const marker = new google.maps.Marker({
+      position:{lat,lng},
+      map: gmap,
+      icon:{
+        url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(flagSvg),
+        scaledSize: new google.maps.Size(28,34),
+        anchor: new google.maps.Point(4,32),
+      },
+      title,
+      optimized:false,
+    });
+    drawnMarkers.push(marker);
+    return marker;
+  }
 
-  // Move to next year
-  t(()=>{
-    stepYear(yi+1);
-  }, totalDelay + YEAR_PAUSE);
-}
+  function updateDisplay(year, label, color){
+    jYear.style.opacity='0'; jLabel.style.opacity='0';
+    tick(()=>{
+      jYear.textContent  = year;
+      jLabel.textContent = label;
+      jYear.style.transition='opacity .25s';
+      jYear.style.color  = color==='#fff' ? '#fff' : (color||'#E8622A');
+      jYear.style.opacity='1';
+      jLabel.style.opacity='1';
+    },100);
+  }
 
-window.startJourney = function(){ clearAllTimers(); runFrom(0); };
+  function showCard(stop){
+    jCity.textContent = stop.city;
+    jDesc.textContent = stop.desc;
+    jQty.textContent  = stop.qty;
+    jQty.style.color  = stop.color==='#fff' ? '#E8622A' : stop.color;
+    jCard.style.opacity='1';
+    jCard.style.transform='translateY(0)';
+    jFNum.textContent = stop.qty.split(' ')[0];
+    jFLbl.textContent = stop.city.split(',')[0];
+  }
+
+  function runFromYear(yi){
+    if(yi >= JOURNEY.length){
+      dotEls.forEach(d=>d.classList.add('visited'));
+      jReplay.style.display='block';
+      return;
+    }
+
+    const yr = JOURNEY[yi];
+    dotEls.forEach((d,i)=>{
+      d.classList.remove('active');
+      if(i<yi) d.classList.add('visited');
+    });
+    dotEls[yi].classList.add('active');
+    updateDisplay(yr.year, yr.label, yr.stops[0].color);
+
+    // Always place HQ marker
+    placeGMarker(HQ.lat, HQ.lng, '#E8622A', 'Bhopal HQ', true);
+
+    let totalDelay = 200;
+
+    yr.stops.forEach((stop, si)=>{
+      const isHome = stop.lat===HQ.lat && stop.lng===HQ.lng;
+
+      // All arrows fire simultaneously (50ms stagger)
+      tick(()=>{
+        if(!isHome){
+          drawArrow(HQ.lat, HQ.lng, stop.lat, stop.lng, stop.color, ()=>{
+            placeGMarker(stop.lat, stop.lng, stop.color, stop.city, false);
+          });
+        }
+      }, 50*si);
+
+      // Card updates sequentially
+      tick(()=>{ showCard(stop); }, totalDelay);
+
+      totalDelay += STOP_PAUSE;
+    });
+
+    tick(()=>{ runFromYear(yi+1); }, totalDelay + YEAR_PAUSE);
+  }
+
+  window.initJourneyMap = function(){
+    const darkStyle = [
+      {elementType:'geometry',                  stylers:[{color:'#1a1714'}]},
+      {elementType:'labels.text.fill',          stylers:[{color:'#9a938c'}]},
+      {elementType:'labels.text.stroke',        stylers:[{color:'#1a1714'}]},
+      {featureType:'administrative.country',    elementType:'geometry.stroke', stylers:[{color:'#E8622A'},{weight:1.5}]},
+      {featureType:'administrative.province',   elementType:'geometry.stroke', stylers:[{color:'#3a3530'},{weight:0.8}]},
+      {featureType:'administrative.locality',   elementType:'labels.text.fill',stylers:[{color:'#6a6460'}]},
+      {featureType:'road',                      elementType:'geometry',        stylers:[{color:'#222018'}]},
+      {featureType:'road.highway',              elementType:'geometry',        stylers:[{color:'#2a2418'}]},
+      {featureType:'water',                     elementType:'geometry',        stylers:[{color:'#0a1018'}]},
+      {featureType:'water',                     elementType:'labels.text.fill',stylers:[{color:'#2d4055'}]},
+      {featureType:'poi',                       stylers:[{visibility:'off'}]},
+      {featureType:'transit',                   stylers:[{visibility:'off'}]},
+      {featureType:'landscape',                 elementType:'geometry',        stylers:[{color:'#1a1612'}]},
+    ];
+
+    gmap = new google.maps.Map(document.getElementById('journeyGmap'),{
+      center: {lat:22.5, lng:80.5},
+      zoom: 5,
+      styles: darkStyle,
+      disableDefaultUI: true,
+      gestureHandling: 'none',
+      zoomControl: false,
+      keyboardShortcuts: false,
+    });
+
+    // Sync SVG overlay size with map div
+    const mapDiv = document.getElementById('journeyGmap');
+    svg.setAttribute('width',  mapDiv.offsetWidth);
+    svg.setAttribute('height', mapDiv.offsetHeight);
+
+    google.maps.event.addListenerOnce(gmap,'idle',()=>{
+      tick(()=>startJourney(), 800);
+    });
+  };
+
+  window.startJourney = function(){
+    clearAll();
+    if(gmap){
+      // No zoom change — always stay at India view
+      gmap.setCenter({lat:22.5, lng:80.5});
+      gmap.setZoom(5);
+      tick(()=>runFromYear(0), 600);
+    }
+  };
+
+  // Auto start when scrolled into view
+  const section = document.getElementById('journeyMap');
+  if(section){
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting && gmap){ startJourney(); obs.unobserve(e.target); }
+        else if(e.isIntersecting && !gmap){
+          // Map not ready yet — wait
+          const wait = setInterval(()=>{
+            if(gmap){ startJourney(); obs.unobserve(e.target); clearInterval(wait); }
+          },200);
+        }
+      });
+    },{threshold:0.3});
+    obs.observe(section);
+  }
+
 })();
-
 </script>
 </body>
 </html>

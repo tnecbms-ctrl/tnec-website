@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>True North Engineering Consultants LLP | GIS · Survey · Hydraulic Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --or:#E8622A;--or2:#F07845;--or-dim:rgba(232,98,42,0.1);--or-glow:rgba(232,98,42,0.2);
+  --ink:#18140F;--ink2:#4A4540;--ink3:#9A938C;
+  --bg:#F4F1EC;--bg2:#EDEAE4;--white:#FDFCFB;
+  --rule:rgba(24,20,15,0.09);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
+.cur{position:fixed;width:9px;height:9px;background:var(--or);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s,opacity .3s;mix-blend-mode:multiply}
+.cur.lg{width:34px;height:34px;opacity:.28}
+
+/* NAV */
+nav{position:fixed;inset:0 0 auto;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1rem 5vw;background:rgba(244,241,236,.93);backdrop-filter:blur(20px);border-bottom:1px solid var(--rule);transition:padding .35s,box-shadow .35s}
+nav.sh{padding:.7rem 5vw;box-shadow:0 4px 24px rgba(24,20,15,.07)}
+.logo{display:flex;align-items:center;gap:.65rem;text-decoration:none}
+.logo img{width:38px;height:38px;object-fit:contain;flex-shrink:0}
+.logo-name{font-family:'Inter',sans-serif;font-weight:800;font-size:.88rem;letter-spacing:-.01em;line-height:1;white-space:nowrap;color:var(--ink)}
+.logo-name .tn{color:var(--or)}
+.nl{display:flex;gap:1.8rem;list-style:none}
+.nl a{font-size:.7rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink2);text-decoration:none;position:relative;padding-bottom:2px;transition:color .2s}
+.nl a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--or);transition:width .3s}
+.nl a:hover{color:var(--or)}.nl a:hover::after{width:100%}
+.ncta{background:var(--or);color:#fff;font-size:.68rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;padding:.52rem 1.2rem;border-radius:100px;transition:background .2s,transform .18s;box-shadow:0 4px 14px var(--or-glow)}
+.ncta:hover{background:var(--or2);transform:translateY(-1px)}
+
+/* HERO */
+#hero{min-height:100vh;display:grid;grid-template-columns:55% 45%;position:relative;overflow:hidden;align-items:stretch}
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:9rem 5vw 5rem;position:relative;z-index:2}
+.hero-right{position:relative;overflow:hidden}
+.hero-right img.bg{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform 8s ease}
+.hero-right:hover img.bg{transform:scale(1.03)}
+.hero-right::after{content:'';position:absolute;inset:0;background:linear-gradient(to right,var(--bg) 0%,rgba(244,241,236,.3) 38%,transparent 62%),linear-gradient(to top,var(--bg) 0%,transparent 20%)}
+.h-cert{display:inline-flex;align-items:center;gap:.45rem;font-size:.6rem;color:var(--ink3);background:var(--white);border:1px solid var(--rule);border-radius:100px;padding:.26rem .72rem;margin-bottom:1rem;width:fit-content;font-weight:500}
+.h-cert .dot{width:5px;height:5px;background:#2DBC6E;border-radius:50%;flex-shrink:0}
+.h-eye{display:inline-flex;align-items:center;gap:.55rem;font-size:.63rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--or);margin-bottom:1.3rem}
+.h-eye::before{content:'';width:20px;height:1.5px;background:var(--or)}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,4vw,4.6rem);font-weight:900;line-height:1.1;letter-spacing:-.01em;color:var(--ink)}
+h1 .or{color:var(--or)}
+h1 .bl{display:block}
+.h-sub{font-size:.87rem;line-height:1.8;color:var(--ink2);font-weight:300;max-width:400px;margin-top:1.1rem}
+.h-tags{display:flex;flex-wrap:wrap;gap:.38rem;margin-top:.95rem}
+.h-tag{font-size:.6rem;font-weight:500;color:var(--ink3);background:var(--bg2);border:1px solid var(--rule);border-radius:100px;padding:.2rem .62rem}
+.h-actions{display:flex;gap:.75rem;margin-top:1.7rem;flex-wrap:wrap}
+.btn-p{display:inline-flex;align-items:center;gap:.4rem;background:var(--or);color:#fff;font-size:.73rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:.7rem 1.55rem;border-radius:100px;transition:background .2s,transform .18s,box-shadow .2s;box-shadow:0 6px 20px var(--or-glow)}
+.btn-p:hover{background:var(--or2);transform:translateY(-2px)}
+.btn-o{display:inline-flex;align-items:center;gap:.4rem;border:1.5px solid rgba(24,20,15,.2);color:var(--ink);font-size:.73rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:.7rem 1.55rem;border-radius:100px;transition:border-color .2s,color .2s,transform .18s}
+.btn-o:hover{border-color:var(--or);color:var(--or);transform:translateY(-2px)}
+.h-stats{display:flex;gap:2.2rem;margin-top:2.6rem;padding-top:1.7rem;border-top:1px solid var(--rule)}
+.sn{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;color:var(--ink);line-height:1}
+.sn span{color:var(--or)}
+.sl{font-size:.6rem;color:var(--ink3);margin-top:.25rem;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+.h-card{position:absolute;bottom:2.5rem;left:-1rem;background:var(--white);border-radius:14px;padding:.9rem 1.2rem;box-shadow:0 20px 54px rgba(24,20,15,.13);display:flex;align-items:center;gap:.8rem;z-index:10;animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.h-card-icon{width:36px;height:36px;background:var(--or-dim);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.h-card-body strong{display:block;font-weight:700;font-size:.82rem;color:var(--ink)}
+.h-card-body span{font-size:.6rem;color:var(--ink3)}
+
+/* MARQUEE services */
+.mq{background:var(--ink);padding:.78rem 0;overflow:hidden;border-top:2px solid var(--or);border-bottom:2px solid var(--or)}
+.mq-inner{display:flex;gap:2.5rem;white-space:nowrap;animation:mq 26s linear infinite;width:max-content}
+.mq-inner span{font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(244,241,236,.52);font-weight:500;flex-shrink:0}
+.mq-inner .sep{color:var(--or)}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* SECTIONS */
+section{padding:5.5rem 5vw}
+.sec-lbl{display:inline-flex;align-items:center;gap:.5rem;font-size:.63rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--or);margin-bottom:.8rem}
+.sec-lbl::before{content:'';width:16px;height:1.5px;background:var(--or)}
+h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,2.2vw,2.25rem);font-weight:800;letter-spacing:-.01em;line-height:1.18;color:var(--ink)}
+.sec-intro{font-size:.85rem;color:var(--ink2);line-height:1.8;font-weight:300;max-width:470px;margin-top:.55rem}
+
+/* ABOUT */
+#about{background:var(--white)}
+.about-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:4.5rem;align-items:center}
+.about-vis{position:relative}
+.about-img-wrap{border-radius:20px;overflow:hidden;height:490px;position:relative;box-shadow:0 28px 70px rgba(24,20,15,.11)}
+.about-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:left center}
+.about-img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(145deg,rgba(232,98,42,.13),transparent 55%)}
+.about-corner{position:absolute;bottom:0;right:0;background:var(--or);color:#fff;padding:1.2rem 1.6rem;border-radius:20px 0 20px 0;text-align:center}
+.about-corner .big{font-family:'Playfair Display',serif;font-weight:800;font-size:1.8rem;line-height:1}
+.about-corner .sm{font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;opacity:.82;margin-top:.2rem;font-weight:500}
+.about-float{position:absolute;top:2rem;right:-1.5rem;background:var(--white);border-radius:12px;padding:.85rem 1.1rem;box-shadow:0 14px 40px rgba(24,20,15,.11);text-align:center;animation:float 6s ease-in-out infinite 1s}
+.about-float .num{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:800;color:var(--or);line-height:1}
+.about-float .lbl{font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-top:.2rem;font-weight:500}
+.about-text p{font-size:.85rem;line-height:1.84;color:var(--ink2);font-weight:300;margin-bottom:.85rem}
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:1.6rem}
+.pill{background:var(--bg);border-radius:12px;padding:.9rem 1.05rem;border-left:3px solid var(--or);transition:transform .25s,box-shadow .25s}
+.pill:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(24,20,15,.07)}
+.pill-t{font-weight:700;font-size:.75rem;margin-bottom:.18rem}
+.pill-d{font-size:.66rem;color:var(--ink3);line-height:1.52}
+
+/* SERVICES */
+#services{background:var(--bg)}
+.srv-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.4rem;gap:2rem;flex-wrap:wrap}
+.srv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:20px;overflow:hidden}
+.srv-card{background:var(--white);padding:1.55rem 1.35rem;position:relative;overflow:hidden;transition:background .3s;cursor:default}
+.srv-card::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:3px;background:linear-gradient(to right,var(--or),var(--or2));transform:scaleX(0);transform-origin:left;transition:transform .38s}
+.srv-card:hover{background:var(--bg)}.srv-card:hover::after{transform:scaleX(1)}
+.srv-n{font-size:.54rem;font-weight:700;color:var(--or);letter-spacing:.14em;margin-bottom:1.3rem;opacity:.65}
+.srv-ico{font-size:1.35rem;margin-bottom:.75rem;display:block}
+.srv-nm{font-weight:700;font-size:.8rem;color:var(--ink);line-height:1.32;margin-bottom:.35rem}
+.srv-ds{font-size:.67rem;color:var(--ink3);line-height:1.6}
+
+/* NUMBERS */
+.numbers-band{background:var(--or);padding:3rem 5vw;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center}
+.nb-num{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:800;color:#fff;line-height:1}
+.nb-lbl{font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.68);margin-top:.36rem;font-weight:500}
+.nb-div{border-right:1px solid rgba(255,255,255,.15)}
+.nb-div:last-child{border-right:none}
+
+/* PROJECTS */
+#projects{background:var(--ink);position:relative;overflow:hidden}
+#projects::before{content:'';position:absolute;top:-160px;right:-160px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(232,98,42,.07),transparent 70%);pointer-events:none}
+#projects .sec-lbl{color:var(--or)}
+#projects h2{color:#fff}
+#projects .sec-intro{color:rgba(244,241,236,.42)}
+.pj-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.4rem;gap:2rem;flex-wrap:wrap}
+.pj-big{font-family:'Playfair Display',serif;font-size:4.5rem;font-weight:800;color:rgba(244,241,236,.04);line-height:1}
+.pj-scroll{display:flex;gap:1.1rem;overflow-x:auto;padding-bottom:1rem;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--or) rgba(255,255,255,.05)}
+.pj-scroll::-webkit-scrollbar{height:3px}.pj-scroll::-webkit-scrollbar-track{background:rgba(255,255,255,.05)}.pj-scroll::-webkit-scrollbar-thumb{background:var(--or);border-radius:2px}
+.pj-card{flex-shrink:0;width:272px;background:rgba(244,241,236,.04);border:1px solid rgba(244,241,236,.07);border-radius:16px;padding:1.5rem;scroll-snap-align:start;transition:background .3s,transform .3s,border-color .3s}
+.pj-card:hover{background:rgba(244,241,236,.07);border-color:rgba(232,98,42,.3);transform:translateY(-4px)}
+.pj-tag{display:inline-block;font-size:.56rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--or);background:rgba(232,98,42,.12);padding:.17rem .58rem;border-radius:100px;margin-bottom:.95rem}
+.pj-title{font-weight:700;font-size:.8rem;color:#fff;line-height:1.38;margin-bottom:.5rem}
+.pj-meta{font-size:.66rem;color:rgba(244,241,236,.33);line-height:1.58}
+.pj-qty{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:800;color:var(--or);margin-top:1.1rem;line-height:1}
+.pj-qty small{font-size:.55rem;display:block;font-family:'Inter',sans-serif;font-weight:400;letter-spacing:.07em;text-transform:uppercase;color:rgba(244,241,236,.27);margin-top:.16rem}
+.pj-hint{font-size:.61rem;color:rgba(244,241,236,.2);letter-spacing:.07em;text-transform:uppercase;margin-top:.72rem}
+
+/* ═══ CLIENTS — REAL LOGO DUAL ROW MARQUEE ═══ */
+#clients{background:var(--white);overflow:hidden}
+.cl-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.8rem;gap:2rem;flex-wrap:wrap}
+
+.logo-marquee-wrap{
+  display:flex;flex-direction:column;gap:1.2rem;
+  overflow:hidden;
+  -webkit-mask-image:linear-gradient(to right,transparent 0%,black 6%,black 94%,transparent 100%);
+  mask-image:linear-gradient(to right,transparent 0%,black 6%,black 94%,transparent 100%);
+}
+.logo-row{display:flex;gap:1.2rem;width:max-content}
+.logo-row-1{animation:lmq1 32s linear infinite}
+.logo-row-2{animation:lmq2 38s linear infinite}
+@keyframes lmq1{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes lmq2{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.logo-marquee-wrap:hover .logo-row-1,
+.logo-marquee-wrap:hover .logo-row-2{animation-play-state:paused}
+
+.lc{
+  flex-shrink:0;min-width:160px;height:84px;
+  background:var(--bg);border:1px solid var(--rule);border-radius:14px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:.6rem 1rem;gap:.35rem;
+  transition:border-color .25s,background .25s,transform .25s,box-shadow .25s;
+  cursor:default;position:relative;overflow:hidden;
+}
+.lc::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2.5px;background:var(--or);transform:scaleX(0);transform-origin:left;transition:transform .35s}
+.lc:hover{border-color:rgba(232,98,42,.3);background:var(--white);transform:translateY(-3px);box-shadow:0 8px 24px rgba(24,20,15,.08)}.lc:hover::after{transform:scaleX(1)}
+.lc img{max-height:44px;max-width:130px;object-fit:contain;filter:grayscale(20%);transition:filter .25s}
+.lc:hover img{filter:grayscale(0%)}
+.lc-name{font-size:.58rem;font-weight:500;color:var(--ink3);line-height:1.2;text-align:center;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis}
+
+/* ═══ INDIA MAP — interactive with real map image ═══ */
+#map-section{background:var(--bg2)}
+.map-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:4rem;align-items:start}
+.map-info .sec-intro{margin-top:.6rem}
+.map-legend{margin-top:1.8rem;display:flex;flex-direction:column;gap:.65rem}
+.legend-item{display:flex;align-items:center;gap:.7rem;font-size:.76rem;color:var(--ink2)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legend-dot.active{background:var(--or)}
+.legend-dot.done{background:#2DBC6E}
+.map-states{font-size:.7rem;color:var(--ink3);margin-top:1.4rem;line-height:1.75}
+.map-states strong{color:var(--ink);font-weight:600;font-size:.74rem;display:block;margin-bottom:.2rem}
+
+/* Map container */
+.map-wrap{position:relative;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(24,20,15,.14)}
+.map-wrap img.map-bg{width:100%;display:block}
+.map-pins{position:absolute;inset:0;pointer-events:none}
+.pin{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer}
+
+/* FLAG PIN */
+.pin-dot{
+  position:relative;z-index:2;
+  width:22px;height:22px;
+  display:flex;align-items:flex-end;justify-content:flex-start;
+  transition:transform .2s;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.35));
+}
+.pin-dot::before{
+  /* flagpole */
+  content:'';
+  position:absolute;
+  left:0;bottom:0;
+  width:2px;height:18px;
+  background:#fff;
+  border-radius:1px;
+  box-shadow:0 1px 4px rgba(0,0,0,.3);
+}
+.pin-dot::after{
+  /* flag */
+  content:'';
+  position:absolute;
+  left:2px;top:0;
+  width:12px;height:9px;
+  border-radius:0 2px 2px 0;
+  clip-path:polygon(0 0, 100% 20%, 100% 80%, 0 100%);
+}
+.pin.active .pin-dot::after{background:var(--or)}
+.pin.done .pin-dot::after{background:#2DBC6E}
+.pin:hover .pin-dot{transform:scale(1.3) translateY(-2px)}
+
+/* pulse ring stays on pole base */
+.pin-ring{
+  position:absolute;
+  bottom:0;left:0;
+  width:8px;height:8px;
+  border-radius:50%;
+  transform:translate(-3px, 3px);
+  opacity:0;
+}
+.pin.active .pin-ring{background:rgba(232,98,42,.5);animation:pinRing 2s ease-out infinite}
+.pin.done .pin-ring{background:rgba(45,188,110,.5);animation:pinRing 2s ease-out infinite 0.5s}
+@keyframes pinRing{0%{transform:translate(-3px,3px) scale(1);opacity:.8}100%{transform:translate(-3px,3px) scale(4);opacity:0}}
+
+/* tooltip */
+.pin-tip{position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:10px;padding:.5rem .85rem;font-size:.68rem;font-weight:500;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s,transform .2s;transform:translateX(-50%) translateY(4px);z-index:10;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.pin-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink)}
+.pin:hover .pin-tip{opacity:1;transform:translateX(-50%) translateY(0)}
+.pin-city{font-weight:700;color:#fff;margin-bottom:.1rem}
+.pin-desc{color:rgba(244,241,236,.55);font-size:.62rem}
+
+/* MAP OVERLAY SYSTEM */
+.map-wrap{position:relative}
+.map-dim{
+  position:absolute;inset:0;
+  background:rgba(20,16,10,0.55);
+  z-index:1;
+  pointer-events:none;
+}
+.map-states-overlay{
+  position:absolute;inset:0;
+  z-index:2;
+  pointer-events:none;
+}
+.map-pins{z-index:3}
+.pin-tip{z-index:10}
+
+/* State highlight blobs */
+.state-blob{
+  position:absolute;
+  border-radius:40%;
+  border:2px solid rgba(232,98,42,0.7);
+  background:rgba(232,98,42,0.15);
+  backdrop-filter:blur(0px);
+  animation:blobPulse 4s ease-in-out infinite;
+  pointer-events:none;
+}
+.state-blob.done{
+  border-color:rgba(45,188,110,0.6);
+  background:rgba(45,188,110,0.1);
+  animation:blobPulseDone 4s ease-in-out infinite;
+}
+@keyframes blobPulse{
+  0%,100%{background:rgba(232,98,42,0.12);border-color:rgba(232,98,42,0.6)}
+  50%{background:rgba(232,98,42,0.22);border-color:rgba(232,98,42,0.9)}
+}
+@keyframes blobPulseDone{
+  0%,100%{background:rgba(45,188,110,0.08);border-color:rgba(45,188,110,0.5)}
+  50%{background:rgba(45,188,110,0.18);border-color:rgba(45,188,110,0.8)}
+}
+
+/* State name labels on map */
+.state-label{
+  position:absolute;
+  z-index:4;
+  font-family:'Inter',sans-serif;
+  font-size:.55rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.9);
+  text-shadow:0 1px 4px rgba(0,0,0,.8);
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  white-space:nowrap;
+}
+  
+/* EQUIPMENT */
+#equipment{background:var(--white)}
+.eq-grid{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center}
+.eq-img-wrap{border-radius:20px;overflow:hidden;height:460px;position:relative;box-shadow:0 28px 70px rgba(24,20,15,.11)}
+.eq-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:right center}
+.eq-img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(24,20,15,.7) 0%,transparent 50%)}
+.eq-caption{position:absolute;bottom:1.4rem;left:1.4rem;right:1.4rem;color:#fff;z-index:2}
+.eq-caption strong{font-size:.9rem;font-weight:700}
+.eq-caption span{font-size:.65rem;opacity:.52;display:block;margin-top:.15rem}
+.eq-list{display:flex;flex-direction:column;gap:.6rem}
+.eq-item{display:flex;align-items:center;gap:.85rem;padding:.9rem 1.1rem;background:var(--bg);border-radius:12px;border:1px solid var(--rule);transition:border-color .2s,transform .22s}
+.eq-item:hover{border-color:rgba(232,98,42,.28);transform:translateX(4px)}
+.eq-ico{width:35px;height:35px;background:var(--or-dim);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.eq-name{font-weight:500;font-size:.81rem;color:var(--ink)}
+
+/* EXPERTISE */
+#expertise{background:var(--bg)}
+.team-head{text-align:center;max-width:460px;margin:0 auto 2.8rem}
+.team-head .sec-lbl{justify-content:center}.team-head .sec-lbl::before{display:none}
+.exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.exp-card{background:var(--white);border-radius:16px;padding:1.4rem;border:1px solid var(--rule);transition:transform .25s,box-shadow .25s,border-color .25s;position:relative;overflow:hidden}
+.exp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--or),var(--or2));transform:scaleX(0);transform-origin:left;transition:transform .38s}
+.exp-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(24,20,15,.08);border-color:rgba(232,98,42,.14)}.exp-card:hover::before{transform:scaleX(1)}
+.exp-ico{font-size:1.65rem;margin-bottom:.82rem;display:block}
+.exp-title{font-weight:700;font-size:.84rem;color:var(--ink);margin-bottom:.36rem}
+.exp-desc{font-size:.68rem;color:var(--ink3);line-height:1.6}
+.exp-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.82rem}
+.exp-tag{font-size:.57rem;background:var(--or-dim);color:var(--or);border-radius:100px;padding:.15rem .5rem;font-weight:600}
+
+/* CONTACT */
+#contact{background:var(--ink);position:relative;overflow:hidden}
+#contact::before{content:'';position:absolute;bottom:-140px;left:-140px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(232,98,42,.07),transparent 70%);pointer-events:none}
+#contact::after{content:'';position:absolute;top:-90px;right:-90px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(232,98,42,.04),transparent 70%);pointer-events:none}
+.ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:start;position:relative;z-index:2}
+#contact .sec-lbl{color:var(--or)}
+#contact h2{color:#fff}
+.ct-tagline{font-family:'Playfair Display',serif;font-size:clamp(1.35rem,2vw,1.9rem);font-weight:800;color:#fff;line-height:1.24;margin-top:1.2rem}
+.ct-tagline span{color:var(--or)}
+.ct-items{display:flex;flex-direction:column;gap:1rem;margin-top:1.7rem}
+.ct-item{display:flex;align-items:flex-start;gap:.85rem}
+.ct-ico{width:35px;height:35px;background:rgba(232,98,42,.12);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.88rem;flex-shrink:0;margin-top:.06rem}
+.ct-info strong{display:block;font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,241,236,.28);margin-bottom:.13rem}
+.ct-info a,.ct-info p{font-size:.82rem;color:rgba(244,241,236,.82);text-decoration:none;line-height:1.6;transition:color .2s}
+.ct-info a:hover{color:var(--or)}
+.ct-certs{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.9rem}
+.cert{display:inline-flex;align-items:center;gap:.3rem;background:rgba(244,241,236,.04);border:1px solid rgba(244,241,236,.08);border-radius:100px;padding:.3rem .75rem;font-size:.6rem;font-weight:500;color:rgba(244,241,236,.56);letter-spacing:.04em}
+.cert .ck{color:#2DBC6E;font-size:.66rem}
+.ct-form{background:rgba(244,241,236,.04);border:1px solid rgba(244,241,236,.07);border-radius:20px;padding:1.85rem}
+.ct-form h3{font-weight:700;font-size:.94rem;color:#fff;margin-bottom:.2rem}
+.ct-form p{font-size:.72rem;color:rgba(244,241,236,.3);margin-bottom:1.5rem}
+.fg{margin-bottom:.85rem}
+.fg label{display:block;font-size:.6rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:rgba(244,241,236,.34);margin-bottom:.32rem}
+.fg input,.fg textarea,.fg select{width:100%;background:rgba(244,241,236,.06);border:1px solid rgba(244,241,236,.09);border-radius:10px;padding:.66rem .88rem;color:#fff;font-family:'Inter',sans-serif;font-size:.8rem;outline:none;transition:border-color .2s,background .2s;resize:none}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(244,241,236,.18)}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--or);background:rgba(232,98,42,.05)}
+.fg select option{background:#18140F;color:#fff}
+.fg select{color:rgba(244,241,236,.38);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239A938C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .9rem center}
+.fg select.chosen{color:#fff}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.78rem}
+.sub-btn{width:100%;background:var(--or);color:#fff;font-family:'Inter',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:none;border-radius:10px;padding:.8rem;cursor:pointer;transition:background .2s,transform .18s;box-shadow:0 5px 18px var(--or-glow);margin-top:.28rem}
+.sub-btn:hover{background:var(--or2);transform:translateY(-1px)}
+.sub-btn.sent{background:#2DBC6E;box-shadow:none}
+.fg .err{display:none;font-size:.6rem;color:#ff6b6b;margin-top:.28rem;font-weight:500}
+.fg.has-error input,.fg.has-error textarea,.fg.has-error select{border-color:#ff6b6b !important;background:rgba(255,107,107,0.06) !important}
+.fg.has-error .err{display:block}
+  
+footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.04)}
+.foot-left{display:flex;align-items:center;gap:.55rem}
+.foot-left img{width:26px;height:26px;object-fit:contain;filter:brightness(10);opacity:.55}
+.foot-logo{font-weight:700;font-size:.76rem;color:rgba(244,241,236,.34)}
+.foot-logo .tn{color:var(--or)}
+.foot-links{display:flex;gap:1.4rem}
+.foot-links a{font-size:.64rem;color:rgba(244,241,236,.22);text-decoration:none;letter-spacing:.05em;font-weight:500;transition:color .2s}
+.foot-links a:hover{color:var(--or)}
+.foot-copy{font-size:.6rem;color:rgba(244,241,236,.13);letter-spacing:.04em}
+
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.rv.in{opacity:1;transform:translateY(0)}
+.rvl{opacity:0;transform:translateX(-22px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.rvl.in{opacity:1;transform:translateX(0)}
+.rvr{opacity:0;transform:translateX(22px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.rvr.in{opacity:1;transform:translateX(0)}
+
+@media(max-width:960px){
+  #hero{grid-template-columns:1fr}.hero-right{height:280px;order:-1}
+  .hero-right::after{background:linear-gradient(to top,var(--bg) 0%,transparent 55%)}
+  .hero-left{padding:6rem 5vw 4rem}.h-card{display:none}
+  .about-grid,.eq-grid,.ct-grid,.map-layout{grid-template-columns:1fr;gap:3rem}
+  .srv-grid{grid-template-columns:repeat(2,1fr)}
+  .numbers-band{grid-template-columns:repeat(2,1fr)}
+  .exp-grid{grid-template-columns:repeat(2,1fr)}
+  .nl{display:none}
+}
+@media(max-width:600px){
+  section{padding:3.5rem 5vw}
+  .srv-grid,.exp-grid{grid-template-columns:1fr}
+  h1{font-size:2.3rem}.h-stats{gap:1.4rem}
+  .form-row{grid-template-columns:1fr}
+  .numbers-band{grid-template-columns:1fr;gap:1.2rem}
+  .nb-div{border-right:none;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:1.2rem}
+}
+
+.pj-marquee-outer{overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent 0%,black 5%,black 95%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,black 5%,black 95%,transparent 100%)}
+.pj-marquee-inner{display:flex;gap:1.1rem;width:max-content;animation:pjmq 40s linear infinite}
+.pj-marquee-inner:hover{animation-play-state:paused}
+@keyframes pjmq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Google Maps info window custom style */
+.gm-style .gm-style-iw-c{border-radius:12px !important;padding:0 !important;box-shadow:0 8px 32px rgba(24,20,15,.2) !important}
+.gm-style .gm-style-iw-d{overflow:hidden !important;padding:0 !important}
+.gm-style .gm-style-iw-t::after{display:none}
+.map-popup{padding:1rem 1.2rem;min-width:200px;max-width:260px;font-family:'Inter',sans-serif}
+.map-popup-tag{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--or);margin-bottom:.3rem}
+.map-popup-tag.done{color:#2DBC6E}
+.map-popup-title{font-weight:700;font-size:.85rem;color:#18140F;line-height:1.3;margin-bottom:.25rem}
+.map-popup-desc{font-size:.72rem;color:#4A4540;line-height:1.5}
+.map-popup-qty{font-weight:800;font-size:1rem;color:var(--or);margin-top:.5rem;font-family:'Playfair Display',serif}
+.map-popup-qty.done{color:#2DBC6E}
+
+/* ── JOURNEY MAP ── */
+.j-dot-ind{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.2);
+  transition:background .3s,transform .3s;
+  cursor:pointer;
+}
+.j-dot-ind.visited{background:var(--or)}
+.j-dot-ind.active{background:#fff;transform:scale(1.4)}
+
+/* SVG path animation */
+.j-path{
+  fill:none;
+  stroke:var(--or);
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-dasharray:6 4;
+  opacity:0.8;
+}
+.j-arrow{
+  fill:var(--or);
+  opacity:0.9;
+}
+.j-pin-circle{
+  fill:var(--or);
+  stroke:#fff;
+  stroke-width:1.5;
+}
+.j-pin-circle.done{fill:#2DBC6E}
+.j-pin-label{
+  font-family:'Inter',sans-serif;
+  font-size:7px;
+  font-weight:700;
+  fill:rgba(255,255,255,0.9);
+  text-shadow:0 1px 3px rgba(0,0,0,.8);
+}
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnLBtOeixDJN9BZdCXJ_PaZTOUU469uV0&callback=initJourneyMap"></script>
+</head>
+<body>
+<div class="cur" id="cur"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">
+    <img src="TN-removebg-preview.png" alt="TNEC Logo"/>
+    <span class="logo-name"><span class="tn">T</span>rue <span class="tn">N</span>orth Engineering Consultants LLP</span>
+  </a>
+  <ul class="nl">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#clients">Clients</a></li>
+    <li><a href="#map-section">Coverage</a></li>
+    <li><a href="#expertise">Expertise</a></li>
+  </ul>
+  <a href="#contact" class="ncta">Get in Touch</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="h-cert"><div class="dot"></div>ISO 9001:2015 · MSME · GST Registered</div>
+    <div class="h-eye">Bhopal, MP · Est. 2022</div>
+    <h1><span class="bl">We <span class="or">Design.</span></span><span class="bl">We <span class="or">Deliver.</span></span><span class="bl">We Build</span><span class="bl">Communities.</span></h1>
+    <p class="h-sub">Engineering consultancy for GIS Mapping, Topographical Survey, Hydraulic Design and Infrastructure development across India.</p>
+    <div class="h-tags"><span class="h-tag">GIS Mapping</span><span class="h-tag">Topographical Survey</span><span class="h-tag">Hydraulic Design</span><span class="h-tag">Bathymetry</span><span class="h-tag">DPR Consultancy</span></div>
+    <div class="h-actions"><a href="#projects" class="btn-p">View Projects ↗</a><a href="#contact" class="btn-o">Contact Us</a></div>
+    <div class="h-stats">
+      <div><div class="sn">50K<span>+</span></div><div class="sl">KM Surveyed</div></div>
+      <div><div class="sn">165<span>+</span></div><div class="sl">Projects</div></div>
+      <div><div class="sn">40<span>+</span></div><div class="sl">Clients</div></div>
+      <div><div class="sn">12<span>+</span></div><div class="sl">States</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img class="bg" src="TNEC_PAMPHLET_1.png" alt="True North Engineering"/>
+    <div class="h-card"><div class="h-card-icon">📡</div><div class="h-card-body"><strong>50,000+ KM Surveyed</strong><span>Across 12+ States Since 2015 &amp; more</span></div></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq" aria-hidden="true">
+  <div class="mq-inner">
+    <span>Topographical Survey</span><span class="sep">✦</span><span>GIS Mapping</span><span class="sep">✦</span><span>Hydraulic Design</span><span class="sep">✦</span><span>Bathymetry Survey</span><span class="sep">✦</span><span>Remote Sensing</span><span class="sep">✦</span><span>Water Supply Design</span><span class="sep">✦</span><span>Sewer Network Design</span><span class="sep">✦</span><span>DPR Consultancy</span><span class="sep">✦</span><span>AMRUT 2.0</span><span class="sep">✦</span><span>Drone Mapping</span><span class="sep">✦</span>
+    <span>Topographical Survey</span><span class="sep">✦</span><span>GIS Mapping</span><span class="sep">✦</span><span>Hydraulic Design</span><span class="sep">✦</span><span>Bathymetry Survey</span><span class="sep">✦</span><span>Remote Sensing</span><span class="sep">✦</span><span>Water Supply Design</span><span class="sep">✦</span><span>Sewer Network Design</span><span class="sep">✦</span><span>DPR Consultancy</span><span class="sep">✦</span><span>AMRUT 2.0</span><span class="sep">✦</span><span>Drone Mapping</span><span class="sep">✦</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-vis rvl">
+      <div style="border-radius:20px;overflow:hidden;box-shadow:0 28px 70px rgba(24,20,15,.11);height:490px;position:relative;background:#1a1714" id="journeyMap">
+
+        <!-- Google Map -->
+        <div id="journeyGmap" style="width:100%;height:100%;position:absolute;inset:0;z-index:1"></div>
+
+        <!-- SVG overlay for arrows -->
+        <svg id="journeySvg" style="width:100%;height:100%;position:absolute;inset:0;z-index:2;pointer-events:none"></svg>
+
+        <!-- Year display -->
+        <div style="position:absolute;top:1.2rem;left:1.4rem;z-index:10;pointer-events:none">
+          <div id="jYear" style="font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;color:#E8622A;line-height:1;text-shadow:0 2px 12px rgba(0,0,0,.8)">2015</div>
+          <div id="jLabel" style="font-size:.7rem;font-weight:600;color:rgba(244,241,236,.7);letter-spacing:.1em;text-transform:uppercase;margin-top:.15rem;text-shadow:0 1px 6px rgba(0,0,0,.8)">Journey Begins</div>
+        </div>
+    
+        <!-- Current place card -->
+        <div id="jCard" style="position:absolute;bottom:1.4rem;left:1.4rem;right:1.4rem;z-index:10;background:rgba(24,20,15,.85);backdrop-filter:blur(10px);border-radius:14px;padding:1rem 1.2rem;border:1px solid rgba(232,98,42,.3);transform:translateY(8px);opacity:0;transition:all .4s ease">
+          <div id="jCity" style="font-weight:700;font-size:.88rem;color:#fff;margin-bottom:.2rem"></div>
+          <div id="jDesc" style="font-size:.7rem;color:rgba(244,241,236,.55);line-height:1.5"></div>
+          <div id="jQty" style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;color:var(--or);margin-top:.4rem"></div>
+        </div>
+    
+        <!-- Progress dots at top right -->
+        <div id="jDots" style="position:absolute;top:1.4rem;right:1.4rem;z-index:10;display:flex;flex-direction:column;gap:.35rem"></div>
+    
+        <!-- Replay button -->
+        <button onclick="startJourney()" id="jReplay" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:none;background:var(--or);color:#fff;border:none;border-radius:100px;padding:.7rem 1.6rem;font-family:'Inter',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;z-index:10;box-shadow:0 6px 24px rgba(232,98,42,.4)">↺ Replay Journey</button>
+    
+      </div>
+    
+      <div class="about-float">
+        <div class="num" id="jFloatNum">2015</div>
+        <div class="lbl" id="jFloatLbl">Journey Begins</div>
+      </div>
+    </div>
+    <div class="rvr">
+      <div class="sec-lbl">About Us</div>
+      <h2>An Emerging Force in Infrastructure Consultancy</h2>
+      <div style="margin-top:1rem">
+        <p>Established in 2022, True North Engineering Consultants LLP is a rapidly growing organization committed to excellence in Topographical Survey, GIS, Remote Sensing, Bathymetry, Water Supply and Sewerage projects.</p>
+        <p>Our continuing objective is to deliver all services with keen observation — maintaining efficiency, accuracy and quality. Our founding directors bring <strong>10+ years of hands-on experience</strong> since 2015, having delivered 100+ projects through their prior venture before establishing True North Engineering Consultants LLP in 2022.</p>
+
+        <!-- Timeline -->
+        <div style="display:flex;flex-direction:column;gap:.75rem;margin-top:1.5rem;padding-left:.5rem;border-left:3px solid var(--or)">
+          <div style="display:flex;gap:1rem;align-items:flex-start">
+            <span style="font-family:'Playfair Display',serif;font-weight:800;color:var(--or);font-size:1rem;flex-shrink:0;line-height:1.2">2015</span>
+            <div><div style="font-weight:600;font-size:.8rem;color:var(--ink)">Shristi Survey Consulting Pvt. Ltd. founded</div><div style="font-size:.72rem;color:var(--ink3);margin-top:.15rem">Directors begin GIS, Survey &amp; Hydraulic Design work — 100+ projects delivered across MP, MH, UP, Assam &amp; more</div></div>
+          </div>
+          <div style="display:flex;gap:1rem;align-items:flex-start">
+            <span style="font-family:'Playfair Display',serif;font-weight:800;color:var(--or);font-size:1rem;flex-shrink:0;line-height:1.2">2022</span>
+            <div><div style="font-weight:600;font-size:.8rem;color:var(--ink)">True North Engineering Consultants LLP established</div><div style="font-size:.72rem;color:var(--ink3);margin-top:.15rem">New entity formed, carrying forward the same team, expertise and client relationships</div></div>
+          </div>
+          <div style="display:flex;gap:1rem;align-items:flex-start">
+            <span style="font-family:'Playfair Display',serif;font-weight:800;color:var(--or);font-size:1rem;flex-shrink:0;line-height:1.2">2026</span>
+            <div><div style="font-weight:600;font-size:.8rem;color:var(--ink)">50,000+ KM surveyed · 165+ projects · 12+ states</div><div style="font-size:.72rem;color:var(--ink3);margin-top:.15rem">Combined leadership experience of a decade powering every project we deliver</div></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="pillars">
+        <div class="pill"><div class="pill-t">🤝 Teamwork</div><div class="pill-d">Collaborative approach to every challenge</div></div>
+        <div class="pill"><div class="pill-t">🎯 Dedication</div><div class="pill-d">Committed to accuracy and timely delivery</div></div>
+        <div class="pill"><div class="pill-t">✅ Integrity</div><div class="pill-d">Transparent and ethical in every engagement</div></div>
+        <div class="pill"><div class="pill-t">💡 Impact</div><div class="pill-d">Projects that improve communities at scale</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="srv-head rv"><div><div class="sec-lbl">Core Services</div><h2>What We Do Best</h2></div><p class="sec-intro">Specialized technical services for infrastructure, water systems and geospatial intelligence.</p></div>
+  <div class="srv-grid rv">
+    <div class="srv-card"><div class="srv-n">01</div><span class="srv-ico">🗺️</span><div class="srv-nm">GIS Mapping &amp; Remote Sensing</div><div class="srv-ds">Satellite image processing, spatial analysis, utility GIS mapping and web mapping for infrastructure planning.</div></div>
+    <div class="srv-card"><div class="srv-n">02</div><span class="srv-ico">📐</span><div class="srv-nm">Topographical Survey</div><div class="srv-ds">Total Station and DGPS survey, profile &amp; contour mapping, earthwork calculation for roads and infrastructure.</div></div>
+    <div class="srv-card"><div class="srv-n">03</div><span class="srv-ico">💧</span><div class="srv-nm">Water Supply Design</div><div class="srv-ds">Pipeline hydraulic design, WTP, OHT and IPS structure design for AMRUT, MPJN, JJM and multi-village schemes.</div></div>
+    <div class="srv-card"><div class="srv-n">04</div><span class="srv-ico">🌊</span><div class="srv-nm">Bathymetry Survey</div><div class="srv-ds">River contouring, dam capacity analysis and contour interval surveys for water resource management.</div></div>
+    <div class="srv-card"><div class="srv-n">05</div><span class="srv-ico">🏗️</span><div class="srv-nm">Sewer Network Design</div><div class="srv-ds">Sewage network survey, LWM hydraulic design, STP sizing, IPS and flow accumulation analysis for towns.</div></div>
+    <div class="srv-card"><div class="srv-n">06</div><span class="srv-ico">🚁</span><div class="srv-nm">Drone &amp; GPR Survey</div><div class="srv-ds">Aerial drone surveys, photogrammetry, ground penetrating radar and digital terrain model generation.</div></div>
+    <div class="srv-card"><div class="srv-n">07</div><span class="srv-ico">📋</span><div class="srv-nm">DPR Consultancy</div><div class="srv-ds">Detailed project report preparation for water supply, sewerage, waterbody rejuvenation and green space.</div></div>
+    <div class="srv-card"><div class="srv-n">08</div><span class="srv-ico">🏘️</span><div class="srv-nm">Consumer / D2D Survey</div><div class="srv-ds">Door-to-door household and asset GIS survey with prescribed questionnaire formats using digital methodology.</div></div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<div class="numbers-band">
+  <div class="nb-div rv"><div class="nb-num" data-target="10" data-suffix="+ Yrs">10+ Yrs</div><div class="nb-lbl">Leadership Experience</div></div>
+  <div class="nb-div rv"><div class="nb-num" data-target="50000" data-suffix="+">50000+</div><div class="nb-lbl">KM Survey Coverage</div></div>
+  <div class="nb-div rv"><div class="nb-num" data-target="130" data-suffix="+">165+</div><div class="nb-lbl">Projects Delivered</div></div>
+  <div class="nb-div rv"><div class="nb-num" data-target="150000" data-suffix="+">150000+</div><div class="nb-lbl">Households Surveyed</div></div>
+  <div class="nb-div rv"><div class="nb-num" data-target="12" data-suffix="+">12+</div><div class="nb-lbl">States Covered</div></div>
+</div>
+
+<!-- CLIENTS — REAL LOGO DUAL ROW MARQUEE -->
+<section id="clients">
+  <div class="cl-head rv">
+    <div><div class="sec-lbl">Our Clients</div><h2>Trusted by Industry Leaders</h2></div>
+    <p class="sec-intro">From government bodies to multinational infrastructure corporations — hover to pause.</p>
+  </div>
+  <div class="logo-marquee-wrap rv" id="logo-marquee">
+    <div class="logo-row logo-row-1" id="row1"></div>
+    <div class="logo-row logo-row-2" id="row2"></div>
+  </div>
+</section>
+  
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="pj-head rv"><div><div class="sec-lbl">Selected Projects</div><h2>Trusted Across Major Infrastructure Projects</h2><p class="sec-intro" style="margin-top:.6rem">From AMRUT 2.0 to Mithi River Mumbai — spanning states and sectors. Projects marked "Leadership team prior experience" were delivered by our founding directors before establishing TNEC LLP.</p></div><div style="text-align:right;flex-shrink:0"><div class="pj-big">165+</div><div style="font-size:.6rem;color:rgba(244,241,236,.18);letter-spacing:.09em;text-transform:uppercase;margin-top:-.3rem">Total Projects</div></div></div>
+  <div class="pj-marquee-outer">
+    <div class="pj-marquee-inner">
+      <div class="pj-card"><div class="pj-tag">AMRUT 2.0 · Indore</div><div class="pj-title">Topographical Survey &amp; Hydraulic Design — Indore WSS Pipeline Network</div><div class="pj-meta">CMR Infrastructure Pvt Ltd, MP</div><div class="pj-qty">3000+ KM<small>Survey &amp; Design</small></div></div>
+      <div class="pj-card"><div class="pj-tag">AMRUT 2.0 · Bhopal</div><div class="pj-title">Topographical &amp; GTI Survey — Bhopal Water Supply Scheme</div><div class="pj-meta">LC Infra Projects Pvt. Ltd., Ahmedabad</div><div class="pj-qty">1000 KM · 36 OHTs<small>4 Intakes · 6 WTP · 4 CLF</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MPJN · Jabalpur</div><div class="pj-title">Hydraulic Design — Multi-Village WSS, Jabalpur District</div><div class="pj-meta">CMR Infrastructure &amp; AFCONS Infrastructure</div><div class="pj-qty">2890 KM<small>280 OHTs · 5 MBRs</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MPJN · Ashta-Ranipura</div><div class="pj-title">Multi-Village Water Supply — Feeder &amp; Distribution Network</div><div class="pj-meta">CMR Infrastructure &amp; Laxmi Civil Engineering</div><div class="pj-qty">4745 KM<small>250 OHTs · 2 MBR · 8 IPS</small></div></div>
+      <div class="pj-card"><div class="pj-tag">BMC · Mumbai</div><div class="pj-title">Mithi River Development Project — Package III</div><div class="pj-meta">Aakshaya Infra Projects Pvt. Ltd., Mumbai</div><div class="pj-qty">250 Acres<small>Drone · Bathymetry · GPR</small></div></div>
+      <div class="pj-card"><div class="pj-tag">AMRUT 2.0 · Rewa</div><div class="pj-title">Survey &amp; Hydraulic Design — Rewa Water Supply Networks</div><div class="pj-meta">CMR Infrastructure Pvt Ltd, MP</div><div class="pj-qty">1100 KM<small>Clear &amp; Raw Water Mains</small></div></div>
+      <div class="pj-card"><div class="pj-tag">AMRUT 2.0 · Ratlam</div><div class="pj-title">Survey &amp; Pipeline Hydraulic Design — Ratlam WSS</div><div class="pj-meta">Yogi Construction, Gujarat</div><div class="pj-qty">655 KM<small>9 OHT · 12 MLD WTP</small></div></div>
+      <div class="pj-card"><div class="pj-tag">SBM 2.0 · Bihar</div><div class="pj-title">DPR for STP &amp; FSTP — 21 Towns, Bihar State</div><div class="pj-meta">BLG Construction Services, Jodhpur</div><div class="pj-qty">21 Towns<small>Full DPR &amp; Estimation</small></div></div>
+      <div class="pj-card"><div class="pj-tag">AMRUT 2.0 · Sagar Div</div><div class="pj-title">DPR for 12 ULBs — Sagar Division, Madhya Pradesh</div><div class="pj-meta">MARS Planning &amp; Engineering Services</div><div class="pj-qty">12 ULBs<small>WSS · WBR · LWM</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MPIDC · Industrial</div><div class="pj-title">Industrial Area Water Supply — Bathymetry &amp; Survey</div><div class="pj-meta">Vastushilpi Projects &amp; Consultants, Bhopal</div><div class="pj-qty">3 Clusters<small>Sagar · Bina · Ashta</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MCAD · Maharashtra</div><div class="pj-title">Jalgaon Irrigation Area Contour Survey</div><div class="pj-meta">Deccan Technical Consultants LLP</div><div class="pj-qty">3930 Ha<small>Asoda-Bhadali Pocket</small></div></div>
+      <div class="pj-card"><div class="pj-tag">Consumer Survey · Maihar</div><div class="pj-title">Consumer Survey for Sewerage Scheme — Maihar, MP</div><div class="pj-meta">Krishna Construction Co.</div><div class="pj-qty">15,513 HH<small>Door-to-Door Survey</small></div></div>
+      <div class="pj-card"><div class="pj-tag">Consumer Survey · Bandri</div><div class="pj-title">Consumer Survey for Sewerage Scheme — Bandri, MP</div><div class="pj-meta">Atulya Infracon</div><div class="pj-qty">8,688 HH<small>Door-to-Door Survey</small></div></div>
+      <div class="pj-card"><div class="pj-tag">JJM · Charkhari</div><div class="pj-title">Consumer Survey for WSS — Charkhari, Uttar Pradesh</div><div class="pj-meta">Jal Jeevan Mission</div><div class="pj-qty">7,700 HH<small>Prescribed Q&amp;A Format</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MPUDCL · Package 3D</div><div class="pj-title">Consumer Survey for Water Supply Scheme — 4 Towns, MP</div><div class="pj-meta">Deccan Technical Consultants LLP</div><div class="pj-qty">12,318 HH<small>Loharda · Khategaon · Nemawar · Kantaphod</small></div></div>
+      <div class="pj-card"><div class="pj-tag">JJM · Chhuriya</div><div class="pj-title">Consumer Survey for WSS — Chhuriya, Chhattisgarh</div><div class="pj-meta">Adroit Associates JV</div><div class="pj-qty">960 HH<small>Digital Survey Methodology</small></div></div>
+      <div class="pj-card"><div class="pj-tag">JJM · Chhuriya</div><div class="pj-title">Encroachment D2D/Area Survey - Mithi River Mumbai</div><div class="pj-meta">Aakshaya Infra Projects</div><div class="pj-qty">960 HH<small>Digital Survey Methodology</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MVWSS · Guna, MP</div><div class="pj-title">Multi-Village Rural WSS — 354 Villages, Guna District</div><div class="pj-meta">WPIL Ltd. · Leadership team prior experience</div><div class="pj-qty">3000 KM<small>Feeder &amp; Distribution Network</small></div></div>
+      <div class="pj-card"><div class="pj-tag">JJM · Rewa Division</div><div class="pj-title">Water &amp; Sewer Supply Schemes — Rewa Division, 23 ULBs</div><div class="pj-meta">Lion Engineering Consultants · Leadership team prior experience</div><div class="pj-qty">4500 KM<small>AMRUT 2.0 Urban Projects</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MVWSS · Gorakhpur</div><div class="pj-title">Multi-Village Rural WSS — 200 Villages, Gorakhpur, UP</div><div class="pj-meta">Deccan Technical Consultants · Leadership team prior experience</div><div class="pj-qty">3000 KM<small>Uttar Pradesh</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MVWSS · Biswanath</div><div class="pj-title">Multi-Village Rural WSS — Biswanath, Assam</div><div class="pj-meta">Feedback Infra Pvt Ltd · Leadership team prior experience</div><div class="pj-qty">3000 KM<small>Assam State</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MVWSS · Indwar</div><div class="pj-title">Multi-Village Rural WSS — 118 Villages, Katni &amp; Umaria</div><div class="pj-meta">Indian Hume Pipe · Leadership team prior experience</div><div class="pj-qty">1650 KM<small>64 OHTs · Son River Bathymetry</small></div></div>
+      <div class="pj-card"><div class="pj-tag">Storm Water · Uttarakhand</div><div class="pj-title">Storm Water Drainage Master Plan — Rishikesh &amp; Dehradun</div><div class="pj-meta">Feedback Infra Pvt Ltd · Leadership team prior experience</div><div class="pj-qty">218 Sq.KM<small>Uttarakhand</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MVWSS · Hapur</div><div class="pj-title">Multi-Village Rural WSS — 200 Villages, Hapur, UP</div><div class="pj-meta">LC Infra / Deccan Technical · Leadership team prior experience</div><div class="pj-qty">1400 KM<small>Uttar Pradesh</small></div></div>
+      <div class="pj-card"><div class="pj-tag">Hydraulic Design · Waidhan</div><div class="pj-title">Hydraulic Design — Feeder &amp; Distribution Network, Waidhan</div><div class="pj-meta">WPIL Ltd. · Leadership team prior experience</div><div class="pj-qty">4172 KM<small>Multi-Village WSS</small></div></div>
+      
+      <!-- DUPLICATE for seamless loop -->
+      
+      <div class="pj-card"><div class="pj-tag">AMRUT 2.0 · Indore</div><div class="pj-title">Topographical Survey &amp; Hydraulic Design — Indore WSS Pipeline Network</div><div class="pj-meta">CMR Infrastructure Pvt Ltd, MP</div><div class="pj-qty">3000+ KM<small>Survey &amp; Design</small></div></div>
+      <div class="pj-card"><div class="pj-tag">AMRUT 2.0 · Bhopal</div><div class="pj-title">Topographical &amp; GTI Survey — Bhopal Water Supply Scheme</div><div class="pj-meta">LC Infra Projects Pvt. Ltd., Ahmedabad</div><div class="pj-qty">1000 KM · 36 OHTs<small>4 Intakes · 6 WTP · 4 CLF</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MPJN · Jabalpur</div><div class="pj-title">Hydraulic Design — Multi-Village WSS, Jabalpur District</div><div class="pj-meta">CMR Infrastructure &amp; AFCONS Infrastructure</div><div class="pj-qty">2890 KM<small>280 OHTs · 5 MBRs</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MPJN · Ashta-Ranipura</div><div class="pj-title">Multi-Village Water Supply — Feeder &amp; Distribution Network</div><div class="pj-meta">CMR Infrastructure &amp; Laxmi Civil Engineering</div><div class="pj-qty">4745 KM<small>250 OHTs · 2 MBR · 8 IPS</small></div></div>
+      <div class="pj-card"><div class="pj-tag">BMC · Mumbai</div><div class="pj-title">Mithi River Development Project — Package III</div><div class="pj-meta">Aakshaya Infra Projects Pvt. Ltd., Mumbai</div><div class="pj-qty">250 Acres<small>Drone · Bathymetry · GPR</small></div></div>
+      <div class="pj-card"><div class="pj-tag">AMRUT 2.0 · Rewa</div><div class="pj-title">Survey &amp; Hydraulic Design — Rewa Water Supply Networks</div><div class="pj-meta">CMR Infrastructure Pvt Ltd, MP</div><div class="pj-qty">1100 KM<small>Clear &amp; Raw Water Mains</small></div></div>
+      <div class="pj-card"><div class="pj-tag">AMRUT 2.0 · Ratlam</div><div class="pj-title">Survey &amp; Pipeline Hydraulic Design — Ratlam WSS</div><div class="pj-meta">Yogi Construction, Gujarat</div><div class="pj-qty">655 KM<small>9 OHT · 12 MLD WTP</small></div></div>
+      <div class="pj-card"><div class="pj-tag">SBM 2.0 · Bihar</div><div class="pj-title">DPR for STP &amp; FSTP — 21 Towns, Bihar State</div><div class="pj-meta">BLG Construction Services, Jodhpur</div><div class="pj-qty">21 Towns<small>Full DPR &amp; Estimation</small></div></div>
+      <div class="pj-card"><div class="pj-tag">AMRUT 2.0 · Sagar Div</div><div class="pj-title">DPR for 12 ULBs — Sagar Division, Madhya Pradesh</div><div class="pj-meta">MARS Planning &amp; Engineering Services</div><div class="pj-qty">12 ULBs<small>WSS · WBR · LWM</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MPIDC · Industrial</div><div class="pj-title">Industrial Area Water Supply — Bathymetry &amp; Survey</div><div class="pj-meta">Vastushilpi Projects &amp; Consultants, Bhopal</div><div class="pj-qty">3 Clusters<small>Sagar · Bina · Ashta</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MCAD · Maharashtra</div><div class="pj-title">Jalgaon Irrigation Area Contour Survey</div><div class="pj-meta">Deccan Technical Consultants LLP</div><div class="pj-qty">3930 Ha<small>Asoda-Bhadali Pocket</small></div></div>
+      <div class="pj-card"><div class="pj-tag">Consumer Survey · Maihar</div><div class="pj-title">Consumer Survey for Sewerage Scheme — Maihar, MP</div><div class="pj-meta">Krishna Construction Co.</div><div class="pj-qty">15,513 HH<small>Door-to-Door Survey</small></div></div>
+      <div class="pj-card"><div class="pj-tag">Consumer Survey · Bandri</div><div class="pj-title">Consumer Survey for Sewerage Scheme — Bandri, MP</div><div class="pj-meta">Atulya Infracon</div><div class="pj-qty">8,688 HH<small>Door-to-Door Survey</small></div></div>
+      <div class="pj-card"><div class="pj-tag">JJM · Charkhari</div><div class="pj-title">Consumer Survey for WSS — Charkhari, Uttar Pradesh</div><div class="pj-meta">Jal Jeevan Mission</div><div class="pj-qty">7,700 HH<small>Prescribed Q&amp;A Format</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MPUDCL · Package 3D</div><div class="pj-title">Consumer Survey for Water Supply Scheme — 4 Towns, MP</div><div class="pj-meta">Deccan Technical Consultants LLP</div><div class="pj-qty">12,318 HH<small>Loharda · Khategaon · Nemawar · Kantaphod</small></div></div>
+      <div class="pj-card"><div class="pj-tag">JJM · Chhuriya</div><div class="pj-title">Consumer Survey for WSS — Chhuriya, Chhattisgarh</div><div class="pj-meta">Adroit Associates JV</div><div class="pj-qty">960 HH<small>Digital Survey Methodology</small></div></div>
+      <div class="pj-card"><div class="pj-tag">JJM · Chhuriya</div><div class="pj-title">Encroachment D2D/Area Survey - Mithi River Mumbai</div><div class="pj-meta">Aakshaya Infra Projects</div><div class="pj-qty">960 HH<small>Digital Survey Methodology</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MVWSS · Guna, MP</div><div class="pj-title">Multi-Village Rural WSS — 354 Villages, Guna District</div><div class="pj-meta">WPIL Ltd. · Leadership team prior experience</div><div class="pj-qty">3000 KM<small>Feeder &amp; Distribution Network</small></div></div>
+      <div class="pj-card"><div class="pj-tag">JJM · Rewa Division</div><div class="pj-title">Water &amp; Sewer Supply Schemes — Rewa Division, 23 ULBs</div><div class="pj-meta">Lion Engineering Consultants · Leadership team prior experience</div><div class="pj-qty">4500 KM<small>AMRUT 2.0 Urban Projects</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MVWSS · Gorakhpur</div><div class="pj-title">Multi-Village Rural WSS — 200 Villages, Gorakhpur, UP</div><div class="pj-meta">Deccan Technical Consultants · Leadership team prior experience</div><div class="pj-qty">3000 KM<small>Uttar Pradesh</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MVWSS · Biswanath</div><div class="pj-title">Multi-Village Rural WSS — Biswanath, Assam</div><div class="pj-meta">Feedback Infra Pvt Ltd · Leadership team prior experience</div><div class="pj-qty">3000 KM<small>Assam State</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MVWSS · Indwar</div><div class="pj-title">Multi-Village Rural WSS — 118 Villages, Katni &amp; Umaria</div><div class="pj-meta">Indian Hume Pipe · Leadership team prior experience</div><div class="pj-qty">1650 KM<small>64 OHTs · Son River Bathymetry</small></div></div>
+      <div class="pj-card"><div class="pj-tag">Storm Water · Uttarakhand</div><div class="pj-title">Storm Water Drainage Master Plan — Rishikesh &amp; Dehradun</div><div class="pj-meta">Feedback Infra Pvt Ltd · Leadership team prior experience</div><div class="pj-qty">218 Sq.KM<small>Uttarakhand</small></div></div>
+      <div class="pj-card"><div class="pj-tag">MVWSS · Hapur</div><div class="pj-title">Multi-Village Rural WSS — 200 Villages, Hapur, UP</div><div class="pj-meta">LC Infra / Deccan Technical · Leadership team prior experience</div><div class="pj-qty">1400 KM<small>Uttar Pradesh</small></div></div>
+      <div class="pj-card"><div class="pj-tag">Hydraulic Design · Waidhan</div><div class="pj-title">Hydraulic Design — Feeder &amp; Distribution Network, Waidhan</div><div class="pj-meta">WPIL Ltd. · Leadership team prior experience</div><div class="pj-qty">4172 KM<small>Multi-Village WSS</small></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- INDIA MAP — Google Maps with auto markers -->
+<section id="map-section">
+  <div class="map-layout">
+    <div class="map-info rvl">
+      <div class="sec-lbl">Project Coverage</div>
+      <h2>Where We've Worked Across India</h2>
+      <p class="sec-intro">From the Narmada basin to Mumbai's Mithi River — our projects span 12+ states with 50,000+ KM of survey coverage.</p>
+      <div class="map-legend">
+        <div class="legend-item"><div class="legend-dot active"></div>Active / Ongoing Project</div>
+        <div class="legend-item"><div class="legend-dot done"></div>Completed Project</div>
+      </div>
+      <div class="map-states">
+        <strong>States Covered</strong>
+        Madhya Pradesh · Maharashtra · Gujarat · Uttar Pradesh · Chhattisgarh · Bihar · Jharkhand · Rajasthan · Assam · Uttarakhand · Goa · West Bengal
+      </div>
+    </div>
+    <div class="rvr" style="border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(24,20,15,.14);height:520px">
+      <div id="gmap" style="width:100%;height:100%"></div>
+    </div>
+  </div>
+</section>
+ 
+<!-- EQUIPMENT -->
+<section id="equipment">
+  <div class="eq-grid">
+    <div class="rvl">
+      <div class="sec-lbl">Equipment &amp; Capability</div>
+      <h2>State-of-the-Art Survey Fleet</h2>
+      <p class="sec-intro">A full-fledged survey team equipped with precision instruments, backed by advanced GIS, Remote Sensing &amp; Photogrammetry software.</p>
+      <div class="eq-list" style="margin-top:1.8rem">
+        <div class="eq-item"><div class="eq-ico">🔭</div><span class="eq-name">Total Station</span></div>
+        <div class="eq-item"><div class="eq-ico">📡</div><span class="eq-name">DGPS Dual Frequency (RTK)</span></div>
+        <div class="eq-item"><div class="eq-ico">🗺️</div><span class="eq-name">Handheld GPS for GIS Mapping</span></div>
+        <div class="eq-item"><div class="eq-ico">📏</div><span class="eq-name">Auto Level</span></div>
+        <div class="eq-item"><div class="eq-ico">🌊</div><span class="eq-name">Eco-Sounder for Bathymetric Survey</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTISE -->
+<section id="expertise">
+  <div class="team-head rv">
+    <div class="sec-lbl">Our Expertise</div>
+    <h2>Domains We Excel In</h2>
+    <p class="sec-intro" style="margin:0 auto;margin-top:.6rem">Highly qualified engineers, GIS professionals and surveyors bringing precision to every assignment.</p>
+  </div>
+  <div class="exp-grid">
+    <div class="exp-card rv"><span class="exp-ico">🛰️</span><div class="exp-title">GIS &amp; Remote Sensing</div><div class="exp-desc">Advanced geospatial analysis, satellite image processing, spatial data preparation and web mapping application development.</div><div class="exp-tags"><span class="exp-tag">M.Tech GIS</span><span class="exp-tag">Remote Sensing</span><span class="exp-tag">12+ Yrs</span></div></div>
+    <div class="exp-card rv"><span class="exp-ico">🏗️</span><div class="exp-title">Civil &amp; Hydraulic Engineering</div><div class="exp-desc">Water supply and sewerage hydraulic design, structural design for OHT, WTP and IPS, DPR preparation and cost estimation.</div><div class="exp-tags"><span class="exp-tag">B.E / M.E Civil</span><span class="exp-tag">Hydraulics</span><span class="exp-tag">6+ Yrs</span></div></div>
+    <div class="exp-card rv"><span class="exp-ico">📐</span><div class="exp-title">Survey &amp; Drafting</div><div class="exp-desc">Total Station, DGPS, bathymetric surveys with precision drafting, contour mapping, profile drawing and CAD deliverables.</div><div class="exp-tags"><span class="exp-tag">Total Station</span><span class="exp-tag">DGPS RTK</span><span class="exp-tag">8+ Yrs</span></div></div>
+    <div class="exp-card rv"><span class="exp-ico">💧</span><div class="exp-title">Water Supply Systems</div><div class="exp-desc">End-to-end design and survey for multi-village water supply schemes under AMRUT 2.0, MPJN and JJM projects.</div><div class="exp-tags"><span class="exp-tag">AMRUT 2.0</span><span class="exp-tag">MPJN</span><span class="exp-tag">JJM</span></div></div>
+    <div class="exp-card rv"><span class="exp-ico">🌊</span><div class="exp-title">Sewerage &amp; LWM</div><div class="exp-desc">Liquid waste management design, SBM 2.0 schemes, STP sizing, drain network survey and flow accumulation analysis.</div><div class="exp-tags"><span class="exp-tag">SBM 2.0</span><span class="exp-tag">LWM</span><span class="exp-tag">STP Design</span></div></div>
+    <div class="exp-card rv"><span class="exp-ico">🗂️</span><div class="exp-title">DPR &amp; Estimation</div><div class="exp-desc">Detailed project reports for water supply, sewerage, waterbody rejuvenation and green space under government schemes.</div><div class="exp-tags"><span class="exp-tag">DPR</span><span class="exp-tag">Estimation</span><span class="exp-tag">Planning</span></div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="ct-grid">
+    <div class="rvl">
+      <div class="sec-lbl">Contact Us</div>
+      <div class="ct-tagline">Let's Build Better<br>Infrastructure <span>Together.</span></div>
+      <div class="ct-items">
+        <div class="ct-item"><div class="ct-ico">📍</div><div class="ct-info"><strong>Address</strong><a href="https://maps.app.goo.gl/vdCGTWJqvVa7sP9R6" target="_blank" rel="noopener" style="color:rgba(244,241,236,.82);text-decoration:none;transition:color .2s" onmouseover="this.style.color='#E8622A'" onmouseout="this.style.color='rgba(244,241,236,.82)'">249, Shirdipuram,<br>Kolar Road,<br>Bhopal – 462042, Madhya Pradesh, India</a></div></div>
+        <div class="ct-item" style="margin-top:.5rem">
+          <div style="width:100%;border-radius:12px;overflow:hidden;border:1px solid rgba(244,241,236,.1)">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3666.3!2d77.421500!3d23.183306!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDEwJzU5LjkiTiA3N8KwMjUnMTcuNCJF!5e0!3m2!1sen!2sin!4v1700000000000" width="100%" height="160" style="border:0;display:block;filter:invert(90%) hue-rotate(180deg)" allowfullscreen="" loading="lazy"></iframe>
+          </div>
+        </div>
+        <div class="ct-item"><div class="ct-ico">📞</div><div class="ct-info"><strong>Phone</strong><a href="tel:0755-4913465">0755-4913465</a></div></div>
+        <div class="ct-item"><div class="ct-ico">✉️</div><div class="ct-info"><strong>Email</strong><a href="mailto:tnecbms@gmail.com">tnecbms@gmail.com</a></div></div>
+        <div class="ct-item"><div class="ct-ico">🌐</div><div class="ct-info"><strong>Website</strong><a href="http://www.tnecllp.in" target="_blank" rel="noopener">www.tnecllp.in</a></div></div>
+      </div>
+      <div class="ct-certs">
+        <span class="cert"><span class="ck">✓</span> ISO 9001:2015 Certified</span>
+        <span class="cert"><span class="ck">✓</span> MSME Registered</span>
+        <span class="cert"><span class="ck">✓</span> GST Registered</span>
+      </div>
+    </div>
+    <div class="rvr">
+      <div class="ct-form">
+        <h3>Send Us a Message</h3>
+        <p>We'll respond within 24 hours.</p>
+        <div class="form-row">
+          <div class="fg"><label>Name</label><input type="text" placeholder="Your full name"/></div>
+          <div class="fg"><label>Phone</label><input type="tel" placeholder="+91 XXXXX XXXXX"/></div>
+        </div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="your@email.com"/></div>
+        <div class="fg">
+          <label>Service Required</label>
+          <select id="svc" onchange="this.classList.add('chosen')">
+            <option value="" disabled selected>Select a service…</option>
+            <option>GIS Mapping &amp; Remote Sensing</option>
+            <option>Topographical Survey</option>
+            <option>Water Supply Design</option>
+            <option>Sewer Network Design</option>
+            <option>Bathymetry Survey</option>
+            <option>Drone / GPR Survey</option>
+            <option>DPR Consultancy</option>
+            <option>Consumer / D2D Survey</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="fg"><label>Message</label><textarea rows="4" placeholder="Tell us about your project or requirement…"></textarea></div>
+        <button class="sub-btn" id="submitBtn" onclick="handleSubmit(event)">Send Message →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-left">
+    <img src="TN-removebg-preview.png" alt="TNEC Logo"/>
+    <div class="foot-logo"><span class="tn">T</span>rue <span class="tn">N</span>orth Engineering Consultants LLP</div>
+  </div>
+  <div class="foot-links">
+    <a href="#about">About</a><a href="#services">Services</a><a href="#projects">Projects</a>
+    <a href="#clients">Clients</a><a href="#map-section">Coverage</a><a href="#contact">Contact</a>
+  </div>
+  <div class="foot-copy">© 2026 TNEC LLP · Bhopal, MP</div>
+</footer>
+
+<script>
+/* ── Cursor ── */
+const cur=document.getElementById('cur');
+let mx=0,my=0,cx=0,cy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function tick(){cx+=(mx-cx)*.13;cy+=(my-cy)*.13;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(tick)})();
+document.querySelectorAll('a,button,.srv-card,.pj-card,.exp-card,.lc,.eq-item,.pill,.pin').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('lg'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('lg'));
+});
+
+/* ── Nav shrink ── */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('sh',scrollY>60),{passive:true});
+
+/* ── Scroll reveal ── */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target)}});
+},{threshold:0.08,rootMargin:'0px 0px -28px 0px'});
+document.querySelectorAll('.rv,.rvl,.rvr').forEach((el,i)=>{
+  el.style.transitionDelay=(i%5)*0.07+'s';obs.observe(el);
+});
+['.srv-grid .srv-card','.exp-grid .exp-card','.eq-list .eq-item','.pillars .pill'].forEach(sel=>{
+  document.querySelectorAll(sel).forEach((el,i)=>{el.style.transitionDelay=i*0.05+'s'});
+});
+
+/* ── Counter ── */
+const nbObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    e.target.querySelectorAll('.nb-num').forEach(el=>{
+      const target=+el.dataset.target,sfx=el.dataset.suffix||'';
+      let v=0;const step=target/55;
+      const t=()=>{v=Math.min(v+step,target);el.textContent=(v>=1000?Math.floor(v).toLocaleString():Math.floor(v))+sfx;if(v<target)requestAnimationFrame(t)};t();
+    });nbObs.unobserve(e.target);
+  });
+},{threshold:0.4});
+const band=document.querySelector('.numbers-band');if(band)nbObs.observe(band);
+
+/* ── CLIENT LOGOS — real images from PDF ── */
+const CLIENT_LOGOS = [
+  {name:'Deccan Technical Consultants',src:'cl_07.png'},
+  {name:'CMR Infrastructure',src:'cl_03.png'},
+  {name:'MARS Planning & Engineering',src:'cl_05.png'},
+  {name:'Afcons Infrastructure',src:'cl_01.png'},
+  {name:'Zetwerk Manufacturing',src:'cl_04.png'},
+  {name:'Laxmi Civil Engineering',src:'cl_09.png'},
+  {name:'Vastushilpi Projects',src:'cl_06.png'},
+  {name:'Bansal Brothers',src:'cl_30.png'},
+  {name:'Krishna Construction Co.',src:'cl_11.png'},
+  {name:'Adroit Associates',src:'cl_02.png'},
+  {name:'Multi-Urban Infra',src:'cl_20.png'},
+  {name:'S-Convecranes',src:'cl_26.jpg'},
+  {name:'VAB Agency',src:'cl_13.png'},
+  {name:'SB Singh',src:'cl_21.png'},
+  {name:'Central India Engineering',src:'cl_23.png'},
+  {name:'Atlasgreen Scinergy',src:'cl_17.png'},
+  {name:'Yogi Construction',src:'cl_25.png'},
+  {name:'BLG Construction',src:'cl_16.png'},
+  {name:'Omkarya Constructions',src:'cl_15.png'},
+  {name:'Aakshya Infra',src:'cl_22.png'},
+  {name:'Flozon Technologies',src:'cl_18.png'},
+  {name:'Essmar Infra',src:'cl_12.png'},
+  {name:'Reliable Industrial Solutions',src:'cl_24.png'},
+  {name:'Chandra Nirman Pvt Ltd',src:'cl_10.png'},
+  {name:'Intergen Energy Ltd.',src:'cl_14.png'},
+  {name:'LC Infra Projects Pvt. Ltd.',src:'cl_08.png'},
+  {name:'Rudraksh Infra Projects',src:'cl_27.jpg'},
+  {name:'Vikran Engineering Ltd.',src:'cl_28.png'}
+];
+
+function buildClientMarquee(){
+  const row1=document.getElementById('row1');
+  const row2=document.getElementById('row2');
+  if(!row1||!row2) return;
+
+  // Split into two halves
+  const half=Math.ceil(CLIENT_LOGOS.length/2);
+  const set1=CLIENT_LOGOS.slice(0,half);
+  const set2=CLIENT_LOGOS.slice(half);
+
+  function makeCard(logo){
+    const d=document.createElement('div');
+    d.className='lc';
+    const img=document.createElement('img');
+    img.src=logo.src;
+    img.alt=logo.name;
+    img.onerror=function(){
+      // Fallback to text if image fails
+      this.style.display='none';
+      const span=document.createElement('span');
+      span.style.cssText='font-family:Playfair Display,serif;font-weight:800;font-size:1rem;color:#18140F';
+      span.textContent=logo.name.split(' ').map(w=>w[0]).join('').slice(0,3);
+      d.insertBefore(span,d.querySelector('.lc-name'));
+    };
+    const name=document.createElement('div');
+    name.className='lc-name';
+    name.textContent=logo.name;
+    d.appendChild(img);d.appendChild(name);
+    return d;
+  }
+
+  // Row 1 = set1 duplicated for seamless loop
+  [...set1,...set1].forEach(l=>row1.appendChild(makeCard(l)));
+  // Row 2 = set2 duplicated
+  [...set2,...set2].forEach(l=>row2.appendChild(makeCard(l)));
+}
+
+buildClientMarquee();
+
+/* ── EmailJS ── */
+emailjs.init('SlkGhU9nFLKeBRVsa');
+
+function handleSubmit(e){
+  e.preventDefault();
+
+  const nameEl  = document.querySelector('input[placeholder="Your full name"]');
+  const phoneEl = document.querySelector('input[placeholder="+91 XXXXX XXXXX"]');
+  const emailEl = document.querySelector('input[placeholder="your@email.com"]');
+  const svcEl   = document.getElementById('svc');
+  const msgEl   = document.querySelector('textarea');
+
+  // Clear old errors
+  [nameEl,phoneEl,emailEl,svcEl,msgEl].forEach(el=>{
+    el.closest('.fg').classList.remove('has-error');
+    const old=el.closest('.fg').querySelector('.err');
+    if(old) old.remove();
+  });
+
+  // Validate
+  let valid=true;
+  function showErr(el,msg){
+    const fg=el.closest('.fg');
+    fg.classList.add('has-error');
+    const span=document.createElement('span');
+    span.className='err';
+    span.textContent=msg;
+    fg.appendChild(span);
+    valid=false;
+  }
+
+  const name  = nameEl.value.trim();
+  const phone = phoneEl.value.trim();
+  const email = emailEl.value.trim();
+  const svc   = svcEl.value;
+  const msg   = msgEl.value.trim();
+
+  if(!name || name.length<2)
+    showErr(nameEl, !name ? 'Please enter your full name.' : 'Name must be at least 2 characters.');
+  if(!phone)
+    showErr(phoneEl,'Please enter your phone number.');
+  else if(!/^[+\d][\d\s\-]{8,14}$/.test(phone))
+    showErr(phoneEl,'Enter a valid phone number.');
+  if(!email)
+    showErr(emailEl,'Please enter your email address.');
+  else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    showErr(emailEl,'Enter a valid email address.');
+  if(!svc)
+    showErr(svcEl,'Please select a service.');
+  if(!msg || msg.length<10)
+    showErr(msgEl, !msg ? 'Please write a message.' : 'Message must be at least 10 characters.');
+
+  if(!valid) return;
+
+  const btn=document.getElementById('submitBtn');
+  btn.textContent='Sending…';
+  btn.disabled=true;
+
+  emailjs.send('service_xdywm9b','template_oqoj69b',{
+    from_name : name,
+    phone     : phone,
+    from_email: email,
+    service   : svc,
+    message   : msg,
+  })
+  .then(()=>{
+    btn.textContent='✓ Message Sent!';
+    btn.classList.add('sent');
+    btn.disabled=false;
+    nameEl.value=''; phoneEl.value=''; emailEl.value='';
+    svcEl.value=''; svcEl.classList.remove('chosen');
+    msgEl.value='';
+    setTimeout(()=>{btn.textContent='Send Message →';btn.classList.remove('sent')},4000);
+  })
+  .catch(err=>{
+    console.error('EmailJS error:',err);
+    btn.textContent='Failed — Try Again';
+    btn.style.background='#ff6b6b';
+    btn.disabled=false;
+    setTimeout(()=>{btn.textContent='Send Message →';btn.style.background='';},4000);
+  });
+} 
+
+/* ── GOOGLE MAPS ── */
+
+// ═══════════════════════════════════════════════
+// YOUR PROJECT LOCATIONS — just add/edit here!
+// type: 'active' = orange flag, 'done' = green flag
+// ═══════════════════════════════════════════════
+const PROJECT_LOCATIONS = [
+  // ── TNEC LLP Projects ──
+  { lat:23.2599, lng:77.4126, city:'Bhopal, MP ★ HQ',        desc:'Multiple AMRUT 2.0 · Water Supply · Sewer Projects', qty:'Multiple Projects', type:'active' },
+  { lat:22.7196, lng:75.8577, city:'Indore, MP',              desc:'AMRUT 2.0 WSS Pipeline Network',                     qty:'3000+ KM',         type:'active' },
+  { lat:23.1815, lng:79.9864, city:'Jabalpur, MP',            desc:'Multi-Village WSS Hydraulic Design',                 qty:'2890 KM',          type:'active' },
+  { lat:24.5333, lng:81.3000, city:'Rewa, MP',                desc:'AMRUT 2.0 Water Supply Networks',                    qty:'1100 KM',          type:'done'   },
+  { lat:26.2183, lng:78.1828, city:'Gwalior, MP',             desc:'Contour Survey for WTP Sites — AMRUT 2.0',           qty:'4 WTP Sites',      type:'done'   },
+  { lat:23.3315, lng:75.0367, city:'Ratlam, MP',              desc:'Pipeline Hydraulic Design, AMRUT 2.0',               qty:'655 KM',           type:'done'   },
+  { lat:24.5854, lng:80.8322, city:'Satna, MP',               desc:'Sewer Network + LWM 7 Towns',                        qty:'179 KM',           type:'done'   },
+  { lat:24.0765, lng:75.0667, city:'Mandsaur, MP',            desc:'Sewerage Scheme Pipeline Survey',                    qty:'355 KM',           type:'done'   },
+  { lat:23.1875, lng:77.0833, city:'Sehore / Ashta, MP',      desc:'Multi-Village WSS MPJN Scheme',                      qty:'4745 KM',          type:'active' },
+  { lat:21.8200, lng:76.3500, city:'Khandwa, MP',             desc:'AMRUT 2.0 Water Supply',                             qty:'522 KM',           type:'done'   },
+  { lat:24.7455, lng:78.8320, city:'Tikamgarh / Niwari, MP',  desc:'DPR for 12 ULBs — AMRUT 2.0',                       qty:'12 ULBs',          type:'active' },
+  { lat:19.0760, lng:72.8777, city:'Mumbai, Maharashtra',     desc:'Mithi River Dev — Drone + Bathymetry + GPR',         qty:'250 Acres',        type:'active' },
+  { lat:21.1458, lng:79.0882, city:'Nagpur, MH',              desc:'Topographical Survey — Various MH Projects',         qty:'Multiple',         type:'done'   },
+  { lat:21.1700, lng:77.3200, city:'Anjangaon Surji, MH',     desc:'Topographical Survey for Sewer Network',             qty:'145 KM',           type:'done'   },
+  { lat:22.9734, lng:72.6831, city:'Ahmedabad, Gujarat',      desc:'Krishna Construction + Yogi Construction Projects',  qty:'Multiple',         type:'active' },
+  { lat:25.4670, lng:80.3320, city:'Banda / Hamirpur, UP',    desc:'WSS Survey & Pipeline Hydraulic Design',             qty:'228 KM',           type:'done'   },
+  { lat:21.2514, lng:81.6296, city:'Chhattisgarh',            desc:'Chapora MVWSS + LWM Schemes',                        qty:'65 KM',            type:'done'   },
+  { lat:25.5941, lng:85.1376, city:'Bihar (21 Towns)',        desc:'DPR for STP & FSTP under SBM 2.0',                  qty:'21 Towns',         type:'active' },
+  { lat:23.6693, lng:86.1511, city:'Bokaro, Jharkhand',       desc:'Topographical Survey for Sewerage STP',              qty:'STP Survey',       type:'done'   },
+  { lat:26.2917, lng:73.0169, city:'Rajasthan',               desc:'BLG Construction — DPR Projects',                   qty:'Multiple',         type:'done'   },
+  { lat:20.9200, lng:75.3200, city:'Jalgaon, Maharashtra',    desc:'Irrigation Area Contour Survey',                     qty:'3930 Ha',          type:'done'   },
+
+  // ── Leadership team prior experience (Shristi) ──
+  { lat:24.6637, lng:77.3167, city:'Guna, MP',                desc:'Multi-Village WSS — 354 Villages',                   qty:'3000 KM',          type:'done'   },
+  { lat:26.7606, lng:83.3732, city:'Gorakhpur, UP',           desc:'Multi-Village WSS — 200 Villages',                   qty:'3000 KM',          type:'done'   },
+  { lat:28.7333, lng:77.7833, city:'Hapur, UP',               desc:'Multi-Village WSS — 200 Villages',                   qty:'1400 KM',          type:'done'   },
+  { lat:26.7000, lng:93.0000, city:'Biswanath, Assam',        desc:'Multi-Village Rural WSS',                            qty:'3000 KM',          type:'done'   },
+  { lat:26.0100, lng:89.9700, city:'Dhubri, Assam',           desc:'Multi-Village Rural WSS',                            qty:'648 KM',           type:'done'   },
+  { lat:30.3165, lng:78.0322, city:'Rishikesh & Dehradun, UK',desc:'Storm Water Drainage Master Plan',                   qty:'218 Sq.KM',        type:'done'   },
+  { lat:15.5057, lng:73.8258, city:'Goa',                     desc:'Topographical Survey of Sewage Main Trunk',          qty:'50 KM',            type:'done'   },
+  { lat:19.9975, lng:73.7898, city:'Nashik, MH',              desc:'Bathymetry of Godavari River, Smart City',           qty:'64 Ha',            type:'done'   },
+  { lat:24.8000, lng:87.9200, city:'Farakkha, WB',            desc:'Bathymetric Survey of Ganga River',                  qty:'100 Ha',           type:'done'   },
+  { lat:23.1300, lng:80.7200, city:'Anuppur, MP',             desc:'Dameri MVWSS — 78 Villages + Bathymetry',            qty:'1000 KM',          type:'done'   },
+  { lat:21.8200, lng:75.6200, city:'Khargone & Burhanpur, MP',desc:'Water Supply & Sewerage under AMRUT 2.0',            qty:'800 KM',           type:'done'   },
+  { lat:22.0000, lng:76.9600, city:'Dewas, MP',               desc:'Water Supply | Sewer Network Design',                qty:'700 KM',           type:'done'   },
+  { lat:24.1500, lng:78.6500, city:'Chhatarpur, MP',          desc:'Water Supply Survey — Khajuraho Region',             qty:'182 KM',           type:'done'   },
+  { lat:22.6900, lng:74.9000, city:'Barwani & Sheopur, MP',   desc:'Multi-Village Rural WSS — 210 Villages',             qty:'2000 KM',          type:'done'   },
+];
+
+function initMap() {
+  // Custom dark map style to match website theme
+  const mapStyle = [
+    { elementType:'geometry',        stylers:[{color:'#1a1714'}] },
+    { elementType:'labels.text.fill',stylers:[{color:'#9a938c'}] },
+    { elementType:'labels.text.stroke',stylers:[{color:'#1a1714'}] },
+    { featureType:'administrative',  elementType:'geometry',stylers:[{color:'#2a2520'}] },
+    { featureType:'administrative.country', elementType:'geometry.stroke', stylers:[{color:'#E8622A'},{weight:1.2}] },
+    { featureType:'administrative.province',elementType:'geometry.stroke',stylers:[{color:'#3a3530'},{weight:0.8}] },
+    { featureType:'road',            elementType:'geometry',stylers:[{color:'#2a2520'}] },
+    { featureType:'road.highway',    elementType:'geometry',stylers:[{color:'#333028'}] },
+    { featureType:'water',           elementType:'geometry',stylers:[{color:'#0f1520'}] },
+    { featureType:'water',           elementType:'labels.text.fill',stylers:[{color:'#3d5970'}] },
+    { featureType:'poi',             stylers:[{visibility:'off'}] },
+    { featureType:'transit',         stylers:[{visibility:'off'}] },
+    { featureType:'landscape',       elementType:'geometry',stylers:[{color:'#1e1a16'}] },
+    { featureType:'administrative.locality', elementType:'labels', stylers:[{visibility:'off'}] },
+  ];
+
+  const map = new google.maps.Map(document.getElementById('gmap'), {
+    center: { lat: 22.5, lng: 80.0 },
+    zoom: 5,
+    styles: mapStyle,
+    disableDefaultUI: false,
+    zoomControl: true,
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: true,
+    gestureHandling: 'cooperative',
+  });
+
+  const infoWindow = new google.maps.InfoWindow();
+
+  PROJECT_LOCATIONS.forEach(loc => {
+    const isActive = loc.type === 'active';
+
+    // Custom flag SVG marker
+    const flagSvg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="28" viewBox="0 0 24 28">
+        <line x1="3" y1="4" x2="3" y2="27" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <polygon points="3,4 20,8 20,18 3,22" fill="${isActive ? '#E8622A' : '#2DBC6E'}" opacity="0.95"/>
+        <circle cx="3" cy="27" r="2.5" fill="${isActive ? '#E8622A' : '#2DBC6E'}"/>
+      </svg>`;
+
+    const marker = new google.maps.Marker({
+      position: { lat: loc.lat, lng: loc.lng },
+      map: map,
+      icon: {
+        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(flagSvg),
+        scaledSize: new google.maps.Size(24, 28),
+        anchor: new google.maps.Point(3, 27),
+      },
+      title: loc.city,
+    });
+
+    marker.addListener('click', () => {
+      infoWindow.setContent(`
+        <div class="map-popup">
+          <div class="map-popup-tag ${loc.type}">${loc.type === 'active' ? '🟠 Active Project' : '🟢 Completed Project'}</div>
+          <div class="map-popup-title">${loc.city}</div>
+          <div class="map-popup-desc">${loc.desc}</div>
+          <div class="map-popup-qty ${loc.type}">${loc.qty}</div>
+        </div>
+      `);
+      infoWindow.open(map, marker);
+    });
+  });
+}
+
+/* ── JOURNEY MAP — Google Maps + SVG arrows ── */
+(function(){
+
+  const JOURNEY = [
+    {
+      year:'2015', label:'Shristi Survey Consulting Founded',
+      stops:[
+        { lat:23.26, lng:77.41, city:'Bhopal, MP — HQ ★', desc:'Shristi Survey Consulting founded. First GIS & Survey projects begin.', qty:'HQ', color:'#E8622A' },
+      ]
+    },
+    {
+      year:'2016', label:'First Major Projects',
+      stops:[
+        { lat:24.66, lng:77.32, city:'Guna, MP',           desc:'Multi-Village WSS — 354 Villages.',      qty:'3000 KM',   color:'#E8622A' },
+        { lat:22.00, lng:76.95, city:'Dewas, MP',           desc:'Water Supply & Sewer Survey.',           qty:'Survey',    color:'#E8622A' },
+        { lat:23.33, lng:75.04, city:'Ratlam, MP',          desc:'Water Supply Network Survey.',           qty:'Survey',    color:'#E8622A' },
+      ]
+    },
+    {
+      year:'2017', label:'Expanding into UP',
+      stops:[
+        { lat:28.73, lng:77.78, city:'Hapur, UP',           desc:'Multi-Village WSS — 200 Villages.',      qty:'1400 KM',   color:'#E8622A' },
+        { lat:28.57, lng:77.32, city:'Gautam Buddha Nagar', desc:'Multi-Village WSS — 117 Villages.',      qty:'500 KM',    color:'#E8622A' },
+        { lat:26.76, lng:83.37, city:'Gorakhpur, UP',        desc:'Multi-Village WSS — 200 Villages.',      qty:'3000 KM',   color:'#E8622A' },
+        { lat:24.15, lng:78.65, city:'Chhatarpur, MP',       desc:'Water Supply Survey.',                   qty:'182 KM',    color:'#E8622A' },
+      ]
+    },
+    {
+      year:'2018', label:'Northeast & Uttarakhand',
+      stops:[
+        { lat:26.70, lng:93.00, city:'Biswanath, Assam',    desc:'Multi-Village Rural WSS.',               qty:'3000 KM',   color:'#F07845' },
+        { lat:26.01, lng:89.97, city:'Dhubri, Assam',        desc:'Multi-Village Rural WSS.',               qty:'648 KM',    color:'#F07845' },
+        { lat:30.32, lng:78.03, city:'Rishikesh & Dehradun', desc:'Storm Water Drainage Master Plan.',      qty:'218 Sq.KM', color:'#F07845' },
+        { lat:24.13, lng:79.90, city:'Khajuraho, MP',         desc:'Khajuraho Airport Survey.',              qty:'150 Ha',    color:'#F07845' },
+      ]
+    },
+    {
+      year:'2019', label:'West Coast & Bathymetry',
+      stops:[
+        { lat:15.51, lng:73.83, city:'Goa',                  desc:'Topographical Survey of Sewage Trunk.',  qty:'50 KM',     color:'#F07845' },
+        { lat:19.99, lng:73.79, city:'Nashik, MH',            desc:'Bathymetry of Godavari River.',          qty:'64 Ha',     color:'#F07845' },
+        { lat:23.13, lng:80.72, city:'Anuppur, MP',           desc:'Dameri MVWSS — 78 Villages.',            qty:'1000 KM',   color:'#F07845' },
+        { lat:22.69, lng:74.90, city:'Barwani & Sheopur, MP', desc:'Multi-Village WSS — 210 Villages.',      qty:'2000 KM',   color:'#F07845' },
+      ]
+    },
+    {
+      year:'2020', label:'River Surveys & Mining',
+      stops:[
+        { lat:24.80, lng:87.92, city:'Farakkha, WB',          desc:'Bathymetric Survey of Ganga River.',     qty:'100 Ha',    color:'#F07845' },
+        { lat:23.67, lng:86.15, city:'Bokaro, Jharkhand',     desc:'Coal Mine Contour + Sewerage STP.',      qty:'63 Ha',     color:'#F07845' },
+        { lat:21.82, lng:75.62, city:'Khargone, MP',           desc:'Water Supply & Sewerage AMRUT.',         qty:'800 KM',    color:'#F07845' },
+        { lat:21.82, lng:76.35, city:'Khandwa, MP',            desc:'AMRUT Water Supply Network.',            qty:'522 KM',    color:'#F07845' },
+      ]
+    },
+    {
+      year:'2021', label:'Large Scale WSS',
+      stops:[
+        { lat:24.53, lng:81.30, city:'Rewa Division, MP',     desc:'23 ULBs Water & Sewer Schemes.',         qty:'4500 KM',   color:'#F07845' },
+        { lat:24.59, lng:80.83, city:'Satna, MP',             desc:'Hydraulic Design — Sewer Network.',      qty:'179 KM',    color:'#F07845' },
+        { lat:21.26, lng:81.63, city:'Chhattisgarh',          desc:'Chapora MVWSS + LWM Schemes.',           qty:'65 KM',     color:'#F07845' },
+        { lat:24.80, lng:80.82, city:'Waidhan, MP',           desc:'Hydraulic Design — Feeder Network.',     qty:'4172 KM',   color:'#F07845' },
+      ]
+    },
+    {
+      year:'2022', label:'🎉 TNEC LLP Founded!',
+      stops:[
+        { lat:23.26, lng:77.41, city:'Bhopal, MP — HQ ★', desc:'True North Engineering Consultants LLP established. ISO 9001:2015 · MSME · GST Registered.', qty:'New Chapter ✨', color:'#fff' },
+      ]
+    },
+    {
+      year:'2023', label:'AMRUT 2.0 Domination',
+      stops:[
+        { lat:22.72, lng:75.86, city:'Indore, MP',            desc:'AMRUT 2.0 WSS Pipeline Network.',        qty:'3000+ KM',  color:'#2DBC6E' },
+        { lat:23.26, lng:77.41, city:'Bhopal, MP',            desc:'GTI Survey — 36 OHTs, 6 WTP, 4 CLF.',   qty:'1000 KM',   color:'#2DBC6E' },
+        { lat:24.53, lng:81.30, city:'Rewa, MP',              desc:'AMRUT 2.0 Water Supply Networks.',       qty:'1100 KM',   color:'#2DBC6E' },
+        { lat:23.33, lng:75.04, city:'Ratlam, MP',            desc:'Pipeline Hydraulic Design.',             qty:'655 KM',    color:'#2DBC6E' },
+        { lat:21.82, lng:76.35, city:'Khandwa, MP',           desc:'AMRUT 2.0 Water Supply.',                qty:'522 KM',    color:'#2DBC6E' },
+        { lat:24.08, lng:75.07, city:'Mandsaur, MP',          desc:'Sewerage Scheme Pipeline Survey.',       qty:'355 KM',    color:'#2DBC6E' },
+        { lat:24.75, lng:78.83, city:'Tikamgarh, MP',         desc:'DPR for 12 ULBs — AMRUT 2.0.',          qty:'12 ULBs',   color:'#2DBC6E' },
+      ]
+    },
+    {
+      year:'2024', label:'Mumbai, Big WSS & DPR',
+      stops:[
+        { lat:19.08, lng:72.88, city:'Mumbai, Maharashtra',   desc:'Mithi River — Drone, Bathymetry, GPR.',  qty:'250 Acres', color:'#2DBC6E' },
+        { lat:23.18, lng:79.99, city:'Jabalpur, MP',          desc:'Multi-Village WSS Hydraulic Design.',    qty:'2890 KM',   color:'#2DBC6E' },
+        { lat:23.19, lng:77.08, city:'Sehore / Ashta, MP',   desc:'Ashta-Ranipura MVWSS — 250 OHTs.',       qty:'4745 KM',   color:'#2DBC6E' },
+        { lat:26.22, lng:78.18, city:'Gwalior, MP',           desc:'Contour Survey for WTP Sites.',          qty:'4 WTP',     color:'#2DBC6E' },
+        { lat:20.92, lng:75.32, city:'Jalgaon, MH',           desc:'Irrigation Area Contour Survey.',        qty:'3930 Ha',   color:'#2DBC6E' },
+        { lat:21.17, lng:77.32, city:'Anjangaon Surji, MH',  desc:'Topographical Survey — Sewer Network.',  qty:'145 KM',    color:'#2DBC6E' },
+      ]
+    },
+    {
+      year:'2025', label:'Bihar, Consumer Surveys',
+      stops:[
+        { lat:25.59, lng:85.14, city:'Bihar — 21 Towns',      desc:'DPR for STP & FSTP under SBM 2.0.',     qty:'21 Towns',  color:'#2DBC6E' },
+        { lat:24.09, lng:80.83, city:'Maihar, MP',            desc:'Consumer Survey — Sewerage Scheme.',     qty:'15,513 HH', color:'#2DBC6E' },
+        { lat:23.85, lng:79.55, city:'Bandri, MP',            desc:'Consumer Survey — Sewerage Scheme.',     qty:'8,688 HH',  color:'#2DBC6E' },
+        { lat:25.47, lng:80.33, city:'Charkhari, UP',         desc:'Consumer Survey — Jal Jeevan Mission.',  qty:'7,700 HH',  color:'#2DBC6E' },
+        { lat:22.60, lng:76.55, city:'Dewas Package 3D',      desc:'Consumer Survey — 4 Towns MPUDCL.',      qty:'12,318 HH', color:'#2DBC6E' },
+        { lat:21.27, lng:81.13, city:'Chhuriya, CH',          desc:'Consumer Survey — Digital Survey.',      qty:'960 HH',    color:'#2DBC6E' },
+      ]
+    },
+    {
+      year:'2026', label:'50K+ KM · 165+ Projects · 12+ States',
+      stops:[
+        { lat:22.50, lng:80.00, city:'All Across India 🇮🇳', desc:'A decade of engineering excellence. Still growing!', qty:'50K+ KM · 165+ Projects', color:'#2DBC6E' },
+      ]
+    },
+  ];
+
+  const svg     = document.getElementById('journeySvg');
+  const jYear   = document.getElementById('jYear');
+  const jLabel  = document.getElementById('jLabel');
+  const jCard   = document.getElementById('jCard');
+  const jCity   = document.getElementById('jCity');
+  const jDesc   = document.getElementById('jDesc');
+  const jQty    = document.getElementById('jQty');
+  const jDots   = document.getElementById('jDots');
+  const jReplay = document.getElementById('jReplay');
+  const jFNum   = document.getElementById('jFloatNum');
+  const jFLbl   = document.getElementById('jFloatLbl');
+
+  const DRAW_MS    = 350;
+  const STOP_PAUSE = 300;
+  const YEAR_PAUSE = 500;
+
+  let gmap, timers=[], drawnMarkers=[];
+
+  JOURNEY.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='j-dot-ind';
+    d.onclick=()=>{ clearAll(); runFromYear(i); };
+    jDots.appendChild(d);
+  });
+  const dotEls=jDots.querySelectorAll('.j-dot-ind');
+
+  function clearAll(){
+    timers.forEach(clearTimeout); timers=[];
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    drawnMarkers.forEach(m=>m.setMap(null)); drawnMarkers=[];
+    dotEls.forEach(d=>d.classList.remove('active','visited'));
+    jReplay.style.display='none';
+    jCard.style.opacity='0';
+  }
+
+  function tick(fn,ms){ const id=setTimeout(fn,ms); timers.push(id); }
+
+  const HQ = {lat:23.26, lng:77.41};
+
+  function latLngToSvg(lat,lng){
+    if(!gmap) return {x:0,y:0};
+    const mapDiv = document.getElementById('journeyGmap');
+    const w = mapDiv.offsetWidth, h = mapDiv.offsetHeight;
+    const proj = gmap.getProjection();
+    const bounds = gmap.getBounds();
+    if(!proj||!bounds) return {x:0,y:0};
+    const ne=bounds.getNorthEast(), sw=bounds.getSouthWest();
+    const neP=proj.fromLatLngToPoint(ne);
+    const swP=proj.fromLatLngToPoint(sw);
+    const ptP=proj.fromLatLngToPoint(new google.maps.LatLng(lat,lng));
+    const scale=Math.pow(2,gmap.getZoom());
+    const mapW=(neP.x-swP.x)*scale, mapH=(swP.y-neP.y)*scale;
+    return {
+      x:((ptP.x-swP.x)*scale/mapW)*w,
+      y:((ptP.y-neP.y)*scale/mapH)*h
+    };
+  }
+
+  function drawArrow(fromLat,fromLng,toLat,toLng,color,onDone){
+    const from=latLngToSvg(fromLat,fromLng);
+    const to=latLngToSvg(toLat,toLng);
+    const dx=to.x-from.x, dy=to.y-from.y;
+    const col=color==='#fff'?'#E8622A':color;
+
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',from.x); line.setAttribute('y1',from.y);
+    line.setAttribute('x2',from.x); line.setAttribute('y2',from.y);
+    line.setAttribute('stroke',col);
+    line.setAttribute('stroke-width','2');
+    line.setAttribute('stroke-linecap','round');
+    line.setAttribute('stroke-dasharray','5 3');
+    line.setAttribute('opacity','0.8');
+    svg.appendChild(line);
+
+    const arrow=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    arrow.setAttribute('fill',col);
+    arrow.style.opacity='0';
+    svg.appendChild(arrow);
+
+    const start=performance.now();
+    function animate(now){
+      const p=Math.min((now-start)/DRAW_MS,1);
+      const e=1-(1-p)**2;
+      const cx=from.x+dx*e, cy=from.y+dy*e;
+      line.setAttribute('x2',cx); line.setAttribute('y2',cy);
+      if(p>0.2){
+        const rad=Math.atan2(dy,dx), sz=6;
+        arrow.setAttribute('points',
+          (cx+sz*Math.cos(rad))+','+(cy+sz*Math.sin(rad))+' '+
+          (cx-sz*.6*Math.cos(rad)+sz*.6*Math.sin(rad))+','+(cy-sz*.6*Math.sin(rad)-sz*.6*Math.cos(rad))+' '+
+          (cx-sz*.6*Math.cos(rad)-sz*.6*Math.sin(rad))+','+(cy-sz*.6*Math.sin(rad)+sz*.6*Math.cos(rad))
+        );
+        arrow.style.opacity='0.95';
+      }
+      if(p<1){ requestAnimationFrame(animate); }
+      else { if(onDone) onDone(); }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  function placeGMarker(lat,lng,color,title,isHQ){
+    const c=color==='#fff'?'#E8622A':color;
+    const flagSvg=`<svg xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewBox="0 0 28 34">
+      <line x1="4" y1="6" x2="4" y2="32" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="4,6 22,10 22,20 4,24" fill="${c}" opacity="0.95"/>
+      <circle cx="4" cy="32" r="${isHQ?4:3}" fill="${c}" stroke="white" stroke-width="1.5"/>
+      ${isHQ?`<circle cx="4" cy="32" r="9" fill="${c}" opacity="0.2"/>`:''}
+    </svg>`;
+    const marker=new google.maps.Marker({
+      position:{lat,lng},map:gmap,
+      icon:{
+        url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(flagSvg),
+        scaledSize:new google.maps.Size(28,34),
+        anchor:new google.maps.Point(4,32),
+      },
+      title,optimized:false,
+    });
+    drawnMarkers.push(marker);
+    return marker;
+  }
+
+  function updateDisplay(year,label,color){
+    jYear.style.opacity='0'; jLabel.style.opacity='0';
+    tick(()=>{
+      jYear.textContent=year; jLabel.textContent=label;
+      jYear.style.transition='opacity .25s';
+      jYear.style.color=color==='#fff'?'#fff':(color||'#E8622A');
+      jYear.style.opacity='1'; jLabel.style.opacity='1';
+    },100);
+  }
+
+  function showCard(stop){
+    jCity.textContent=stop.city;
+    jDesc.textContent=stop.desc;
+    jQty.textContent=stop.qty;
+    jQty.style.color=stop.color==='#fff'?'#E8622A':stop.color;
+    jCard.style.opacity='1';
+    jCard.style.transform='translateY(0)';
+    jFNum.textContent=stop.qty.split(' ')[0];
+    jFLbl.textContent=stop.city.split(',')[0];
+  }
+
+  function runFromYear(yi){
+    if(yi>=JOURNEY.length){
+      dotEls.forEach(d=>d.classList.add('visited'));
+      jReplay.style.display='block';
+      return;
+    }
+    const yr=JOURNEY[yi];
+    dotEls.forEach((d,i)=>{ d.classList.remove('active'); if(i<yi) d.classList.add('visited'); });
+    dotEls[yi].classList.add('active');
+    updateDisplay(yr.year,yr.label,yr.stops[0].color);
+
+    placeGMarker(HQ.lat,HQ.lng,'#E8622A','Bhopal HQ',true);
+
+    let totalDelay=200;
+
+    yr.stops.forEach((stop,si)=>{
+      const isHome=stop.lat===HQ.lat&&stop.lng===HQ.lng;
+      tick(()=>{
+        if(!isHome){
+          drawArrow(HQ.lat,HQ.lng,stop.lat,stop.lng,stop.color,()=>{
+            placeGMarker(stop.lat,stop.lng,stop.color,stop.city,false);
+          });
+        }
+      },50*si);
+      tick(()=>{ showCard(stop); },totalDelay);
+      totalDelay+=STOP_PAUSE;
+    });
+
+    tick(()=>{ runFromYear(yi+1); },totalDelay+YEAR_PAUSE);
+  }
+
+  window.initJourneyMap=function(){
+    const darkStyle=[
+      {elementType:'geometry',                  stylers:[{color:'#1a1714'}]},
+      {elementType:'labels.text.fill',          stylers:[{color:'#9a938c'}]},
+      {elementType:'labels.text.stroke',        stylers:[{color:'#1a1714'}]},
+      {featureType:'administrative.country',    elementType:'geometry.stroke',stylers:[{color:'#E8622A'},{weight:1.5}]},
+      {featureType:'administrative.province',   elementType:'geometry.stroke',stylers:[{color:'#3a3530'},{weight:0.8}]},
+      {featureType:'administrative.locality',   elementType:'labels.text.fill',stylers:[{color:'#6a6460'}]},
+      {featureType:'road',                      elementType:'geometry',       stylers:[{color:'#222018'}]},
+      {featureType:'road.highway',              elementType:'geometry',       stylers:[{color:'#2a2418'}]},
+      {featureType:'water',                     elementType:'geometry',       stylers:[{color:'#0a1018'}]},
+      {featureType:'water',                     elementType:'labels.text.fill',stylers:[{color:'#2d4055'}]},
+      {featureType:'poi',                       stylers:[{visibility:'off'}]},
+      {featureType:'transit',                   stylers:[{visibility:'off'}]},
+      {featureType:'landscape',                 elementType:'geometry',       stylers:[{color:'#1a1612'}]},
+    ];
+    gmap=new google.maps.Map(document.getElementById('journeyGmap'),{
+      center:{lat:22.5,lng:80.5},zoom:5,
+      styles:darkStyle,
+      disableDefaultUI:true,
+      gestureHandling:'none',
+      zoomControl:false,
+      keyboardShortcuts:false,
+    });
+    const mapDiv=document.getElementById('journeyGmap');
+    svg.setAttribute('width',mapDiv.offsetWidth);
+    svg.setAttribute('height',mapDiv.offsetHeight);
+    google.maps.event.addListenerOnce(gmap,'idle',()=>{
+      tick(()=>startJourney(),800);
+    });
+  };
+
+  window.startJourney=function(){
+    clearAll();
+    if(gmap){
+      gmap.setCenter({lat:22.5,lng:80.5});
+      gmap.setZoom(5);
+      tick(()=>runFromYear(0),600);
+    }
+  };
+
+  const section=document.getElementById('journeyMap');
+  if(section){
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting&&gmap){ startJourney(); obs.unobserve(e.target); }
+        else if(e.isIntersecting&&!gmap){
+          const wait=setInterval(()=>{ if(gmap){ startJourney(); obs.unobserve(e.target); clearInterval(wait); } },200);
+        }
+      });
+    },{threshold:0.3});
+    obs.observe(section);
+  }
+
+})();
+
+</script>
+</body>
+</html>

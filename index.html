@@ -626,8 +626,7 @@ footer{background:#0F0C08;padding:1.6rem 5vw;display:flex;justify-content:space-
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnLBtOeixDJN9BZdCXJ_PaZTOUU469uV0&callback=initializeMaps"></script>
-
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnLBtOeixDJN9BZdCXJ_PaZTOUU469uV0&callback=initAllMaps"></script>
 </head>
 <body>
 <div class="cur" id="cur"></div>
@@ -1636,12 +1635,11 @@ function initMap() {
 
 })();
 
-<script>
-function initializeMaps() {
-    initMap();
-    initJourneyMap();
-}
-</script>
+/* ── COMBINED MAPS INIT ── */
+window.initAllMaps = function(){
+  initMap();         // Project Coverage map
+  initJourneyMap();  // About section journey map
+};
 
 /* ── MOBILE NAV ── */
 function toggleMobileNav(){
